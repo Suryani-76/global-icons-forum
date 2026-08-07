@@ -75,7 +75,7 @@ export default function App() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#ffffff' }}>
-      {!isLowPower && <CustomCursor />}
+      {/* Custom cursor disabled — using normal cursor */}
       <Navbar activeTab={activeTab} onTabChange={handleTabChange} />
       {/* ISO 9001:2015 Banner — shown on every page below navbar */}
       <div style={{ paddingTop: '72px' }}>

@@ -18,8 +18,8 @@ export default function CustomCursor() {
     // Only show custom cursor on desktop
     if (window.matchMedia('(pointer: coarse)').matches) return
 
-    // Hide native cursor
-    document.body.style.cursor = 'none'
+    // Hide native cursor - DISABLED, keep normal cursor
+    // document.body.style.cursor = 'none'
 
     const move = (e) => {
       cursorX.set(e.clientX)

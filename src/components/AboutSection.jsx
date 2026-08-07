@@ -70,15 +70,15 @@ const ALL_OBJECTIVES = [
 ]
 
 const EXECUTIVE_BODY = [
-  { name: 'Mr. Chaitanya Janga',       designation: 'President',       initial: 'C', color: '#e05a24', photo: '/president.jpg' },
-  { name: 'Mithana Eswara Rao',        designation: 'Vice-President',  initial: 'M', color: '#ffffff', photo: '/exec-mithana.jpeg' },
-  { name: 'Jaya Pateriya',             designation: 'Secretary',       initial: 'J', color: '#ffffff', photo: '/exec-jaya-pateriya.jpeg' },
-  { name: 'Kode Sri Chaitanya',        designation: 'Joint Secretary', initial: 'K', color: '#e05a24', photo: '/exec-kode-chaitanya.jpeg' },
-  { name: 'Ramisetty Venkata Apparao', designation: 'Treasurer',       initial: 'R', color: '#ffffff', photo: '/exec-ramisetty.jpeg', facePos: 'center 22%' },
-  { name: 'Dr. Animelli Naveen',        designation: 'Member',          initial: 'A', color: '#e05a24', photo: '/exec-animelli-naveen.jpeg' },
-  { name: 'Battula Dhanista',          designation: 'Member',          initial: 'B', color: '#ffffff', photo: '/exec-battula.jpeg' },
-  { name: 'Emmanuel',                  designation: 'Member',          initial: 'E', color: '#ffffff', photo: '/exec-emmanuel.jpeg' },
-  { name: 'Mr. Syed Ghouseuddin',      designation: 'Awardee',         initial: 'S', color: '#e05a24', photo: '/exec-syed.jpeg' },
+  { name: 'Mr. Chaitanya Janga',        designation: 'President',       initial: 'C', color: '#e05a24', photo: '/president.jpg' },
+  { name: 'Mr. Mithana Eswara Rao',     designation: 'Vice-President',  initial: 'M', color: '#ffffff', photo: '/exec-mithana.jpeg' },
+  { name: 'Mrs. Jaya Pateriya',         designation: 'Secretary',       initial: 'J', color: '#ffffff', photo: '/exec-jaya-pateriya.jpeg' },
+  { name: 'Mr. Kode Sri Chaitanya',     designation: 'Joint Secretary', initial: 'K', color: '#e05a24', photo: '/exec-kode-chaitanya.jpeg' },
+  { name: 'Mr. Ramisetty Venkata Apparao', designation: 'Treasurer',    initial: 'R', color: '#ffffff', photo: '/exec-ramisetty.jpeg', facePos: 'center 22%' },
+  { name: 'Dr. Animelli Naveen',         designation: 'Member',         initial: 'A', color: '#e05a24', photo: '/exec-animelli-naveen.jpeg' },
+  { name: 'Mr. Battula Dhanista',        designation: 'Member',         initial: 'B', color: '#ffffff', photo: '/exec-battula.jpeg' },
+  { name: 'Mr. Emmanuel',               designation: 'Member',          initial: 'E', color: '#ffffff', photo: '/exec-emmanuel.jpeg' },
+  { name: 'Mr. Syed Ghouseuddin',       designation: 'Member',          initial: 'S', color: '#e05a24', photo: '/exec-syed.jpeg' },
 ]
 
 const cardVariant = {
@@ -117,17 +117,51 @@ export default function AboutSection() {
               </div>
             </motion.div>
 
-            {/* President photo */}
+            {/* President + Secretary photos */}
             <motion.div initial={{ opacity: 0, x: 40 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.9, delay: 0.2 }}
-              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem' }}>
-              <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 4, ease: 'easeInOut', repeat: Infinity }} style={{ position: 'relative' }}>
-                <div style={{ position: 'absolute', inset: -6, borderRadius: 24, background: 'linear-gradient(135deg, rgba(224,90,36,0.5), rgba(15,126,163,0.5))', filter: 'blur(14px)', zIndex: 0 }} />
-                <img src="/president.jpg" alt="Mr. Chaitanya Janga"
-                  style={{ width: 'clamp(220px, 26vw, 300px)', height: 'auto', display: 'block', borderRadius: 20, position: 'relative', zIndex: 1, boxShadow: '0 24px 64px rgba(0,0,0,0.2)', border: '3px solid rgba(15,126,163,0.2)' }} />
-              </motion.div>
-              <div style={{ background: 'linear-gradient(135deg, #e05a24, #0f7ea3)', borderRadius: 10, padding: '0.6rem 2rem', boxShadow: '0 4px 20px rgba(224,90,36,0.3)', textAlign: 'center' }}>
-                <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '1.05rem', color: '#ffffff' }}>Mr. Chaitanya Janga</div>
+              style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
+
+              {/* Mr. Chaitanya Janga */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem' }}>
+                <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 4, ease: 'easeInOut', repeat: Infinity }} style={{ position: 'relative' }}>
+                  <div style={{ position: 'absolute', inset: -6, borderRadius: 24, background: 'linear-gradient(135deg, rgba(224,90,36,0.5), rgba(15,126,163,0.5))', filter: 'blur(14px)', zIndex: 0 }} />
+                  <img src="/president.jpg" alt="Mr. Chaitanya Janga"
+                    style={{ width: 'clamp(150px, 18vw, 220px)', height: 'auto', display: 'block', borderRadius: 20, position: 'relative', zIndex: 1, boxShadow: '0 24px 64px rgba(0,0,0,0.2)', border: '3px solid rgba(15,126,163,0.2)' }} />
+                </motion.div>
+                <div style={{
+                  background: 'linear-gradient(135deg, #b94000 0%, #e05a24 50%, #ff8c55 100%)',
+                  borderRadius: 14,
+                  padding: '0.75rem 2rem',
+                  textAlign: 'center',
+                  boxShadow: '0 6px 28px rgba(224,90,36,0.55), 0 1px 0 rgba(255,255,255,0.15) inset',
+                  border: 'none',
+                }}>
+                  <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 900, fontSize: '1rem', color: '#ffffff', letterSpacing: '0.02em' }}>Mr. Chaitanya Janga</div>
+                  <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.85)', marginTop: '0.25rem', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700 }}>✦ President ✦</div>
+                </div>
               </div>
+
+              {/* Mrs. Jaya Pateriya */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem' }}>
+                <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 4, ease: 'easeInOut', repeat: Infinity, delay: 0.5 }} style={{ position: 'relative' }}>
+                  <div style={{ position: 'absolute', inset: -6, borderRadius: 24, background: 'linear-gradient(135deg, rgba(15,126,163,0.5), rgba(224,90,36,0.5))', filter: 'blur(14px)', zIndex: 0 }} />
+                  <img src="/exec-jaya-pateriya.jpeg" alt="Mrs. Jaya Pateriya"
+                    style={{ width: 'clamp(150px, 18vw, 220px)', height: 'auto', display: 'block', borderRadius: 20, position: 'relative', zIndex: 1, boxShadow: '0 24px 64px rgba(0,0,0,0.2)', border: '3px solid rgba(224,90,36,0.2)' }} />
+                </motion.div>
+                <div style={{
+                  background: 'linear-gradient(135deg, #1a1a2e 0%, #2a2a4a 50%, #3a3a6a 100%)',
+                  backdropFilter: 'blur(12px)',
+                  borderRadius: 14,
+                  padding: '0.75rem 2rem',
+                  textAlign: 'center',
+                  boxShadow: '0 6px 28px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.1) inset',
+                  border: '1.5px solid rgba(255,255,255,0.2)',
+                }}>
+                  <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 900, fontSize: '1rem', color: '#ffffff', letterSpacing: '0.02em' }}>Mrs. Jaya Pateriya</div>
+                  <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.75)', marginTop: '0.25rem', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700 }}>✦ Secretary ✦</div>
+                </div>
+              </div>
+
             </motion.div>
           </div>
         </div>
@@ -222,7 +256,7 @@ export default function AboutSection() {
             style={{ marginTop: '3rem', background: 'var(--color-bg-card)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.2)', padding: '1.75rem 2rem', display: 'flex', gap: '3rem', flexWrap: 'wrap', alignItems: 'center' }}>
             {[
               { label: 'Registered Under', value: 'Societies Registration Act 35/2001' },
-              { label: 'Registered Office', value: 'FTPC India, 24-29-211, Durga Puram, Gulabi Thota Road, J Apparao Street, Vijayawada 520003, Andhra Pradesh' },
+              { label: 'Registered Office', value: 'Global Icons Forum Society, 24-29-211, Durga Puram, Gulabi Thota Road, J Apparao Street, Vijayawada 520003, Andhra Pradesh' },
               { label: 'Nature', value: 'Non-Profit · No Commercial Activity' },
               { label: 'Financial Year', value: 'April 1st — March 31st' },
             ].map((item, i) => (

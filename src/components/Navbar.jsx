@@ -5,12 +5,13 @@ export const NAV_ITEMS = [
   { label: 'Home',         id: 'home'         },
   { label: 'About',        id: 'about'        },
   { label: 'Awards',       id: 'awards'       },
+  { label: 'Events',       id: 'events'       },
   { label: 'Gallery',      id: 'gallery'      },
   { label: 'Testimonials', id: 'testimonials' },
   { label: 'Membership',   id: 'membership'   },
   {
     label: 'More', id: 'more', dropdown: [
-      { label: 'Newsletter',         id: 'newsletter' },
+      { label: 'News',              id: 'newsletter' },
       { label: 'Partners',           id: 'partners'   },
       { label: 'Legal & Governance', id: 'legal'      },
     ],

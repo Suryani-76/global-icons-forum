@@ -41,7 +41,8 @@ export default function LegalSection() {
             {[
               { label: 'Organisation Name', value: 'Global Icons Forum Society' },
               { label: 'Registration Act', value: 'Societies Registration Act 35/2001' },
-              { label: 'Registered Office', value: 'D.No: 24-29-210A, Durgapuram, Gulabithota Road, Vijayawada, NTR District-520003, Andhra Pradesh' },
+              { label: 'Registered Office (Vijayawada)', value: 'FTPC India, 24-29-211, Durga Puram, Gulabi Thota Road, J Apparao Street, Vijayawada 520003, Andhra Pradesh' },
+              { label: 'Operating Office (Hyderabad)', value: 'Second Floor, Samridhi Vasyam, Madhapur, Hyderabad, Telangana 500081' },
               { label: 'Nature', value: 'Non-Profit Organisation' },
               { label: 'Financial Year', value: 'April 1st — March 31st' },
               { label: 'Tax Eligibility', value: 'Section 11, 12A & 80G of Income Tax Act' },

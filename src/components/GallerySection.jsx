@@ -2,16 +2,21 @@ import { useState, useRef, useCallback } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 
 const IMAGES = [
-  { src: '/gallery1.jpeg',    caption: 'Award Ceremony — FTPC India' },
-  { src: '/gallery-2.jpeg',  caption: 'Press Conference — Visakhapatnam' },
   { src: '/gallery-3.jpeg',  caption: 'Certificate of Recognition' },
   { src: '/gallery-4.jpeg',  caption: 'Super Star Krishna Awards 2025' },
   { src: '/gallery-5.jpeg',  caption: 'Super Star Krishna Awards — Awardees' },
   { src: '/gallery-6.jpeg',  caption: 'White Awards Ceremony' },
-  { src: '/gallery-7.jpeg',  caption: 'Super Star Krishna Awards — FTPC India' },
-  { src: '/gallery-9.jpeg',  caption: 'FTPC India — Telugu Cinema Vedika' },
+  { src: '/gallery-9.jpeg',  caption: 'Global Icons Forum — Telugu Cinema Vedika' },
   { src: '/gallery10.jpeg',  caption: 'Global Icons Forum — Recognition Event' },
   { src: '/gallery11.jpeg',  caption: 'Global Icons Forum — Award Ceremony' },
+  { src: '/gallery12.jpeg',  caption: 'Global Icons Forum — Excellence Award' },
+  { src: '/gallery14.jpeg',  caption: 'Global Icons Forum — Award Ceremony' },
+  { src: '/gallery15.jpeg',  caption: 'Global Icons Forum — Award Ceremony' },
+  { src: '/gallery16.jpeg',  caption: 'Global Icons Forum — Award Ceremony' },
+  { src: '/gallery17.jpeg',  caption: 'Global Icons Forum — Award Ceremony' },
+  { src: '/gallery18.jpeg',  caption: 'Global Icons Forum — Award Ceremony' },
+  { src: '/gallery19.jpeg',  caption: 'Global Icons Forum — Award Ceremony' },
+  { src: '/gallery20.jpeg',  caption: 'Global Icons Forum — Award Ceremony' },
 ]
 
 // ---- Lightbox ----
@@ -172,18 +177,13 @@ export default function GallerySection() {
             </p>
           </motion.div>
 
-          {/* Masonry-style grid */}
+          {/* Uniform grid — no spans, no empty gaps */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
-            gridAutoRows: '220px',
             gap: '12px',
           }}>
             {IMAGES.map((img, i) => {
-              // Make some images span 2 columns or 2 rows for visual variety
-              const isWide = i === 0 || i === 5
-              const isTall = i === 2 || i === 7
-
               return (
                 <motion.div
                   key={i}
@@ -193,12 +193,11 @@ export default function GallerySection() {
                   whileHover={{ scale: 1.03, zIndex: 10 }}
                   onClick={() => openLightbox(i)}
                   style={{
-                    gridColumn: isWide ? 'span 2' : 'span 1',
-                    gridRow: isTall ? 'span 2' : 'span 1',
                     position: 'relative',
                     overflow: 'hidden',
                     borderRadius: 14,
                     cursor: 'pointer',
+                    aspectRatio: '4/3',
                     border: '1.5px solid rgba(255,255,255,0.2)',
                     boxShadow: '0 4px 24px rgba(0,0,0,0.25)',
                     transition: 'box-shadow 0.3s ease',

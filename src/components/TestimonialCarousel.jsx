@@ -69,10 +69,11 @@ function Lightbox({ photo, name, onClose }) {
           {name && (
             <div style={{
               position: 'absolute', bottom: '1.5rem', left: '50%', transform: 'translateX(-50%)',
-              background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)',
-              border: '1px solid rgba(255,255,255,0.2)', borderRadius: 100,
-              padding: '0.4rem 1.25rem', color: '#fff', fontSize: '0.85rem', fontWeight: 600,
+              background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(255,255,255,0.35)', borderRadius: 100,
+              padding: '0.5rem 1.5rem', color: '#ffffff', fontSize: '0.92rem', fontWeight: 700,
               whiteSpace: 'nowrap', letterSpacing: '0.04em',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
             }}>
               {name}
             </div>

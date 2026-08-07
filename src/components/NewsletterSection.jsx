@@ -1,50 +1,58 @@
-import { useRef, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { useRef, useState, useCallback } from 'react'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 
-const RECENT_NEWS = [
-  {
-    date: 'July 2025',
-    tag: 'Awards',
-    tagColor: '#e05a24',
-    title: 'Global Icons Forum Society Announces 2025 Award Categories',
-    excerpt: 'We are proud to announce the expanded award categories for the 2025 season, celebrating excellence across 12 new domains including AI & Technology and Social Innovation.',
-  },
-  {
-    date: 'June 2025',
-    tag: 'Summit',
-    tagColor: '#f7c430',
-    title: 'International Leadership Summit Coming to New Delhi',
-    excerpt: 'The Global Icons Forum Society will host its flagship International Leadership Summit in New Delhi this September, bringing together 500+ global leaders.',
-  },
-  {
-    date: 'May 2025',
-    tag: 'Membership',
-    tagColor: '#22c55e',
-    title: 'Membership Drive 2025 — Join the Community of Icons',
-    excerpt: 'Applications are now open for the 2025 membership drive. Connect with icons from 120+ countries and gain access to exclusive summits, recognition programmes and global events.',
-  },
-  {
-    date: 'April 2025',
-    tag: 'Chapters',
-    tagColor: '#9b59b6',
-    title: 'New Chapters Launched in Mumbai and Bengaluru',
-    excerpt: 'The Society officially inaugurated new chapter offices in Mumbai and Bengaluru, expanding our national presence and bringing our programmes closer to more communities.',
-  },
-  {
-    date: 'March 2025',
-    tag: 'Social Welfare',
-    tagColor: '#0f7ea3',
-    title: 'Women Empowerment Summit 2025 — A Resounding Success',
-    excerpt: 'Over 300 women leaders participated in the Society\'s annual Women Empowerment Summit in Chennai, resulting in 15 new mentorship partnerships and 3 community initiatives.',
-  },
-  {
-    date: 'February 2025',
-    tag: 'Heritage',
-    tagColor: '#c084fc',
-    title: 'Indian Heritage & Culture Festival Draws Global Audience',
-    excerpt: 'The Global Icons Forum Society\'s annual cultural festival attracted participants from 28 countries, showcasing Indian arts, literature, cinema and performing arts.',
-  },
-]
+const NEWS_PHOTOS = Array.from({ length: 25 }, (_, i) => `/news${i + 1}.jpeg`)
+
+// ---- Lightbox ----
+function Lightbox({ index, onClose, onPrev, onNext }) {
+  if (index === null) return null
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.25 }}
+        onClick={onClose}
+        style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.92)',
+          zIndex: 10000, display: 'flex', alignItems: 'center',
+          justifyContent: 'center', padding: '2rem',
+        }}
+      >
+        <motion.div
+          initial={{ scale: 0.88, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.88, opacity: 0 }}
+          transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+          onClick={e => e.stopPropagation()}
+          style={{ position: 'relative', maxWidth: 'min(900px, 90vw)', maxHeight: '85vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+        >
+          <img
+            src={NEWS_PHOTOS[index]}
+            alt={`News ${index + 1}`}
+            style={{ maxWidth: '100%', maxHeight: '75vh', objectFit: 'contain', borderRadius: 12, boxShadow: '0 32px 80px rgba(0,0,0,0.6)' }}
+          />
+          <div style={{ marginTop: '1rem', fontSize: '0.85rem', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.06em' }}>
+            {index + 1} / {NEWS_PHOTOS.length}
+          </div>
+        </motion.div>
+
+        {/* Close */}
+        <button onClick={onClose} aria-label="Close"
+          style={{ position: 'fixed', top: '1.5rem', right: '1.5rem', width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', fontSize: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10001 }}>✕</button>
+
+        {/* Prev */}
+        <button onClick={e => { e.stopPropagation(); onPrev() }} aria-label="Previous"
+          style={{ position: 'fixed', left: '1.5rem', top: '50%', transform: 'translateY(-50%)', width: 48, height: 48, borderRadius: '50%', background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', fontSize: '1.4rem', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10001 }}>‹</button>
+
+        {/* Next */}
+        <button onClick={e => { e.stopPropagation(); onNext() }} aria-label="Next"
+          style={{ position: 'fixed', right: '1.5rem', top: '50%', transform: 'translateY(-50%)', width: 48, height: 48, borderRadius: '50%', background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', fontSize: '1.4rem', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10001 }}>›</button>
+      </motion.div>
+    </AnimatePresence>
+  )
+}
 
 export default function NewsletterSection() {
   const sectionRef = useRef()
@@ -52,7 +60,9 @@ export default function NewsletterSection() {
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
   const [subscribed, setSubscribed] = useState(false)
-  const [activeNews, setActiveNews] = useState(null)
+  const [lightbox, setLightbox] = useState(null)
+  const prevImage = useCallback(() => setLightbox(i => (i - 1 + NEWS_PHOTOS.length) % NEWS_PHOTOS.length), [])
+  const nextImage = useCallback(() => setLightbox(i => (i + 1) % NEWS_PHOTOS.length), [])
 
   const handleSubscribe = (e) => {
     e.preventDefault()
@@ -66,7 +76,7 @@ export default function NewsletterSection() {
   return (
     <div ref={sectionRef}>
 
-      {/* ===== NEWS CARDS ===== */}
+      {/* ===== NEWS PHOTOS ===== */}
       <section className="section" style={{ background: 'var(--color-bg)', paddingBottom: '2rem' }}>
         <div className="container">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7 }} style={{ marginBottom: '3rem' }}>
@@ -76,61 +86,59 @@ export default function NewsletterSection() {
             <p className="section-subtitle">Stay informed with the latest news, event announcements and updates from the Global Icons Forum Society.</p>
           </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', marginBottom: '2rem' }}>
-            {RECENT_NEWS.map((news, i) => (
-              <motion.div key={i}
-                initial={{ opacity: 0, y: 30 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: i * 0.1, duration: 0.55 }}
-                onClick={() => setActiveNews(activeNews === i ? null : i)}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '2rem' }}>
+            {NEWS_PHOTOS.map((src, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 24, scale: 0.96 }}
+                animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+                transition={{ duration: 0.5, delay: i * 0.04, ease: [0.4, 0, 0.2, 1] }}
+                onClick={() => setLightbox(i)}
                 style={{
-                  background: 'rgba(255,255,255,0.12)',
-                  borderRadius: 16,
-                  border: `1px solid ${activeNews === i ? news.tagColor + '66' : 'rgba(255,255,255,0.2)'}`,
-                  padding: '1.5rem',
-                  cursor: 'pointer',
-                  backdropFilter: 'blur(8px)',
-                  transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
-                  boxShadow: activeNews === i ? `0 8px 32px ${news.tagColor}33` : 'none',
-                  position: 'relative',
+                  borderRadius: 12,
                   overflow: 'hidden',
-                }}>
-                {/* Top accent line */}
-                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: news.tagColor, opacity: activeNews === i ? 1 : 0, transition: 'opacity 0.3s' }} />
-
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                  <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#ffffff', background: `${news.tagColor}99`, borderRadius: 100, padding: '0.2rem 0.65rem', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                    {news.tag}
-                  </span>
-                  <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.55)', fontWeight: 500 }}>{news.date}</span>
-                </div>
-
-                <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '0.95rem', color: '#ffffff', lineHeight: 1.4, marginBottom: '0.6rem' }}>
-                  {news.title}
-                </div>
-
-                {activeNews === i && (
-                  <motion.p
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.8)', lineHeight: 1.7, margin: 0, marginTop: '0.5rem' }}>
-                    {news.excerpt}
-                  </motion.p>
-                )}
-
-                <div style={{ fontSize: '0.75rem', color: news.tagColor, fontWeight: 600, marginTop: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                  {activeNews === i ? 'Close' : 'Read more'}
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-                    style={{ transform: activeNews === i ? 'rotate(90deg)' : 'none', transition: 'transform 0.3s' }}>
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
+                  border: '1.5px solid rgba(255,255,255,0.2)',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
+                  aspectRatio: '4/3',
+                  cursor: 'pointer',
+                  position: 'relative',
+                }}
+              >
+                <img
+                  src={src}
+                  alt={`News ${i + 1}`}
+                  loading="lazy"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                    transition: 'transform 0.4s ease',
+                  }}
+                  onMouseEnter={e => e.target.style.transform = 'scale(1.06)'}
+                  onMouseLeave={e => e.target.style.transform = 'scale(1)'}
+                />
+                {/* Number badge */}
+                <div style={{ position: 'absolute', top: 8, right: 8, width: 26, height: 26, borderRadius: '50%', background: 'rgba(224,90,36,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.62rem', color: '#fff', fontWeight: 700, boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
+                  {i + 1}
                 </div>
               </motion.div>
             ))}
           </div>
+
+          {/* Bottom label */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.9 }}
+            style={{ textAlign: 'center', marginBottom: '2rem', fontSize: '0.8rem', color: 'rgba(255,255,255,0.58)', letterSpacing: '0.1em', textTransform: 'uppercase' }}
+          >
+            Click any photo to view full size
+          </motion.div>
         </div>
       </section>
+
+      <Lightbox index={lightbox} onClose={() => setLightbox(null)} onPrev={prevImage} onNext={nextImage} />
 
       {/* ===== NEWSLETTER SIGNUP ===== */}
       <section style={{ background: 'var(--color-bg-deep)', borderTop: '1px solid rgba(255,255,255,0.12)', borderBottom: '1px solid rgba(255,255,255,0.12)', padding: '5rem 0' }}>

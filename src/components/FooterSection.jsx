@@ -35,7 +35,7 @@ const SOCIAL_LINKS = [
     ),
   },
   {
-    name: 'X (Twitter)', color: '#ffffff', href: 'https://twitter.com/', followers: '18.7K',
+    name: 'X (Twitter)', color: '#000000', href: 'https://twitter.com/', followers: '18.7K',
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30" aria-hidden="true">
         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
@@ -138,7 +138,7 @@ export default function FooterSection({ onTabChange }) {
             </div>
             <p className="footer-brand-desc">
               <strong style={{ color: 'rgba(255,255,255,0.7)' }}>Hyderabad:</strong> Second Floor, Samridhi Vasyam, Madhapur, Hyderabad, Telangana 500081<br />
-              <strong style={{ color: 'rgba(255,255,255,0.7)' }}>Vijayawada:</strong> FTPC India, 24-29-211, Durga Puram, Gulabi Thota Road, Vijayawada 520003<br />
+              <strong style={{ color: 'rgba(255,255,255,0.7)' }}>Vijayawada:</strong> Global Icons Forum Society, 24-29-211, Durga Puram, Gulabi Thota Road, Vijayawada 520003<br />
               info@oklut.com · +91-9014217124
             </p>
             <div style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>

@@ -15,8 +15,8 @@ const CONTACT_INFO = [
   },
   {
     type: 'orange',
-    label: 'FTPC India — Registered Office',
-    value: '24-29-211, Durga Puram, Gulabi Thota Road, J Apparao Street, Vijayawada 520003',
+    label: 'Global Icons Forum Society — Registered Office',
+    value: '24-29-211, Durga Puram, Gulabi Thota Road, Vijayawada 520003',
     svg: (
       <svg viewBox="0 0 24 24" fill="none" stroke="#e05a24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
@@ -128,7 +128,7 @@ export default function ContactSection() {
               position: 'relative',
             }}>
               <iframe
-                title="FTPC India — Vijayawada Registered Office"
+                title="Global Icons Forum Society — Vijayawada Registered Office"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3825.123456789!2d80.6480!3d16.5193!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a35eff9b12345%3A0xabcdef123456!2sDurgapuram%2C%20Vijayawada%2C%20Andhra%20Pradesh%20520003!5e0!3m2!1sen!2sin!4v1690000000000!5m2!1sen!2sin"
                 width="100%"
                 height="280"
