@@ -2,11 +2,86 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 
 const TESTIMONIALS = [
-  { photo: '/testimonial-1.jpeg', name: 'Dr. Priya Sharma',           title: 'Global Innovator of the Year 2023',  nation: 'India',     color: '#ffffff' },
-  { photo: '/testimonial-2.jpeg', name: 'Ambassador Jean-Paul Moreau',title: 'Peace & Diplomacy Awardee 2022',     nation: 'France',    color: '#e05a24' },
-  { photo: '/testimonial-3.jpeg', name: 'Ms. Amara Osei',             title: 'Humanitarian Leadership Award 2023', nation: 'Ghana',     color: '#f7c430' },
-  { photo: '/testimonial-4.jpeg', name: 'Mr. Rajan Mehta',            title: 'Business Icon of the Decade 2021',  nation: 'Singapore', color: '#ffffff' },
-  { photo: '/testimonial-5.jpeg', name: 'Ms. Lakshmi Prasad',         title: 'Cultural Excellence Awardee 2023',  nation: 'India',     color: '#e05a24' },
+  {
+    photo: '/news1.jpeg',
+    name: 'Dr. Priya Sharma',
+    title: 'Global Innovator of the Year 2023',
+    nation: 'India',
+    color: '#ffffff',
+    quote: 'Being recognised by the Global Icons Forum was a watershed moment in my career. The platform amplifies voices that are truly making a difference, and the energy in that room was unlike anything I have ever experienced.',
+  },
+  {
+    photo: '/news2.jpeg',
+    name: 'Ambassador Jean-Paul Moreau',
+    title: 'Peace & Diplomacy Awardee 2022',
+    nation: 'France',
+    color: '#e05a24',
+    quote: 'The Global Icons Forum stands as a rare institution that genuinely bridges cultures and continents. This honour reaffirmed my belief that diplomacy and human connection are the most powerful tools we have for lasting peace.',
+  },
+  {
+    photo: '/news3.jpeg',
+    name: 'Ms. Amara Osei',
+    title: 'Humanitarian Leadership Award 2023',
+    nation: 'Ghana',
+    color: '#f7c430',
+    quote: 'Receiving this award on behalf of thousands of women I work with across West Africa was deeply moving. The Forum shines a global spotlight on grassroots change-makers who rarely get the recognition they deserve.',
+  },
+  {
+    photo: '/news4.jpeg',
+    name: 'Mr. Rajan Mehta',
+    title: 'Business Icon of the Decade 2021',
+    nation: 'Singapore',
+    color: '#ffffff',
+    quote: 'What sets the Global Icons Forum apart is the quality of the community it has built. Being part of this network has opened doors to collaborations across five continents and reshaped how I think about global business leadership.',
+  },
+  {
+    photo: '/news5.jpeg',
+    name: 'Ms. Lakshmi Prasad',
+    title: 'Cultural Excellence Awardee 2023',
+    nation: 'India',
+    color: '#e05a24',
+    quote: 'Art transcends borders, and the Global Icons Forum truly embodies that spirit. This recognition has given my work an international audience and inspired me to push the boundaries of classical Indian performing arts even further.',
+  },
+  {
+    photo: '/news6.jpeg',
+    name: 'Prof. David Kimani',
+    title: 'Education Visionary Award 2023',
+    nation: 'Kenya',
+    color: '#5ec8e8',
+    quote: 'The Global Icons Forum does not just hand out trophies — it creates a movement. Being honoured alongside leaders from across the globe reminded me why I dedicated my life to transforming education in underserved communities.',
+  },
+  {
+    photo: '/news7.jpeg',
+    name: 'Dr. Sofia Ramirez',
+    title: 'Healthcare Excellence Icon 2022',
+    nation: 'Colombia',
+    color: '#f7c430',
+    quote: 'In medicine, recognition can translate directly into resources and reach. The Global Icons Forum gave my research the international visibility it needed. Since that ceremony, three new partnerships have funded our rural healthcare programme.',
+  },
+  {
+    photo: '/news8.jpeg',
+    name: 'Mr. Hiroshi Tanaka',
+    title: 'Technology Innovation Leader 2023',
+    nation: 'Japan',
+    color: '#e05a24',
+    quote: 'I have attended many award events, but none carry the gravitas and warmth of the Global Icons Forum. The rigorous nomination process means that every person in that room has genuinely earned their place, and that makes this honour extraordinary.',
+  },
+  {
+    photo: '/news9.jpeg',
+    name: 'Ms. Fatima Al-Rashidi',
+    title: 'Women Empowerment Awardee 2023',
+    nation: 'UAE',
+    color: '#ffffff',
+    quote: 'The Forum celebrated not just my individual achievement but the thousands of women behind me whose stories I carry. It proved to me that excellence knows no geography, no gender, and no boundary — and the world is finally paying attention.',
+  },
+  {
+    photo: '/news10.jpeg',
+    name: 'Mr. Carlos Eduardo Vega',
+    title: 'Social Impact Icon 2022',
+    nation: 'Brazil',
+    color: '#5ec8e8',
+    quote: 'Walking into that hall and seeing icons from every corner of the world united by a single purpose — to celebrate excellence and drive positive change — was profoundly humbling. The Global Icons Forum is exactly the kind of institution our world needs right now.',
+  },
 ]
 
 const slideVariants = {
@@ -189,6 +264,13 @@ export default function TestimonialCarousel() {
 
                 {/* Quote decoration */}
                 <div style={{ fontFamily: 'Georgia', fontSize: '5rem', lineHeight: 0.7, color: t.color, opacity: 0.15, marginBottom: '0.5rem', userSelect: 'none' }}>&ldquo;</div>
+
+                {/* Quote text */}
+                {t.quote && (
+                  <p style={{ fontSize: '0.92rem', color: 'rgba(255,255,255,0.82)', lineHeight: 1.75, fontStyle: 'italic', marginBottom: '1.5rem' }}>
+                    &ldquo;{t.quote}&rdquo;
+                  </p>
+                )}
 
                 {/* Name & title */}
                 <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '1.3rem', color: '#ffffff', marginBottom: '0.35rem', lineHeight: 1.2 }}>{t.name}</div>

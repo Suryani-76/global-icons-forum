@@ -45,6 +45,46 @@ function CardScene({ Scene, accentColor }) {
   )
 }
 
+function OrgCard({ member, size = 'md', accent = '#e05a24' }) {
+  const sizes = {
+    lg: { card: 200, minH: 290, img: 130, name: '1.15rem', desg: '0.78rem', pad: '2rem 1.75rem 1.5rem' },
+    md: { card: 170, minH: 250, img: 110, name: '1rem',    desg: '0.72rem', pad: '1.75rem 1.5rem 1.25rem' },
+    sm: { card: 148, minH: 210, img:  90, name: '0.88rem', desg: '0.65rem', pad: '1.5rem 1rem 1.1rem' },
+  }
+  const s = sizes[size]
+  return (
+    <div style={{
+      width: s.card,
+      minHeight: s.minH,
+      background: 'var(--color-bg-card)',
+      borderRadius: 20,
+      border: `1.5px solid ${accent}55`,
+      padding: s.pad,
+      textAlign: 'center',
+      boxShadow: `0 4px 28px rgba(0,0,0,0.22), 0 0 0 1px ${accent}22`,
+      position: 'relative',
+      overflow: 'hidden',
+      flexShrink: 0,
+    }}>
+      {/* top accent bar */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, ${accent}, transparent)` }} />
+      {/* avatar */}
+      <div style={{ width: s.img, height: s.img, borderRadius: 16, margin: '0 auto 1rem', overflow: 'hidden', border: `2.5px solid ${accent}88`, boxShadow: `0 4px 18px ${accent}33` }}>
+        {member.photo ? (
+          <img src={member.photo} alt={member.name}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: member.facePos || 'center top', display: 'block' }} />
+        ) : (
+          <div style={{ width: '100%', height: '100%', background: member.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '2.2rem', color: '#fff' }}>
+            {member.initial}
+          </div>
+        )}
+      </div>
+      <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: s.name, color: '#ffffff', marginBottom: '0.4rem', lineHeight: 1.3 }}>{member.name}</div>
+      <div style={{ fontSize: s.desg, fontWeight: 700, color: accent === '#e05a24' ? '#e05a24' : accent === '#0f7ea3' ? '#5ec8e8' : 'rgba(255,255,255,0.65)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{member.designation}</div>
+    </div>
+  )
+}
+
 const IMPACT_CARDS = [
   { accentColor: '#0f7ea3', Scene: GlobalRecognitionScene, title: 'Global Recognition', desc: 'Honoring outstanding individuals and organizations for excellence at national and international levels.' },
   { accentColor: '#f7c430', Scene: AwardsScene, title: 'Awards & Honours', desc: 'Prestigious ceremonies across continents celebrating icons in business, arts, science, diplomacy, and social impact.' },
@@ -71,9 +111,9 @@ const ALL_OBJECTIVES = [
 
 const EXECUTIVE_BODY = [
   { name: 'Mr. Chaitanya Janga',        designation: 'President',       initial: 'C', color: '#e05a24', photo: '/president.jpg' },
-  { name: 'Mr. Mithana Eswara Rao',     designation: 'Vice-President',  initial: 'M', color: '#ffffff', photo: '/exec-mithana.jpeg' },
+  { name: 'Mr. Mithana Eswara Rao',     designation: 'Vice-President',  initial: 'M', color: '#ffffff', photo: '/gallery21.jpeg' },
   { name: 'Mrs. Jaya Pateriya',         designation: 'Secretary',       initial: 'J', color: '#ffffff', photo: '/exec-jaya-pateriya.jpeg' },
-  { name: 'Mr. Kode Sri Chaitanya',     designation: 'Joint Secretary', initial: 'K', color: '#e05a24', photo: '/exec-kode-chaitanya.jpeg' },
+  { name: 'Mr. Kode Sri Chaitanya',     designation: 'Joint Secretary', initial: 'K', color: '#e05a24', photo: '/gallery22.jpeg' },
   { name: 'Mr. Ramisetty Venkata Apparao', designation: 'Treasurer',    initial: 'R', color: '#ffffff', photo: '/exec-ramisetty.jpeg', facePos: 'center 22%' },
   { name: 'Dr. Animelli Naveen',         designation: 'Member',         initial: 'A', color: '#e05a24', photo: '/exec-animelli-naveen.jpeg' },
   { name: 'Mr. Battula Dhanista',        designation: 'Member',         initial: 'B', color: '#ffffff', photo: '/exec-battula.jpeg' },
@@ -218,7 +258,7 @@ export default function AboutSection() {
         </div>
       </section>
 
-      {/* ===== EXECUTIVE BODY ===== */}
+      {/* ===== EXECUTIVE BODY — ORG TREE ===== */}
       <section className="section" id="team" style={{ background: 'var(--color-bg-mid)', borderTop: '1px solid rgba(255,255,255,0.15)' }}>
         <div className="container">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7 }} style={{ marginBottom: '3rem' }}>
@@ -228,27 +268,68 @@ export default function AboutSection() {
             <p className="section-subtitle">The governing committee of the Global Icons Forum Society, duly registered under the Societies Registration Act 35/2001.</p>
           </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>
-            {EXECUTIVE_BODY.map((member, i) => (
-              <motion.div key={i} variants={cardVariant} initial="hidden" animate={inView ? 'visible' : 'hidden'} custom={i}
-                style={{ background: 'var(--color-bg-card)', borderRadius: 20, border: '1px solid rgba(255,255,255,0.2)', padding: '2rem 1.25rem 1.5rem', textAlign: 'center', boxShadow: '0 4px 24px rgba(0,0,0,0.18)', position: 'relative', overflow: 'hidden' }}>
-                {/* Top accent */}
-                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: 'linear-gradient(90deg, #e05a24, transparent)' }} />
-                {/* Avatar — big square */}
-                <div style={{ width: 150, height: 150, borderRadius: 18, margin: '0 auto 1.25rem', overflow: 'hidden', border: '3px solid rgba(224,90,36,0.5)', boxShadow: '0 6px 24px rgba(224,90,36,0.25)' }}>
-                  {member.photo ? (
-                    <img src={member.photo} alt={member.name}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: member.facePos || 'center top', display: 'block' }} />
-                  ) : (
-                    <div style={{ width: '100%', height: '100%', background: member.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '3rem', color: '#fff' }}>
-                      {member.initial}
-                    </div>
-                  )}
-                </div>
-                <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '1.05rem', color: '#ffffff', marginBottom: '0.45rem', lineHeight: 1.3 }}>{member.name}</div>
-                <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#e05a24', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{member.designation}</div>
+          {/* ── ORG TREE ── */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
+
+            {/* ROW 1 — President + Secretary side by side */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '3rem', flexWrap: 'wrap' }}>
+              {/* President — index 0 */}
+              <motion.div variants={cardVariant} initial="hidden" animate={inView ? 'visible' : 'hidden'} custom={0}>
+                <OrgCard member={EXECUTIVE_BODY[0]} size="lg" accent="#e05a24" />
               </motion.div>
-            ))}
+              {/* Secretary — index 2 */}
+              <motion.div variants={cardVariant} initial="hidden" animate={inView ? 'visible' : 'hidden'} custom={1}>
+                <OrgCard member={EXECUTIVE_BODY[2]} size="lg" accent="#e05a24" />
+              </motion.div>
+            </div>
+
+            {/* Connector: Row 1 → Row 2 */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+              <div style={{ width: 2, height: 32, background: 'linear-gradient(to bottom, #e05a24, rgba(255,255,255,0.3))' }} />
+              <div style={{ position: 'relative', width: '36%', height: 2, background: 'rgba(255,255,255,0.25)' }}>
+                <div style={{ position: 'absolute', left: '25%', top: 0, width: 2, height: 28, background: 'rgba(255,255,255,0.25)', transform: 'translateX(-50%)' }} />
+                <div style={{ position: 'absolute', right: '25%', top: 0, width: 2, height: 28, background: 'rgba(255,255,255,0.25)', transform: 'translateX(50%)' }} />
+              </div>
+            </div>
+
+            {/* ROW 2 — Vice-President + Joint Secretary side by side */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '3rem', flexWrap: 'wrap' }}>
+              {/* Vice-President — index 1 */}
+              <motion.div variants={cardVariant} initial="hidden" animate={inView ? 'visible' : 'hidden'} custom={2}>
+                <OrgCard member={EXECUTIVE_BODY[1]} size="md" accent="#0f7ea3" />
+              </motion.div>
+              {/* Joint Secretary — index 3 */}
+              <motion.div variants={cardVariant} initial="hidden" animate={inView ? 'visible' : 'hidden'} custom={3}>
+                <OrgCard member={EXECUTIVE_BODY[3]} size="md" accent="#0f7ea3" />
+              </motion.div>
+            </div>
+
+            {/* Connector: Row 2 → Row 3 */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+              <div style={{ width: 2, height: 32, background: 'linear-gradient(to bottom, #0f7ea3, rgba(255,255,255,0.2))' }} />
+              <div style={{ position: 'relative', width: '70%', height: 2, background: 'rgba(255,255,255,0.18)' }}>
+                {[0,1,2,3,4].map(j => (
+                  <div key={j} style={{
+                    position: 'absolute',
+                    left: `${10 + j * 20}%`,
+                    top: 0,
+                    width: 2,
+                    height: 28,
+                    background: 'rgba(255,255,255,0.18)',
+                    transform: 'translateX(-50%)',
+                  }} />
+                ))}
+              </div>
+            </div>
+
+            {/* ROW 3 — Remaining 5 members (indexes 4–8) */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+              {EXECUTIVE_BODY.slice(4).map((member, i) => (
+                <motion.div key={i} variants={cardVariant} initial="hidden" animate={inView ? 'visible' : 'hidden'} custom={i + 4}>
+                  <OrgCard member={member} size="sm" accent="rgba(255,255,255,0.35)" />
+                </motion.div>
+              ))}
+            </div>
           </div>
 
           {/* Registered details */}
