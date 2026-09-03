@@ -1,4 +1,4 @@
-import { Suspense, useState, lazy } from 'react'
+import { Suspense, useState, lazy, useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { AnimatePresence, motion } from 'framer-motion'
 import { SectionLoader } from './components/CanvasLoader'
@@ -65,13 +65,49 @@ function TabContent({ tab, onTabChange }) {
   }
 }
 
+// Map tab ids to URL paths and back
+const TAB_TO_PATH = {
+  home:         '/',
+  about:        '/about',
+  awards:       '/awards',
+  gallery:      '/gallery',
+  testimonials: '/testimonials',
+  membership:   '/membership',
+  programmes:   '/programmes',
+  chapters:     '/chapters',
+  events:       '/events',
+  newsletter:   '/newsletter',
+  legal:        '/legal',
+  partners:     '/partners',
+  contact:      '/contact',
+}
+const PATH_TO_TAB = Object.fromEntries(Object.entries(TAB_TO_PATH).map(([k, v]) => [v, k]))
+
+function getInitialTab() {
+  const path = window.location.pathname
+  return PATH_TO_TAB[path] || 'home'
+}
+
 export default function App() {
-  const [activeTab, setActiveTab] = useState('home')
+  const [activeTab, setActiveTab] = useState(getInitialTab)
 
   const handleTabChange = (id) => {
     setActiveTab(id)
+    const path = TAB_TO_PATH[id] || '/'
+    window.history.pushState({ tab: id }, '', path)
     window.scrollTo({ top: 0, behavior: 'instant' })
   }
+
+  // Handle browser back/forward buttons
+  useEffect(() => {
+    const onPop = (e) => {
+      const tab = e.state?.tab || PATH_TO_TAB[window.location.pathname] || 'home'
+      setActiveTab(tab)
+      window.scrollTo({ top: 0, behavior: 'instant' })
+    }
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
 
   return (
     <div style={{ minHeight: '100vh', background: '#ffffff' }}>
