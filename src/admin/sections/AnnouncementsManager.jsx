@@ -1,134 +1,283 @@
 import { useState } from 'react'
 import { Card, PageHeader, Btn, Badge } from '../AdminUI'
-
-const INIT_HERO = { tagline: 'Celebrating Excellence Across the Globe', subtext: 'The Global Icons Forum Society honours outstanding individuals and organisations for excellence at national and international levels.' }
-const INIT_BANNERS = [
-  { id: 1, text: '🏆 Nominations Open for Global Icons Awards 2026 — Apply Now', active: true },
-  { id: 2, text: '📅 National Summit 2026 — Coming September, Vijayawada', active: true },
-  { id: 3, text: '🌐 ISO 9001:2015 Certified — MQA Certification Services, UK', active: false },
-]
-const INIT_PARTNERS = [
-  { id: 1, name: 'Ministry of Culture, India',   logo: '', url: '#', active: true },
-  { id: 2, name: 'UKAF Certification Limited',   logo: '', url: '#', active: true },
-  { id: 3, name: 'MQA Certification Services',   logo: '', url: '#', active: true },
-  { id: 4, name: 'Andhra Pradesh Tourism',        logo: '', url: '#', active: false },
-]
+import { useAnnouncements } from '../../utils/announcementsStore'
 
 export default function AnnouncementsManager() {
-  const [hero, setHero]         = useState(INIT_HERO)
+  const [data, setData]         = useAnnouncements()
   const [editHero, setEditHero] = useState(false)
-  const [heroTemp, setHeroTemp] = useState(INIT_HERO)
-  const [banners, setBanners]   = useState(INIT_BANNERS)
+  const [heroTemp, setHeroTemp] = useState(data.hero)
   const [newBanner, setNewBanner] = useState('')
-  const [partners, setPartners] = useState(INIT_PARTNERS)
+  const [bannerAccent, setBannerAccent] = useState('orange')
   const [partnerModal, setPartnerModal] = useState(null)
   const [toast, setToast]       = useState('')
 
   const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(''), 2500) }
 
-  const saveHero = () => { setHero(heroTemp); setEditHero(false); showToast('Hero section updated.') }
-  const addBanner = () => {
-    if (!newBanner.trim()) return
-    setBanners(prev => [...prev, { id: Date.now(), text: newBanner.trim(), active: true }])
-    setNewBanner(''); showToast('Banner added.')
+  const saveHero = () => {
+    const tagline = heroTemp?.tagline ?? document.querySelector('#hero-tagline-input')?.value ?? ''
+    const subtext = heroTemp?.subtext ?? document.querySelector('#hero-subtext-input')?.value ?? ''
+    setData(prev => ({ ...prev, hero: { tagline, subtext } }))
+    setEditHero(false)
+    showToast('✓ Hero section updated on live website.')
   }
-  const toggleBanner = (id) => setBanners(prev => prev.map(b => b.id === id ? { ...b, active: !b.active } : b))
-  const removeBanner = (id) => { setBanners(prev => prev.filter(b => b.id !== id)); showToast('Banner removed.') }
+
+  const addBanner = () => {
+    const text = newBanner.trim() || document.querySelector('#new-banner-input')?.value?.trim() || ''
+    if (!text) return
+    const banner = {
+      id: Date.now(),
+      text,
+      accent: bannerAccent,
+      active: true,
+    }
+    setData(prev => ({
+      ...prev,
+      banners: [banner, ...(prev.banners || [])],
+    }))
+    setNewBanner('')
+    showToast('✓ Ticker banner added to live site.')
+  }
+
+  const toggleBanner = (id) => {
+    setData(prev => ({
+      ...prev,
+      banners: (prev.banners || []).map(b => b.id === id ? { ...b, active: !b.active } : b),
+    }))
+    showToast('Banner visibility toggled.')
+  }
+
+  const removeBanner = (id) => {
+    setData(prev => ({
+      ...prev,
+      banners: (prev.banners || []).filter(b => b.id !== id),
+    }))
+    showToast('Banner removed.')
+  }
 
   const savePartner = () => {
     if (!partnerModal.data.name.trim()) return
-    if (partnerModal.mode === 'add') { setPartners(prev => [...prev, partnerModal.data]); showToast('Partner added.') }
-    else                             { setPartners(prev => prev.map(p => p.id === partnerModal.data.id ? partnerModal.data : p)); showToast('Updated.') }
+    if (partnerModal.mode === 'add') {
+      setData(prev => ({
+        ...prev,
+        partners: [...(prev.partners || []), { ...partnerModal.data, id: Date.now() }],
+      }))
+      showToast('✓ Partner added to live site.')
+    } else {
+      setData(prev => ({
+        ...prev,
+        partners: (prev.partners || []).map(p => p.id === partnerModal.data.id ? partnerModal.data : p),
+      }))
+      showToast('✓ Partner updated.')
+    }
     setPartnerModal(null)
+  }
+
+  const removePartner = (id) => {
+    setData(prev => ({
+      ...prev,
+      partners: (prev.partners || []).filter(p => p.id !== id),
+    }))
+    showToast('Partner removed.')
   }
 
   return (
     <div>
-      <PageHeader title="Homepage & Announcements" subtitle="Hero text, banners, partners" />
+      <PageHeader title="Homepage & Announcements" subtitle="Hero text, marquee ticker, partners live sync" />
       {toast && <Toast msg={toast} />}
 
       {/* HERO SECTION */}
       <Card style={{ marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem' }}>🎯 Hero Section Text</div>
-          <Btn size="sm" onClick={() => { setHeroTemp(hero); setEditHero(true) }}>✏️ Edit</Btn>
+          <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem' }}>🎯 Homepage Hero Text</div>
+          <Btn id="edit-hero-btn" size="sm" onClick={() => { setHeroTemp(data.hero || {}); setEditHero(true) }}>✏️ Edit</Btn>
         </div>
         {editHero ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            <div><label style={labelStyle}>Tagline</label><input value={heroTemp.tagline} onChange={e => setHeroTemp(p => ({ ...p, tagline: e.target.value }))} style={inputStyle} /></div>
-            <div><label style={labelStyle}>Subtitle</label><textarea value={heroTemp.subtext} onChange={e => setHeroTemp(p => ({ ...p, subtext: e.target.value }))} rows={3} style={{ ...inputStyle, resize: 'vertical' }} /></div>
-            <div style={{ display: 'flex', gap: '0.75rem' }}><Btn onClick={saveHero}>Save</Btn><Btn variant="ghost" onClick={() => setEditHero(false)}>Cancel</Btn></div>
+            <div>
+              <label style={labelStyle}>Tagline / Header</label>
+              <input
+                id="hero-tagline-input"
+                value={heroTemp?.tagline || ''}
+                onChange={e => setHeroTemp(p => ({ ...p, tagline: e.target.value }))}
+                style={inputStyle}
+              />
+            </div>
+            <div>
+              <label style={labelStyle}>Subtitle / Paragraph</label>
+              <textarea
+                id="hero-subtext-input"
+                value={heroTemp?.subtext || ''}
+                onChange={e => setHeroTemp(p => ({ ...p, subtext: e.target.value }))}
+                rows={3}
+                style={{ ...inputStyle, resize: 'vertical' }}
+              />
+            </div>
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
+              <Btn id="save-hero-btn" onClick={saveHero}>Save & Update Live Site</Btn>
+              <Btn variant="ghost" onClick={() => setEditHero(false)}>Cancel</Btn>
+            </div>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <div><span style={labelStyle}>Tagline</span><div style={{ fontSize: '0.95rem', color: '#fff', fontWeight: 600 }}>{hero.tagline}</div></div>
-            <div><span style={labelStyle}>Subtitle</span><div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6 }}>{hero.subtext}</div></div>
+          <div>
+            <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#e05a24', marginBottom: '0.4rem' }}>
+              {data.hero?.tagline}
+            </div>
+            <p style={{ margin: 0, fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
+              {data.hero?.subtext}
+            </p>
           </div>
         )}
       </Card>
 
-      {/* BANNERS */}
+      {/* MARQUEE TICKER BANNERS */}
       <Card style={{ marginBottom: '1.5rem' }}>
-        <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem', marginBottom: '1rem' }}>📣 Announcement Banners</div>
-        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
-          <input value={newBanner} onChange={e => setNewBanner(e.target.value)} onKeyDown={e => e.key === 'Enter' && addBanner()} placeholder="New banner text..." style={{ ...inputStyle, flex: 1 }} />
-          <Btn onClick={addBanner}>Add</Btn>
+        <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem', marginBottom: '1rem' }}>
+          📣 Marquee Ticker Announcements ({data.banners?.length || 0})
         </div>
+
+        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+          <input
+            id="new-banner-input"
+            value={newBanner}
+            onChange={e => setNewBanner(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && addBanner()}
+            placeholder="Add new scrolling announcement ticker item..."
+            style={{ ...inputStyle, flex: 1, minWidth: 260 }}
+          />
+          <select
+            id="banner-accent-select"
+            value={bannerAccent}
+            onChange={e => setBannerAccent(e.target.value)}
+            style={{ ...inputStyle, width: 'auto' }}
+          >
+            <option value="orange">Orange Dot</option>
+            <option value="blue">Blue Dot</option>
+          </select>
+          <Btn id="add-banner-btn" onClick={addBanner}>+ Add to Ticker</Btn>
+        </div>
+
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          {banners.map(b => (
-            <div key={b.id} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'rgba(255,255,255,0.05)', borderRadius: 8, padding: '0.65rem 0.85rem' }}>
-              <div style={{ flex: 1, fontSize: '0.82rem', color: b.active ? '#fff' : 'rgba(255,255,255,0.35)' }}>{b.text}</div>
-              <Badge color={b.active ? '#2ecc71' : '#666'}>{b.active ? 'Live' : 'Off'}</Badge>
-              <Btn size="sm" variant="ghost" onClick={() => toggleBanner(b.id)}>{b.active ? 'Hide' : 'Show'}</Btn>
-              <Btn size="sm" variant="danger" onClick={() => removeBanner(b.id)}>✕</Btn>
+          {(data.banners || []).map(b => (
+            <div
+              key={b.id}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '0.65rem 0.9rem', borderRadius: 8,
+                background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <span style={{
+                  display: 'inline-block', width: 8, height: 8, borderRadius: '50%',
+                  background: b.accent === 'blue' ? '#0f7ea3' : '#e05a24',
+                }} />
+                <span style={{ fontSize: '0.85rem', color: b.active ? '#fff' : 'rgba(255,255,255,0.35)', textDecoration: b.active ? 'none' : 'line-through' }}>
+                  {b.text}
+                </span>
+              </div>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <Btn size="sm" variant="ghost" onClick={() => toggleBanner(b.id)}>
+                  {b.active ? 'Hide' : 'Show'}
+                </Btn>
+                <Btn size="sm" variant="ghost" onClick={() => removeBanner(b.id)} style={{ color: '#ff6b6b' }}>
+                  🗑
+                </Btn>
+              </div>
             </div>
           ))}
         </div>
       </Card>
 
-      {/* PARTNERS */}
+      {/* PARTNERS & AFFILIATIONS */}
       <Card>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem' }}>🤝 Partner / Collaboration Logos</div>
-          <Btn size="sm" onClick={() => setPartnerModal({ mode: 'add', data: { id: Date.now(), name: '', logo: '', url: '#', active: true } })}>+ Add</Btn>
+          <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem' }}>
+            🤝 Partner Organisations & Affiliations
+          </div>
+          <Btn size="sm" onClick={() => setPartnerModal({ mode: 'add', data: { name: '', active: true } })}>
+            + Add Partner
+          </Btn>
         </div>
 
-        {partnerModal && (
-          <div style={overlayStyle}>
-            <Card style={{ maxWidth: 420, width: '100%' }}>
-              <div style={{ fontWeight: 700, color: '#fff', marginBottom: '1.25rem' }}>{partnerModal.mode === 'add' ? 'Add Partner' : 'Edit Partner'}</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                {[['Organisation Name', 'name'], ['Logo URL', 'logo'], ['Website URL', 'url']].map(([label, key]) => (
-                  <div key={key}><label style={labelStyle}>{label}</label><input value={partnerModal.data[key]} onChange={e => setPartnerModal(p => ({ ...p, data: { ...p.data, [key]: e.target.value } }))} style={inputStyle} /></div>
-                ))}
-              </div>
-              <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.25rem' }}>
-                <Btn onClick={savePartner}>Save</Btn>
-                <Btn variant="ghost" onClick={() => setPartnerModal(null)}>Cancel</Btn>
-              </div>
-            </Card>
-          </div>
-        )}
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0.75rem' }}>
-          {partners.map(p => (
-            <div key={p.id} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 10, padding: '0.85rem', border: '1px solid rgba(255,255,255,0.1)' }}>
-              <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.85rem', marginBottom: '0.3rem' }}>{p.name}</div>
-              <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)', marginBottom: '0.6rem' }}>{p.url}</div>
-              <div style={{ display: 'flex', gap: '0.4rem' }}>
-                <Badge color={p.active ? '#2ecc71' : '#666'}>{p.active ? 'Active' : 'Hidden'}</Badge>
-                <Btn size="sm" onClick={() => setPartnerModal({ mode: 'edit', data: { ...p } })}>✏️</Btn>
-                <Btn size="sm" variant="ghost" onClick={() => setPartners(prev => prev.map(x => x.id === p.id ? { ...x, active: !x.active } : x))}>{p.active ? 'Hide' : 'Show'}</Btn>
-              </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '0.75rem' }}>
+          {(data.partners || []).map(p => (
+            <div
+              key={p.id}
+              style={{
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                padding: '0.75rem 1rem', borderRadius: 8,
+                background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+              }}
+            >
+              <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#fff' }}>{p.name}</span>
+              <Btn size="sm" variant="ghost" onClick={() => removePartner(p.id)} style={{ color: '#ff6b6b' }}>🗑</Btn>
             </div>
           ))}
         </div>
       </Card>
+
+      {/* Partner Modal */}
+      {partnerModal && (
+        <div style={overlayStyle} onClick={() => setPartnerModal(null)}>
+          <div style={{ ...modalStyle, maxWidth: 400 }} onClick={e => e.stopPropagation()}>
+            <div style={modalHeader}>
+              <span style={modalTitle}>Add Partner</span>
+              <button type="button" onClick={() => setPartnerModal(null)} style={closeBtn}>✕</button>
+            </div>
+            <div style={{ marginBottom: '1.25rem' }}>
+              <label style={labelStyle}>Partner Organisation Name</label>
+              <input
+                value={partnerModal.data.name}
+                onChange={e => setPartnerModal(p => ({ ...p, data: { ...p.data, name: e.target.value } }))}
+                style={inputStyle}
+                placeholder="e.g. Ministry of Culture, India"
+                autoFocus
+              />
+            </div>
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
+              <button type="button" onClick={savePartner} style={primaryBtn}>Save Partner</button>
+              <button type="button" onClick={() => setPartnerModal(null)} style={ghostBtn}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
 
-const overlayStyle = { position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem' }
-const inputStyle   = { width: '100%', padding: '0.6rem 0.85rem', background: '#1a2636', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#fff', fontSize: '0.85rem', boxSizing: 'border-box' }
-const labelStyle   = { display: 'block', fontSize: '0.7rem', fontWeight: 600, color: 'rgba(255,255,255,0.38)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.3rem' }
-function Toast({ msg }) { return <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', background: '#1a3a2a', border: '1px solid #2ecc71', color: '#2ecc71', borderRadius: 10, padding: '0.75rem 1.25rem', fontSize: '0.85rem', fontWeight: 600, zIndex: 9999 }}>{msg}</div> }
+function Toast({ msg }) {
+  return (
+    <div style={{
+      position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 9999,
+      background: '#2ecc71', color: '#fff', padding: '0.75rem 1.25rem',
+      borderRadius: 8, fontWeight: 600, fontSize: '0.85rem',
+      boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+    }}>
+      {msg}
+    </div>
+  )
+}
+
+const overlayStyle = {
+  position: 'fixed', inset: 0, zIndex: 1000,
+  background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)',
+  display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem',
+}
+const modalStyle = {
+  width: '100%', background: '#111c26',
+  borderRadius: 16, padding: '2rem',
+  boxShadow: '0 24px 64px rgba(0,0,0,0.7)',
+  border: '1px solid rgba(255,255,255,0.1)',
+}
+const modalHeader = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }
+const modalTitle  = { fontSize: '1rem', fontWeight: 700, color: '#fff' }
+const closeBtn    = { background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '1.2rem', lineHeight: 1 }
+const labelStyle  = { display: 'block', fontSize: '0.74rem', color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 600, marginBottom: '0.35rem' }
+const inputStyle  = {
+  width: '100%', background: 'rgba(255,255,255,0.05)',
+  border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8,
+  padding: '0.65rem 0.9rem', color: '#fff', fontSize: '0.85rem',
+  outline: 'none', boxSizing: 'border-box',
+}
+const primaryBtn  = { background: '#e05a24', color: '#fff', border: 'none', borderRadius: 8, padding: '0.65rem 1.25rem', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer' }
+const ghostBtn    = { background: 'none', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.55)', borderRadius: 8, padding: '0.65rem 1.25rem', fontSize: '0.85rem', cursor: 'pointer' }

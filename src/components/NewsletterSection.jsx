@@ -1,11 +1,10 @@
 import { useRef, useState, useCallback } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
-
-const NEWS_PHOTOS = Array.from({ length: 25 }, (_, i) => `/news${i + 1}.jpeg`)
+import { useNewspaperItems } from '../utils/newspaperStore'
 
 // ---- Lightbox ----
-function Lightbox({ index, onClose, onPrev, onNext }) {
-  if (index === null) return null
+function Lightbox({ item, onClose, onPrev, onNext, currentIdx, total }) {
+  if (!item) return null
   return (
     <AnimatePresence>
       <motion.div
@@ -29,12 +28,18 @@ function Lightbox({ index, onClose, onPrev, onNext }) {
           style={{ position: 'relative', maxWidth: 'min(900px, 90vw)', maxHeight: '85vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
         >
           <img
-            src={NEWS_PHOTOS[index]}
-            alt={`News ${index + 1}`}
-            style={{ maxWidth: '100%', maxHeight: '75vh', objectFit: 'contain', borderRadius: 12, boxShadow: '0 32px 80px rgba(0,0,0,0.6)' }}
+            src={item.photo}
+            alt={item.headline || 'News coverage'}
+            style={{ maxWidth: '100%', maxHeight: '70vh', objectFit: 'contain', borderRadius: 12, boxShadow: '0 32px 80px rgba(0,0,0,0.6)' }}
           />
-          <div style={{ marginTop: '1rem', fontSize: '0.85rem', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.06em' }}>
-            {index + 1} / {NEWS_PHOTOS.length}
+          <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+            <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#fff' }}>{item.headline}</div>
+            <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)', marginTop: '0.25rem' }}>
+              {item.publication} {item.date ? `· ${item.date}` : ''}
+            </div>
+            <div style={{ marginTop: '0.5rem', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.06em' }}>
+              {currentIdx + 1} / {total}
+            </div>
           </div>
         </motion.div>
 
@@ -60,9 +65,13 @@ export default function NewsletterSection() {
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
   const [subscribed, setSubscribed] = useState(false)
-  const [lightbox, setLightbox] = useState(null)
-  const prevImage = useCallback(() => setLightbox(i => (i - 1 + NEWS_PHOTOS.length) % NEWS_PHOTOS.length), [])
-  const nextImage = useCallback(() => setLightbox(i => (i + 1) % NEWS_PHOTOS.length), [])
+  const [lightboxIdx, setLightboxIdx] = useState(null)
+
+  const [rawItems] = useNewspaperItems()
+  const items = rawItems.filter(i => i.status !== 'Archived')
+
+  const prevImage = useCallback(() => setLightboxIdx(i => (i - 1 + items.length) % items.length), [items.length])
+  const nextImage = useCallback(() => setLightboxIdx(i => (i + 1) % items.length), [items.length])
 
   const handleSubscribe = (e) => {
     e.preventDefault()
@@ -86,42 +95,58 @@ export default function NewsletterSection() {
             <p className="section-subtitle">Stay informed with the latest news, event announcements and updates from the Global Icons Forum Society.</p>
           </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '2rem' }}>
-            {NEWS_PHOTOS.map((src, i) => (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px', marginBottom: '2rem' }}>
+            {items.map((item, i) => (
               <motion.div
-                key={i}
+                key={item.id || i}
                 initial={{ opacity: 0, y: 24, scale: 0.96 }}
                 animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-                transition={{ duration: 0.5, delay: i * 0.04, ease: [0.4, 0, 0.2, 1] }}
-                onClick={() => setLightbox(i)}
+                transition={{ duration: 0.45, delay: Math.min(i * 0.03, 0.4), ease: [0.4, 0, 0.2, 1] }}
+                onClick={() => setLightboxIdx(i)}
                 style={{
                   borderRadius: 12,
                   overflow: 'hidden',
-                  border: '1.5px solid rgba(255,255,255,0.2)',
+                  border: '1.5px solid rgba(255,255,255,0.15)',
                   boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
-                  aspectRatio: '4/3',
+                  background: 'var(--color-bg-card)',
                   cursor: 'pointer',
                   position: 'relative',
+                  display: 'flex',
+                  flexDirection: 'column',
                 }}
               >
-                <img
-                  src={src}
-                  alt={`News ${i + 1}`}
-                  loading="lazy"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    display: 'block',
-                    transition: 'transform 0.4s ease',
-                  }}
-                  onMouseEnter={e => e.target.style.transform = 'scale(1.06)'}
-                  onMouseLeave={e => e.target.style.transform = 'scale(1)'}
-                />
-                {/* Number badge */}
-                <div style={{ position: 'absolute', top: 8, right: 8, width: 26, height: 26, borderRadius: '50%', background: 'rgba(224,90,36,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.62rem', color: '#fff', fontWeight: 700, boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
-                  {i + 1}
+                <div style={{ height: 200, overflow: 'hidden', position: 'relative' }}>
+                  <img
+                    src={item.photo}
+                    alt={item.headline || `News ${i + 1}`}
+                    loading="lazy"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      display: 'block',
+                      transition: 'transform 0.4s ease',
+                    }}
+                    onMouseEnter={e => e.target.style.transform = 'scale(1.06)'}
+                    onMouseLeave={e => e.target.style.transform = 'scale(1)'}
+                  />
+                  {/* Category / Publication badge */}
+                  <div style={{ position: 'absolute', top: 8, right: 8, padding: '2px 8px', borderRadius: 12, background: 'rgba(224,90,36,0.88)', fontSize: '0.68rem', color: '#fff', fontWeight: 700 }}>
+                    {item.publication || item.category || 'News'}
+                  </div>
                 </div>
+                {item.headline && (
+                  <div style={{ padding: '0.85rem 1rem' }}>
+                    <div style={{ fontSize: '0.88rem', fontWeight: 600, color: '#fff', lineHeight: 1.35, marginBottom: '0.3rem' }}>
+                      {item.headline}
+                    </div>
+                    {item.date && (
+                      <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)' }}>
+                        {item.date}
+                      </div>
+                    )}
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>
@@ -130,7 +155,7 @@ export default function NewsletterSection() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.9 }}
+            transition={{ delay: 0.5 }}
             style={{ textAlign: 'center', marginBottom: '2rem', fontSize: '0.8rem', color: 'rgba(255,255,255,0.58)', letterSpacing: '0.1em', textTransform: 'uppercase' }}
           >
             Click any photo to view full size
@@ -138,7 +163,14 @@ export default function NewsletterSection() {
         </div>
       </section>
 
-      <Lightbox index={lightbox} onClose={() => setLightbox(null)} onPrev={prevImage} onNext={nextImage} />
+      <Lightbox
+        item={lightboxIdx !== null ? items[lightboxIdx] : null}
+        currentIdx={lightboxIdx || 0}
+        total={items.length}
+        onClose={() => setLightboxIdx(null)}
+        onPrev={prevImage}
+        onNext={nextImage}
+      />
 
       {/* ===== NEWSLETTER SIGNUP ===== */}
       <section style={{ background: 'var(--color-bg-deep)', borderTop: '1px solid rgba(255,255,255,0.12)', borderBottom: '1px solid rgba(255,255,255,0.12)', padding: '5rem 0' }}>
@@ -180,77 +212,67 @@ export default function NewsletterSection() {
                   ))}
                 </div>
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#ffffff' }}>2,400+ subscribers</div>
-                  <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)' }}>Join our growing community</div>
+                  <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.92rem' }}>14,800+ Subscribers</div>
+                  <div style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.5)' }}>Across 120+ countries worldwide</div>
                 </div>
               </div>
             </motion.div>
 
             {/* Right — form */}
             <motion.div initial={{ opacity: 0, x: 30 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.7, delay: 0.15 }}>
-              <div style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 20, border: '1px solid rgba(255,255,255,0.2)', padding: '2.5rem', backdropFilter: 'blur(12px)' }}>
+              <div style={{ background: 'var(--color-bg-card)', borderRadius: 20, padding: '2.5rem', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 20px 60px rgba(0,0,0,0.4)' }}>
+                <h3 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#fff', marginBottom: '0.5rem' }}>Join Our Community</h3>
+                <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.88rem', marginBottom: '1.75rem', lineHeight: 1.6 }}>Receive monthly digests of award ceremonies, honouree stories, and global forum initiatives.</p>
+
                 {subscribed ? (
-                  <div style={{ textAlign: 'center', padding: '2rem 0' }}>
-                    <div style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>🎉</div>
-                    <h3 style={{ color: '#ffffff', marginBottom: '0.5rem', fontFamily: 'var(--font-heading)' }}>You're Subscribed!</h3>
-                    <p style={{ color: 'rgba(255,255,255,0.78)', fontSize: '0.9rem', lineHeight: 1.7 }}>
-                      Thank you for joining the Global Icons Forum Society newsletter. You'll receive our next update soon.
-                    </p>
-                    <button onClick={() => { setSubscribed(false); setEmail(''); setName('') }}
-                      className="btn-secondary" style={{ marginTop: '1.5rem' }}>
-                      Subscribe Another Email
-                    </button>
+                  <div style={{ background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.3)', borderRadius: 12, padding: '1.5rem', textAlign: 'center' }}>
+                    <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>✓</div>
+                    <div style={{ fontWeight: 700, color: '#22c55e', fontSize: '1.1rem', marginBottom: '0.35rem' }}>Subscription Request Initiated!</div>
+                    <div style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.84rem' }}>Your email client should open shortly to confirm your subscription.</div>
                   </div>
                 ) : (
-                  <>
-                    <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '1.4rem', color: '#ffffff', marginBottom: '0.4rem' }}>
-                      Subscribe to Our Newsletter
-                    </h3>
-                    <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.65)', marginBottom: '1.75rem', lineHeight: 1.6 }}>
-                      Get the latest news delivered straight to your inbox. Unsubscribe anytime.
-                    </p>
-
-                    <form onSubmit={handleSubscribe} noValidate>
-                      <div className="contact-form-group">
-                        <label htmlFor="nl-name" style={{ color: 'rgba(255,255,255,0.9)' }}>Full Name</label>
-                        <input id="nl-name" type="text" placeholder="Your name" value={name} onChange={e => setName(e.target.value)} />
-                      </div>
-
-                      <div className="contact-form-group">
-                        <label htmlFor="nl-email" style={{ color: 'rgba(255,255,255,0.9)' }}>Email Address <span style={{ color: '#e05a24' }}>*</span></label>
-                        <input id="nl-email" type="email" placeholder="your@email.com" required value={email} onChange={e => setEmail(e.target.value)} />
-                      </div>
-
-                      {/* Interests */}
-                      <div style={{ marginBottom: '1.5rem' }}>
-                        <div style={{ fontSize: '0.85rem', fontWeight: 600, color: 'rgba(255,255,255,0.9)', marginBottom: '0.75rem' }}>Interests (optional)</div>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                          {['Awards', 'Summits', 'Membership', 'Fellowships', 'Cultural Events', 'Social Welfare'].map((tag, i) => (
-                            <span key={i} style={{ fontSize: '0.75rem', fontWeight: 600, padding: '0.3rem 0.85rem', borderRadius: 100, border: '1px solid rgba(255,255,255,0.3)', color: 'rgba(255,255,255,0.88)', background: 'rgba(255,255,255,0.1)', cursor: 'pointer', userSelect: 'none' }}>
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center', fontSize: '1rem', padding: '0.9rem' }}>
-                        Subscribe Now
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" />
-                        </svg>
-                      </button>
-
-                      <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.45)', textAlign: 'center', marginTop: '1rem', lineHeight: 1.5 }}>
-                        By subscribing, you agree to receive updates from the Global Icons Forum Society. Your data is kept private and never shared.
-                      </p>
-                    </form>
-                  </>
+                  <form onSubmit={handleSubscribe} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.4rem' }}>Full Name</label>
+                      <input
+                        type="text"
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        placeholder="e.g. Dr. Priya Sharma"
+                        style={{ width: '100%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 10, padding: '0.85rem 1rem', color: '#fff', fontSize: '0.92rem', outline: 'none', boxSizing: 'border-box' }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.4rem' }}>Email Address *</label>
+                      <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        placeholder="you@domain.com"
+                        style={{ width: '100%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 10, padding: '0.85rem 1rem', color: '#fff', fontSize: '0.92rem', outline: 'none', boxSizing: 'border-box' }}
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      style={{ background: 'var(--color-orange)', color: '#fff', border: 'none', borderRadius: 10, padding: '0.95rem 1.5rem', fontWeight: 700, fontSize: '0.95rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', boxShadow: '0 4px 18px rgba(224,90,36,0.4)', transition: 'transform 0.2s, box-shadow 0.2s' }}
+                      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(224,90,36,0.5)' }}
+                      onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 18px rgba(224,90,36,0.4)' }}
+                    >
+                      Subscribe to Newsletter →
+                    </button>
+                    <div style={{ fontSize: '0.74rem', color: 'rgba(255,255,255,0.4)', textAlign: 'center' }}>
+                      🔒 Zero spam. Unsubscribe at any time with one click.
+                    </div>
+                  </form>
                 )}
               </div>
             </motion.div>
+
           </div>
         </div>
       </section>
+
     </div>
   )
 }

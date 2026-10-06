@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { useAwards } from '../utils/awardsStore'
 
 const AWARDS = [
   {
@@ -37,6 +38,9 @@ const AWARDS = [
 export default function AwardsSection() {
   const sectionRef = useRef()
   const inView = useInView(sectionRef, { once: true, margin: '-80px' })
+  const [storedAwards] = useAwards()
+  const activeAwards = storedAwards && storedAwards.filter(a => a.active !== false)
+  const list = activeAwards && activeAwards.length > 0 ? activeAwards : AWARDS
 
   return (
     <section className="section awards" id="awards" ref={sectionRef}>
@@ -81,7 +85,7 @@ export default function AwardsSection() {
 
             {/* Award category chips */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem', marginTop: '1.5rem', justifyContent: 'center' }}>
-              {['Business', 'Innovation', 'Diplomacy', 'Culture', 'Science', 'Philanthropy'].map((cat, i) => (
+              {Array.from(new Set(list.map(a => a.category || 'Excellence'))).slice(0, 6).map((cat, i) => (
                 <span key={i} style={{
                   fontSize: '0.75rem',
                   fontWeight: 700,
@@ -117,7 +121,7 @@ export default function AwardsSection() {
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-              {AWARDS.map((award, i) => (
+              {list.map((award, i) => (
                 <motion.div
                   key={i}
                   className="award-item"

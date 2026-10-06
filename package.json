@@ -9,13 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/drei": "^9.92.0",
+    "@react-three/fiber": "^8.15.0",
+    "framer-motion": "^10.18.0",
+    "gsap": "^3.12.4",
+    "heic2any": "^0.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@react-three/fiber": "^8.15.0",
-    "@react-three/drei": "^9.92.0",
-    "three": "^0.160.0",
-    "gsap": "^3.12.4",
-    "framer-motion": "^10.18.0"
+    "three": "^0.160.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

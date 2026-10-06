@@ -37,13 +37,15 @@ const INIT = {
   },
 }
 
+import { useSiteSettings } from '../../utils/settingsStore'
+
 const INIT_ADMINS = [
   { id: 1, username: 'admin',       role: 'Super Admin', email: 'admin@gif.org',   active: true },
   { id: 2, username: 'content_mgr', role: 'Content',     email: 'content@gif.org', active: true },
 ]
 
 export default function SettingsManager() {
-  const [settings, setSettings] = useState(INIT)
+  const [settings, setSettings] = useSiteSettings()
   const [admins, setAdmins]     = useState(INIT_ADMINS)
   const [editing, setEditing]   = useState(null) // section key
   const [temp, setTemp]         = useState(null)
@@ -52,7 +54,7 @@ export default function SettingsManager() {
 
   const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(''), 2500) }
   const startEdit = (key) => { setEditing(key); setTemp({ ...settings[key] }) }
-  const saveEdit  = () => { setSettings(p => ({ ...p, [editing]: temp })); setEditing(null); showToast('Saved.') }
+  const saveEdit  = () => { setSettings(p => ({ ...p, [editing]: temp })); setEditing(null); showToast('✓ Settings updated & live on site.') }
 
   const saveAdmin = () => {
     if (!adminModal.data.username.trim()) return
@@ -62,7 +64,7 @@ export default function SettingsManager() {
   }
 
   const SECTIONS = [
-    { key: 'contact',      label: 'Contact Details',   fields: [['Phone', 'phone'], ['Email', 'email'], ['Address', 'address']] },
+    { key: 'contact',      label: 'Contact Details',   fields: [['Phone', 'phone'], ['Email', 'email'], ['Head Office (Hyderabad)', 'headOffice'], ['Registered Office (Vijayawada)', 'registeredOffice']] },
     { key: 'iso',          label: 'ISO Certification',  fields: [['Certificate No.', 'certNo'], ['Certified By', 'certBy'], ['Location', 'location'], ['Issue Date', 'issued'], ['Expiry Date', 'expiry'], ['Accreditation', 'accred']] },
     { key: 'registration', label: 'Registration Info',  fields: [['Act / Law', 'actName'], ['Nature', 'nature'], ['Financial Year', 'finYear']] },
   ]
@@ -80,16 +82,19 @@ export default function SettingsManager() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.92rem' }}>{sec.label}</div>
               {editing === sec.key
-                ? <div style={{ display: 'flex', gap: '0.5rem' }}><Btn size="sm" onClick={saveEdit}>Save</Btn><Btn size="sm" variant="ghost" onClick={() => setEditing(null)}>Cancel</Btn></div>
-                : <Btn size="sm" onClick={() => startEdit(sec.key)}>Edit</Btn>}
+                ? <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <Btn id={`save-${sec.key}-btn`} size="sm" onClick={saveEdit}>Save</Btn>
+                    <Btn size="sm" variant="ghost" onClick={() => setEditing(null)}>Cancel</Btn>
+                  </div>
+                : <Btn id={`edit-${sec.key}-btn`} size="sm" onClick={() => startEdit(sec.key)}>Edit</Btn>}
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0.85rem' }}>
               {sec.fields.map(([label, key]) => (
                 <div key={key}>
                   <div style={labelStyle}>{label}</div>
                   {editing === sec.key
-                    ? <input value={temp[key]} onChange={e => setTemp(p => ({ ...p, [key]: e.target.value }))} style={inputStyle} />
-                    : <div style={{ fontSize: '0.85rem', color: '#fff', lineHeight: 1.5 }}>{settings[sec.key][key]}</div>}
+                    ? <input id={`input-${sec.key}-${key}`} value={temp[key]} onChange={e => setTemp(p => ({ ...p, [key]: e.target.value }))} style={inputStyle} />
+                    : <div style={{ fontSize: '0.85rem', color: '#fff', lineHeight: 1.5 }}>{settings[sec.key]?.[key]}</div>}
                 </div>
               ))}
             </div>
@@ -101,8 +106,11 @@ export default function SettingsManager() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
             <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.92rem' }}>Social Media Links</div>
             {editing === 'social'
-              ? <div style={{ display: 'flex', gap: '0.5rem' }}><Btn size="sm" onClick={saveEdit}>Save</Btn><Btn size="sm" variant="ghost" onClick={() => setEditing(null)}>Cancel</Btn></div>
-              : <Btn size="sm" onClick={() => startEdit('social')}>Edit</Btn>}
+              ? <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <Btn id="save-social-btn" size="sm" onClick={saveEdit}>Save</Btn>
+                  <Btn size="sm" variant="ghost" onClick={() => setEditing(null)}>Cancel</Btn>
+                </div>
+              : <Btn id="edit-social-btn" size="sm" onClick={() => startEdit('social')}>Edit</Btn>}
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
@@ -131,12 +139,13 @@ export default function SettingsManager() {
                 {/* URL / input */}
                 {editing === 'social' ? (
                   <input
+                    id={`input-social-${key}`}
                     value={temp[key]}
                     onChange={e => setTemp(p => ({ ...p, [key]: e.target.value }))}
                     style={{ ...inputStyle, flex: 1, margin: 0 }}
                   />
                 ) : (
-                  <a href={settings.social[key]} target="_blank" rel="noopener noreferrer"
+                  <a href={settings.social?.[key]} target="_blank" rel="noopener noreferrer"
                     style={{
                       flex: 1, fontSize: '0.82rem', color: meta.color,
                       textDecoration: 'none', overflow: 'hidden',
@@ -145,7 +154,7 @@ export default function SettingsManager() {
                     onMouseEnter={e => e.currentTarget.style.textDecoration = 'underline'}
                     onMouseLeave={e => e.currentTarget.style.textDecoration = 'none'}
                   >
-                    {settings.social[key]}
+                    {settings.social?.[key]}
                   </a>
                 )}
 

@@ -109,7 +109,7 @@ export default function AdminLayout({ onLogout }) {
               {NAV.filter(n => n.group === group).map(item => {
                 const isActive = active === item.id
                 return (
-                  <button key={item.id} onClick={() => setActive(item.id)}
+                  <button key={item.id} id={`nav-${item.id}`} onClick={() => setActive(item.id)}
                     title={!sidebarOpen ? item.label : ''}
                     style={{
                       width: '100%', display: 'flex', alignItems: 'center',

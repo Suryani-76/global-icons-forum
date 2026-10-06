@@ -1,10 +1,20 @@
 import { motion } from 'framer-motion'
+import { useSiteSettings } from '../utils/settingsStore'
 
 /* ============================================================
    ISO 9001:2015 Certification Banner
    Shown sitewide just below the hero section
    ============================================================ */
 export default function IsoBanner() {
+  const [settings] = useSiteSettings()
+  const iso = settings.iso || {}
+
+  const certItems = [
+    { label: 'Cert. No.', value: iso.certNo || 'QMS/26M05315' },
+    { label: 'Certified by', value: iso.certBy || 'MQA Certification Services, London' },
+    { label: 'Valid Until', value: iso.expiry || '17 July 2029' },
+    { label: 'Accredited by', value: iso.accred || 'UKAF-CB-011' },
+  ]
   return (
     <motion.div
       initial={{ opacity: 0, y: -12 }}
@@ -62,12 +72,7 @@ export default function IsoBanner() {
 
           {/* Certificate details */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-            {[
-              { label: 'Cert. No.', value: 'QMS/26M05315' },
-              { label: 'Certified by', value: 'MQA Certification Services, London' },
-              { label: 'Valid Until', value: '17 July 2029' },
-              { label: 'Accredited by', value: 'UKAF-CB-011' },
-            ].map((item, i) => (
+            {certItems.map((item, i) => (
               <div key={i} style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '0.62rem', fontWeight: 700, color: 'rgba(247,196,48,0.75)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
                 <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#ffffff', marginTop: '0.1rem' }}>{item.value}</div>

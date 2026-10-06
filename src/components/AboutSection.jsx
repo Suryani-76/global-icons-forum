@@ -2,6 +2,7 @@ import { useRef, useState, Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { motion, useInView } from 'framer-motion'
 import { useCountUp } from '../hooks/useCountUp'
+import { useExecutiveMembers } from '../utils/executiveStore'
 import {
   GlobalRecognitionScene, AwardsScene, CommunityScene,
   SummitScene, MediaScene, DiplomacyScene,
@@ -35,12 +36,25 @@ function TiltCard({ children, style = {} }) {
   )
 }
 
+const hasWebGL = typeof window !== 'undefined' && (() => {
+  try {
+    const c = document.createElement('canvas')
+    return !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')))
+  } catch (e) {
+    return false
+  }
+})()
+
 function CardScene({ Scene, accentColor }) {
   return (
-    <div aria-hidden="true" style={{ width: 90, height: 90, borderRadius: 16, overflow: 'hidden', background: '#061e28', border: `2px solid ${accentColor}66`, flexShrink: 0, marginBottom: '1.25rem', boxShadow: `0 4px 20px ${accentColor}44` }}>
-      <Canvas camera={{ position: [0, 0, 2.8], fov: 50 }} gl={{ antialias: true, alpha: false }} dpr={[1, 2]} style={{ background: 'transparent', width: '100%', height: '100%' }}>
-        <Suspense fallback={null}><Scene /></Suspense>
-      </Canvas>
+    <div aria-hidden="true" style={{ width: 90, height: 90, borderRadius: 16, overflow: 'hidden', background: '#061e28', border: `2px solid ${accentColor}66`, flexShrink: 0, marginBottom: '1.25rem', boxShadow: `0 4px 20px ${accentColor}44`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      {hasWebGL ? (
+        <Canvas camera={{ position: [0, 0, 2.8], fov: 50 }} gl={{ antialias: true, alpha: false }} dpr={[1, 2]} style={{ background: 'transparent', width: '100%', height: '100%' }}>
+          <Suspense fallback={null}><Scene /></Suspense>
+        </Canvas>
+      ) : (
+        <div style={{ width: 40, height: 40, borderRadius: '50%', background: `radial-gradient(circle, ${accentColor} 0%, transparent 70%)` }} />
+      )}
     </div>
   )
 }
@@ -129,6 +143,13 @@ const cardVariant = {
 export default function AboutSection() {
   const sectionRef = useRef()
   const inView = useInView(sectionRef, { once: true, margin: '-80px' })
+  const [executiveBody] = useExecutiveMembers()
+
+  const president = executiveBody.find(m => m.designation === 'President') || executiveBody[0]
+  const secretary = executiveBody.find(m => m.designation === 'Secretary') || executiveBody[2]
+  const vp = executiveBody.find(m => m.designation === 'Vice-President') || executiveBody[1]
+  const jointSec = executiveBody.find(m => m.designation === 'Joint Secretary') || executiveBody[3]
+  const rest = executiveBody.filter(m => ![president?.id, secretary?.id, vp?.id, jointSec?.id].includes(m.id))
 
   return (
     <div ref={sectionRef}>
@@ -161,12 +182,12 @@ export default function AboutSection() {
             <motion.div initial={{ opacity: 0, x: 40 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.9, delay: 0.2 }}
               style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
 
-              {/* Mr. Chaitanya Janga */}
+              {/* President */}
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem' }}>
                 <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 4, ease: 'easeInOut', repeat: Infinity }} style={{ position: 'relative' }}>
                   <div style={{ position: 'absolute', inset: -6, borderRadius: 24, background: 'linear-gradient(135deg, rgba(224,90,36,0.5), rgba(15,126,163,0.5))', filter: 'blur(14px)', zIndex: 0 }} />
-                  <img src="/president.jpg" alt="Mr. Chaitanya Janga"
-                    style={{ width: 'clamp(150px, 18vw, 220px)', height: 'auto', display: 'block', borderRadius: 20, position: 'relative', zIndex: 1, boxShadow: '0 24px 64px rgba(0,0,0,0.2)', border: '3px solid rgba(15,126,163,0.2)' }} />
+                  <img src={president?.photo || '/president.jpg'} alt={president?.name || 'President'}
+                    style={{ width: 'clamp(150px, 18vw, 220px)', height: 'clamp(150px, 18vw, 220px)', objectFit: 'cover', display: 'block', borderRadius: 20, position: 'relative', zIndex: 1, boxShadow: '0 24px 64px rgba(0,0,0,0.2)', border: '3px solid rgba(15,126,163,0.2)' }} />
                 </motion.div>
                 <div style={{
                   background: 'linear-gradient(135deg, #b94000 0%, #e05a24 50%, #ff8c55 100%)',
@@ -176,17 +197,17 @@ export default function AboutSection() {
                   boxShadow: '0 6px 28px rgba(224,90,36,0.55), 0 1px 0 rgba(255,255,255,0.15) inset',
                   border: 'none',
                 }}>
-                  <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 900, fontSize: '1rem', color: '#ffffff', letterSpacing: '0.02em' }}>Mr. Chaitanya Janga</div>
-                  <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.85)', marginTop: '0.25rem', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700 }}>✦ President ✦</div>
+                  <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 900, fontSize: '1rem', color: '#ffffff', letterSpacing: '0.02em' }}>{president?.name || 'Mr. Chaitanya Janga'}</div>
+                  <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.85)', marginTop: '0.25rem', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700 }}>✦ {president?.designation || 'President'} ✦</div>
                 </div>
               </div>
 
-              {/* Mrs. Jaya Pateriya */}
+              {/* Secretary */}
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem' }}>
                 <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 4, ease: 'easeInOut', repeat: Infinity, delay: 0.5 }} style={{ position: 'relative' }}>
                   <div style={{ position: 'absolute', inset: -6, borderRadius: 24, background: 'linear-gradient(135deg, rgba(15,126,163,0.5), rgba(224,90,36,0.5))', filter: 'blur(14px)', zIndex: 0 }} />
-                  <img src="/exec-jaya-pateriya.jpeg" alt="Mrs. Jaya Pateriya"
-                    style={{ width: 'clamp(150px, 18vw, 220px)', height: 'auto', display: 'block', borderRadius: 20, position: 'relative', zIndex: 1, boxShadow: '0 24px 64px rgba(0,0,0,0.2)', border: '3px solid rgba(224,90,36,0.2)' }} />
+                  <img src={secretary?.photo || '/exec-jaya-pateriya.jpeg'} alt={secretary?.name || 'Secretary'}
+                    style={{ width: 'clamp(150px, 18vw, 220px)', height: 'clamp(150px, 18vw, 220px)', objectFit: 'cover', display: 'block', borderRadius: 20, position: 'relative', zIndex: 1, boxShadow: '0 24px 64px rgba(0,0,0,0.2)', border: '3px solid rgba(224,90,36,0.2)' }} />
                 </motion.div>
                 <div style={{
                   background: 'linear-gradient(135deg, #1a1a2e 0%, #2a2a4a 50%, #3a3a6a 100%)',
@@ -197,8 +218,8 @@ export default function AboutSection() {
                   boxShadow: '0 6px 28px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.1) inset',
                   border: '1.5px solid rgba(255,255,255,0.2)',
                 }}>
-                  <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 900, fontSize: '1rem', color: '#ffffff', letterSpacing: '0.02em' }}>Mrs. Jaya Pateriya</div>
-                  <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.75)', marginTop: '0.25rem', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700 }}>✦ Secretary ✦</div>
+                  <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 900, fontSize: '1rem', color: '#ffffff', letterSpacing: '0.02em' }}>{secretary?.name || 'Mrs. Jaya Pateriya'}</div>
+                  <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.75)', marginTop: '0.25rem', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700 }}>✦ {secretary?.designation || 'Secretary'} ✦</div>
                 </div>
               </div>
 
@@ -273,14 +294,16 @@ export default function AboutSection() {
 
             {/* ROW 1 — President + Secretary side by side */}
             <div style={{ display: 'flex', justifyContent: 'center', gap: '3rem', flexWrap: 'wrap' }}>
-              {/* President — index 0 */}
-              <motion.div variants={cardVariant} initial="hidden" animate={inView ? 'visible' : 'hidden'} custom={0}>
-                <OrgCard member={EXECUTIVE_BODY[0]} size="lg" accent="#e05a24" />
-              </motion.div>
-              {/* Secretary — index 2 */}
-              <motion.div variants={cardVariant} initial="hidden" animate={inView ? 'visible' : 'hidden'} custom={1}>
-                <OrgCard member={EXECUTIVE_BODY[2]} size="lg" accent="#e05a24" />
-              </motion.div>
+              {president && (
+                <motion.div variants={cardVariant} initial="hidden" animate={inView ? 'visible' : 'hidden'} custom={0}>
+                  <OrgCard member={president} size="lg" accent="#e05a24" />
+                </motion.div>
+              )}
+              {secretary && (
+                <motion.div variants={cardVariant} initial="hidden" animate={inView ? 'visible' : 'hidden'} custom={1}>
+                  <OrgCard member={secretary} size="lg" accent="#e05a24" />
+                </motion.div>
+              )}
             </div>
 
             {/* Connector: Row 1 → Row 2 */}
@@ -294,14 +317,16 @@ export default function AboutSection() {
 
             {/* ROW 2 — Vice-President + Joint Secretary side by side */}
             <div style={{ display: 'flex', justifyContent: 'center', gap: '3rem', flexWrap: 'wrap' }}>
-              {/* Vice-President — index 1 */}
-              <motion.div variants={cardVariant} initial="hidden" animate={inView ? 'visible' : 'hidden'} custom={2}>
-                <OrgCard member={EXECUTIVE_BODY[1]} size="md" accent="#0f7ea3" />
-              </motion.div>
-              {/* Joint Secretary — index 3 */}
-              <motion.div variants={cardVariant} initial="hidden" animate={inView ? 'visible' : 'hidden'} custom={3}>
-                <OrgCard member={EXECUTIVE_BODY[3]} size="md" accent="#0f7ea3" />
-              </motion.div>
+              {vp && (
+                <motion.div variants={cardVariant} initial="hidden" animate={inView ? 'visible' : 'hidden'} custom={2}>
+                  <OrgCard member={vp} size="md" accent="#0f7ea3" />
+                </motion.div>
+              )}
+              {jointSec && (
+                <motion.div variants={cardVariant} initial="hidden" animate={inView ? 'visible' : 'hidden'} custom={3}>
+                  <OrgCard member={jointSec} size="md" accent="#0f7ea3" />
+                </motion.div>
+              )}
             </div>
 
             {/* Connector: Row 2 → Row 3 */}
@@ -322,10 +347,10 @@ export default function AboutSection() {
               </div>
             </div>
 
-            {/* ROW 3 — Remaining 5 members (indexes 4–8) */}
+            {/* ROW 3 — Remaining members */}
             <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-              {EXECUTIVE_BODY.slice(4).map((member, i) => (
-                <motion.div key={i} variants={cardVariant} initial="hidden" animate={inView ? 'visible' : 'hidden'} custom={i + 4}>
+              {rest.map((member, i) => (
+                <motion.div key={member.id || i} variants={cardVariant} initial="hidden" animate={inView ? 'visible' : 'hidden'} custom={i + 4}>
                   <OrgCard member={member} size="sm" accent="rgba(255,255,255,0.35)" />
                 </motion.div>
               ))}

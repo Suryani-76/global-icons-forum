@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
+import { useTestimonials } from '../utils/testimonialsStore'
 
 const TESTIMONIALS = [
   {
@@ -166,6 +167,9 @@ const imgVariants = {
 }
 
 export default function TestimonialCarousel() {
+  const [storedTestimonials] = useTestimonials()
+  const list = storedTestimonials && storedTestimonials.length > 0 ? storedTestimonials : TESTIMONIALS
+
   const [index, setIndex] = useState(0)
   const [dir, setDir] = useState(1)
   const [lightbox, setLightbox] = useState(null)
@@ -173,10 +177,13 @@ export default function TestimonialCarousel() {
   const sectionRef = useRef()
   const inView = useInView(sectionRef, { once: false, margin: '-80px' })
 
+  const safeIndex = index % list.length
+  const t = list[safeIndex] || list[0]
+
   const go = useCallback((newIndex, direction) => {
     setDir(direction)
-    setIndex((newIndex + TESTIMONIALS.length) % TESTIMONIALS.length)
-  }, [])
+    setIndex((newIndex + list.length) % list.length)
+  }, [list.length])
 
   const next = useCallback(() => go(index + 1,  1), [index, go])
   const prev = useCallback(() => go(index - 1, -1), [index, go])
@@ -186,8 +193,6 @@ export default function TestimonialCarousel() {
     timerRef.current = setInterval(next, 5000)
     return () => clearInterval(timerRef.current)
   }, [inView, next])
-
-  const t = TESTIMONIALS[index]
 
   return (
     <section ref={sectionRef} id="testimonials"
@@ -285,13 +290,13 @@ export default function TestimonialCarousel() {
                 {/* Counter */}
                 <div style={{ marginTop: 'auto', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>
-                    {index + 1} / {TESTIMONIALS.length}
+                    {safeIndex + 1} / {list.length}
                   </span>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    {TESTIMONIALS.map((_, i) => (
-                      <button key={i} onClick={() => go(i, i > index ? 1 : -1)}
+                    {list.map((_, i) => (
+                      <button key={i} onClick={() => go(i, i > safeIndex ? 1 : -1)}
                         aria-label={`Go to ${i + 1}`}
-                        style={{ width: i === index ? 24 : 7, height: 7, borderRadius: 4, background: i === index ? '#e05a24' : 'rgba(255,255,255,0.25)', border: 'none', cursor: 'pointer', padding: 0, transition: 'all 0.35s ease' }} />
+                        style={{ width: i === safeIndex ? 24 : 7, height: 7, borderRadius: 4, background: i === safeIndex ? '#e05a24' : 'rgba(255,255,255,0.25)', border: 'none', cursor: 'pointer', padding: 0, transition: 'all 0.35s ease' }} />
                     ))}
                   </div>
                 </div>
@@ -322,23 +327,23 @@ export default function TestimonialCarousel() {
 
         {/* Progress bar */}
         <div style={{ maxWidth: 1000, margin: '1.5rem auto 0', height: 2, background: 'rgba(255,255,255,0.12)', borderRadius: 2, overflow: 'hidden' }}>
-          <motion.div key={index} style={{ height: '100%', background: 'linear-gradient(90deg, #0f7ea3, #e05a24)', borderRadius: 2 }}
+          <motion.div key={safeIndex} style={{ height: '100%', background: 'linear-gradient(90deg, #0f7ea3, #e05a24)', borderRadius: 2 }}
             initial={{ width: '0%' }} animate={{ width: '100%' }} transition={{ duration: 5.0, ease: 'linear' }} />
         </div>
 
         {/* Thumbnails strip */}
         <div style={{ maxWidth: 1000, margin: '1.5rem auto 0', display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
-          {TESTIMONIALS.map((item, i) => (
+          {list.map((item, i) => (
             <button key={i}
               onClick={() => {
-                go(i, i > index ? 1 : -1)
+                go(i, i > safeIndex ? 1 : -1)
                 setLightbox({ photo: item.photo, name: item.name })
               }}
               aria-label={`View ${item.name}`}
               style={{
                 width: 72, height: 52, borderRadius: 10, overflow: 'hidden', padding: 0, border: 'none',
-                cursor: 'zoom-in', opacity: i === index ? 1 : 0.45,
-                outline: i === index ? '2px solid #e05a24' : 'none',
+                cursor: 'zoom-in', opacity: i === safeIndex ? 1 : 0.45,
+                outline: i === safeIndex ? '2px solid #e05a24' : 'none',
                 outlineOffset: 2, transition: 'opacity 0.3s ease, outline 0.3s ease',
               }}>
               <img src={item.photo} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />

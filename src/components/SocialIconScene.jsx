@@ -264,8 +264,18 @@ export function XScene({ isHovered }) {
   )
 }
 
+const hasWebGL = typeof window !== 'undefined' && (() => {
+  try {
+    const c = document.createElement('canvas')
+    return !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')))
+  } catch (e) {
+    return false
+  }
+})()
+
 // ---- Generic canvas wrapper ----
 export function SocialIconCanvas({ SceneComponent, isHovered, color }) {
+  if (!hasWebGL) return null
   return (
     <Canvas
       camera={{ position: [0, 0, 3.8], fov: 44 }}

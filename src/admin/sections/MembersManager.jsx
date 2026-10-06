@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, PageHeader, Btn, Badge } from '../AdminUI'
+import { useChapters } from '../../utils/chaptersStore'
 
 const STATUSES = ['Active', 'Pending', 'Rejected']
 const statusColor = { Active: '#2ecc71', Pending: '#f7c430', Rejected: '#ff6b6b' }
@@ -13,22 +14,23 @@ const SAMPLE_MEMBERS = [
   { id: 6,  name: 'Mr. Pedro Costa',    email: 'pedro@example.com',  city: 'Sao Paulo',   country: 'Brazil',    joined: '2025-06-03', status: 'Rejected' },
 ]
 
-const SAMPLE_CHAPTERS = [
-  { id: 1, city: 'Vijayawada', country: 'India',     contact: 'Mr. Chaitanya Janga',  email: 'vijayawada@gif.org',  members: 45, status: 'Active' },
-  { id: 2, city: 'Hyderabad',  country: 'India',     contact: 'Mr. Ravi Kumar',        email: 'hyderabad@gif.org',   members: 38, status: 'Active' },
-  { id: 3, city: 'Mumbai',     country: 'India',     contact: 'Ms. Anita Sharma',      email: 'mumbai@gif.org',      members: 27, status: 'Active' },
-  { id: 4, city: 'Dubai',      country: 'UAE',       contact: 'Ms. Sara Al-Amri',      email: 'dubai@gif.org',       members: 14, status: 'Pending' },
-  { id: 5, city: 'London',     country: 'UK',        contact: 'Mr. Emmanuel',          email: 'london@gif.org',      members: 9,  status: 'Active' },
-]
-
-const blankChapter = { city: '', country: '', contact: '', email: '', members: 0, status: 'Active' }
+const blankChapter = { city: '', state: 'State Chapter', country: 'India', type: 'Chapter Office', contact: '', email: '', members: 0, status: 'Active', icon: '🟢' }
 
 export default function MembersManager() {
   const [tab, setTab]               = useState('members')
-  const [members, setMembers]       = useState(SAMPLE_MEMBERS)
-  const [chapters, setChapters]     = useState(SAMPLE_CHAPTERS)
+  const [members, setMembers]       = useState(() => {
+    try {
+      const saved = localStorage.getItem('gif_registered_members')
+      return saved ? JSON.parse(saved) : SAMPLE_MEMBERS
+    } catch (_) { return SAMPLE_MEMBERS }
+  })
+  const [chapters, setChapters]     = useChapters()
   const [chapterModal, setChapterModal] = useState(null)
   const [toast, setToast]           = useState('')
+
+  useEffect(() => {
+    try { localStorage.setItem('gif_registered_members', JSON.stringify(members)) } catch (_) {}
+  }, [members])
 
   const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(''), 2500) }
 
@@ -38,9 +40,12 @@ export default function MembersManager() {
   }
 
   const saveChapter = () => {
-    if (!chapterModal.data.city.trim()) return
-    if (chapterModal.mode === 'add') { setChapters(prev => [...prev, { ...chapterModal.data, id: Date.now() }]); showToast('Chapter added.') }
-    else                             { setChapters(prev => prev.map(c => c.id === chapterModal.data.id ? chapterModal.data : c)); showToast('Updated.') }
+    const city = chapterModal.data.city.trim() || document.querySelector('#chapter-city-input')?.value?.trim() || ''
+    if (!city) return
+    const contact = chapterModal.data.contact || document.querySelector('#chapter-contact-input')?.value?.trim() || ''
+    const finalData = { ...chapterModal.data, city, contact }
+    if (chapterModal.mode === 'add') { setChapters(prev => [...prev, { ...finalData, id: Date.now() }]); showToast('Chapter added.') }
+    else                             { setChapters(prev => prev.map(c => c.id === chapterModal.data.id ? finalData : c)); showToast('Updated.') }
     setChapterModal(null)
   }
 
@@ -49,14 +54,14 @@ export default function MembersManager() {
   return (
     <div>
       <PageHeader title="Members & Chapters" subtitle={`${members.length} members · ${chapters.length} chapters`}>
-        {tab === 'chapters' && <Btn onClick={() => setChapterModal({ mode: 'add', data: { ...blankChapter, id: Date.now() } })}>+ Add Chapter</Btn>}
+        {tab === 'chapters' && <Btn id="add-chapter-btn" onClick={() => setChapterModal({ mode: 'add', data: { ...blankChapter, id: Date.now() } })}>+ Add Chapter</Btn>}
       </PageHeader>
       {toast && <Toast msg={toast} />}
 
       {/* Tab switch */}
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
         {[['members', '👥 Members'], ['chapters', '🌐 Chapters']].map(([id, label]) => (
-          <button key={id} onClick={() => setTab(id)} style={{
+          <button key={id} id={`tab-${id}`} onClick={() => setTab(id)} style={{
             padding: '0.5rem 1.25rem', borderRadius: 10, border: '1px solid rgba(255,255,255,0.15)',
             background: tab === id ? 'rgba(224,90,36,0.2)' : 'rgba(255,255,255,0.05)',
             color: tab === id ? '#e05a24' : 'rgba(255,255,255,0.55)', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
@@ -74,11 +79,14 @@ export default function MembersManager() {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
               {[['City', 'city'], ['Country', 'country'], ['Contact Person', 'contact'], ['Email', 'email']].map(([label, key]) => (
-                <div key={key}><label style={labelStyle}>{label}</label><input value={chapterModal.data[key]} onChange={e => upd(key, e.target.value)} style={inputStyle} /></div>
+                <div key={key}>
+                  <label style={labelStyle}>{label}</label>
+                  <input id={`chapter-${key}-input`} value={chapterModal.data[key]} onChange={e => upd(key, e.target.value)} style={inputStyle} />
+                </div>
               ))}
             </div>
             <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
-              <button onClick={saveChapter} style={primaryBtn}>Save</button>
+              <button id="save-chapter-btn" onClick={saveChapter} style={primaryBtn}>Save</button>
               <button onClick={() => setChapterModal(null)} style={ghostBtn}>Cancel</button>
             </div>
           </div>

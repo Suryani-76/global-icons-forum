@@ -3,6 +3,15 @@ import { Canvas } from '@react-three/fiber'
 import { motion, useInView } from 'framer-motion'
 import CtaScene from './CtaScene'
 
+const hasWebGL = typeof window !== 'undefined' && (() => {
+  try {
+    const c = document.createElement('canvas')
+    return !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')))
+  } catch (e) {
+    return false
+  }
+})()
+
 export default function CtaBanner() {
   const ref = useRef()
   const inView = useInView(ref, { once: true, margin: '-80px' })
@@ -10,18 +19,20 @@ export default function CtaBanner() {
   return (
     <section className="cta-banner" id="join" ref={ref}>
       {/* 3D background canvas */}
-      <div className="cta-banner-3d" aria-hidden="true">
-        <Canvas
-          camera={{ position: [0, 2.5, 5], fov: 55 }}
-          gl={{ antialias: true, alpha: true }}
-          dpr={[1, 1.5]}
-          style={{ background: 'transparent', width: '100%', height: '100%' }}
-        >
-          <Suspense fallback={null}>
-            <CtaScene />
-          </Suspense>
-        </Canvas>
-      </div>
+      {hasWebGL && (
+        <div className="cta-banner-3d" aria-hidden="true">
+          <Canvas
+            camera={{ position: [0, 2.5, 5], fov: 55 }}
+            gl={{ antialias: true, alpha: true }}
+            dpr={[1, 1.5]}
+            style={{ background: 'transparent', width: '100%', height: '100%' }}
+          >
+            <Suspense fallback={null}>
+              <CtaScene />
+            </Suspense>
+          </Canvas>
+        </div>
+      )}
 
       <div className="container">
         <div className="cta-banner-inner">

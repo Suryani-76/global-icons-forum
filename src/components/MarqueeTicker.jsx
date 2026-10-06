@@ -1,6 +1,7 @@
 import { useRef } from 'react'
+import { useAnnouncements } from '../utils/announcementsStore'
 
-const ITEMS = [
+const DEFAULT_ITEMS = [
   { text: '120+ Countries',              accent: 'blue'   },
   { text: 'Global Icon of the Year',     accent: 'orange' },
   { text: '5,000+ Icons Recognised',     accent: 'blue'   },
@@ -15,8 +16,6 @@ const ITEMS = [
   { text: 'Global Peace Institute',      accent: 'orange' },
 ]
 
-const DOUBLED = [...ITEMS, ...ITEMS]
-
 const DOT = ({ accent }) => (
   <span aria-hidden="true" style={{
     display: 'inline-block', width: 5, height: 5, borderRadius: '50%',
@@ -27,7 +26,12 @@ const DOT = ({ accent }) => (
 
 export default function MarqueeTicker({ direction = 'left' }) {
   const trackRef = useRef()
-  const duration = `${DOUBLED.length * 4.2}s`
+  const [data] = useAnnouncements()
+
+  const activeBanners = (data?.banners || []).filter(b => b.active)
+  const items = activeBanners.length > 0 ? activeBanners : DEFAULT_ITEMS
+  const doubled = [...items, ...items]
+  const duration = `${Math.max(doubled.length * 3.8, 16)}s`
 
   return (
     <div
@@ -46,7 +50,7 @@ export default function MarqueeTicker({ direction = 'left' }) {
           willChange: 'transform',
         }}
       >
-        {DOUBLED.map((item, i) => (
+        {doubled.map((item, i) => (
           <span key={i} style={{
             display: 'inline-flex', alignItems: 'center',
             fontSize: '0.78rem', fontWeight: 600,

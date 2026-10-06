@@ -1,101 +1,148 @@
 import { useState } from 'react'
 import { Card, PageHeader, Btn, Badge } from '../AdminUI'
+import { useAwards } from '../../utils/awardsStore'
 
-const INIT = [
-  { id: 1, category: 'Business & Entrepreneurship', awards: ['Business Icon of the Year', 'Startup of the Year', 'Global Entrepreneur Award'], active: true },
-  { id: 2, category: 'Arts & Culture',               awards: ['Cultural Excellence Award', 'Cinema Icon Award', 'Performing Arts Award'],     active: true },
-  { id: 3, category: 'Science & Technology',         awards: ['Innovation Leader Award', 'Tech Visionary Award', 'Research Excellence Award'], active: true },
-  { id: 4, category: 'Social Impact',                awards: ['Humanitarian Award', 'Community Leader Award', 'Youth Empowerment Award'],      active: true },
-  { id: 5, category: 'Education',                    awards: ['Education Visionary Award', 'Academic Excellence Award'],                        active: true },
-  { id: 6, category: 'Health & Medicine',            awards: ['Healthcare Excellence Award', 'Medical Innovation Award'],                       active: true },
-  { id: 7, category: 'Diplomacy & Peace',            awards: ['Peace & Diplomacy Award', 'Global Ambassador Award'],                           active: true },
-  { id: 8, category: 'Sports',                       awards: ['Sports Icon Award', 'Lifetime Achievement in Sports'],                          active: false },
+const blank = {
+  title: '',
+  category: 'Business & Entrepreneurship',
+  desc: '',
+  color: 'orange',
+  active: true,
+}
+
+const CATEGORIES = [
+  'Leadership & Vision',
+  'Science & Technology',
+  'Diplomacy & Peace',
+  'Social Impact',
+  'Business & Entrepreneurship',
+  'Arts & Culture',
+  'Education',
+  'Healthcare',
 ]
 
-const blank = { category: '', awards: [], active: true }
-
 export default function AwardsManager() {
-  const [cats, setCats]         = useState(INIT)
-  const [modal, setModal]       = useState(null)
-  const [newAward, setNewAward] = useState('')
-  const [toast, setToast]       = useState('')
+  const [awards, setAwards] = useAwards()
+  const [modal, setModal]   = useState(null)
+  const [toast, setToast]   = useState('')
 
   const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(''), 2500) }
-  const openAdd  = () => setModal({ mode: 'add',  data: { ...blank, id: Date.now(), awards: [] } })
-  const openEdit = (c) => setModal({ mode: 'edit', data: { ...c, awards: [...c.awards] } })
+
+  const openAdd  = () => setModal({ mode: 'add', data: { ...blank, id: Date.now() } })
+  const openEdit = (a) => setModal({ mode: 'edit', data: { ...a } })
+  const upd = (k, v) => setModal(p => ({ ...p, data: { ...p.data, [k]: v } }))
 
   const save = () => {
-    if (!modal.data.category.trim()) return
-    if (modal.mode === 'add') { setCats(prev => [...prev, modal.data]); showToast('Category added.') }
-    else                      { setCats(prev => prev.map(c => c.id === modal.data.id ? modal.data : c)); showToast('Updated.') }
-    setModal(null); setNewAward('')
+    const title = modal.data.title.trim() || document.querySelector('#award-title-input')?.value?.trim() || ''
+    if (!title) return
+    const desc = modal.data.desc.trim() || document.querySelector('#award-desc-input')?.value?.trim() || ''
+    const finalData = { ...modal.data, title, desc }
+    if (modal.mode === 'add') {
+      setAwards(prev => [finalData, ...prev])
+      showToast('✓ Award added to live website.')
+    } else {
+      setAwards(prev => prev.map(a => a.id === modal.data.id ? finalData : a))
+      showToast('✓ Award updated on live website.')
+    }
+    setModal(null)
   }
-  const addAward    = () => { if (!newAward.trim()) return; setModal(p => ({ ...p, data: { ...p.data, awards: [...p.data.awards, newAward.trim()] } })); setNewAward('') }
-  const removeAward = (i) => setModal(p => ({ ...p, data: { ...p.data, awards: p.data.awards.filter((_, idx) => idx !== i) } }))
-  const toggleActive = (id) => { setCats(prev => prev.map(c => c.id === id ? { ...c, active: !c.active } : c)); showToast('Status toggled.') }
-  const remove = (id) => { setCats(prev => prev.filter(c => c.id !== id)); showToast('Removed.') }
+
+  const toggleActive = (id) => {
+    setAwards(prev => prev.map(a => a.id === id ? { ...a, active: !a.active } : a))
+    showToast('Award status updated.')
+  }
+
+  const remove = (id) => {
+    setAwards(prev => prev.filter(a => a.id !== id))
+    showToast('Award removed.')
+  }
 
   return (
     <div>
-      <PageHeader title="Awards Manager" subtitle={`${cats.length} categories`}>
-        <Btn onClick={openAdd}>Add Category</Btn>
+      <PageHeader title="Awards Manager" subtitle={`${awards.length} awards published on live site`}>
+        <Btn id="add-award-btn" onClick={openAdd}>+ Add Award</Btn>
       </PageHeader>
       {toast && <Toast msg={toast} />}
 
       {modal && (
-        <div style={overlayStyle}>
-          <div style={{ ...modalStyle, maxWidth: 480, maxHeight: '90vh', overflowY: 'auto' }}>
+        <div style={overlayStyle} onClick={() => setModal(null)}>
+          <div style={{ ...modalStyle, maxWidth: 480, maxHeight: '90vh', overflowY: 'auto' }} onClick={e => e.stopPropagation()}>
             <div style={modalHeader}>
-              <span style={modalTitle}>{modal.mode === 'add' ? 'Add Category' : 'Edit Category'}</span>
-              <button onClick={() => { setModal(null); setNewAward('') }} style={closeBtn}>✕</button>
+              <span style={modalTitle}>{modal.mode === 'add' ? 'Add Award' : 'Edit Award'}</span>
+              <button type="button" onClick={() => setModal(null)} style={closeBtn}>✕</button>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div>
-                <label style={labelStyle}>Category Name</label>
-                <input value={modal.data.category} onChange={e => setModal(p => ({ ...p, data: { ...p.data, category: e.target.value } }))} style={inputStyle} autoFocus />
+                <label style={labelStyle}>Award Title</label>
+                <input
+                  id="award-title-input"
+                  value={modal.data.title}
+                  onChange={e => upd('title', e.target.value)}
+                  style={inputStyle}
+                  placeholder="e.g. Global Icon of the Year"
+                  autoFocus
+                />
               </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                <div>
+                  <label style={labelStyle}>Category</label>
+                  <select id="award-category-select" value={modal.data.category} onChange={e => upd('category', e.target.value)} style={inputStyle}>
+                    {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label style={labelStyle}>Accent Color</label>
+                  <select id="award-color-select" value={modal.data.color} onChange={e => upd('color', e.target.value)} style={inputStyle}>
+                    <option value="orange">Orange Accent</option>
+                    <option value="blue">Blue Accent</option>
+                  </select>
+                </div>
+              </div>
+
               <div>
-                <label style={labelStyle}>Awards</label>
-                <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                  <input value={newAward} onChange={e => setNewAward(e.target.value)} onKeyDown={e => e.key === 'Enter' && addAward()} placeholder="Award name..." style={{ ...inputStyle, flex: 1 }} />
-                  <button onClick={addAward} style={{ ...primaryBtn, flex: 'none', padding: '0.6rem 1rem' }}>Add</button>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
-                  {modal.data.awards.map((a, i) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#1a2636', borderRadius: 7, padding: '0.4rem 0.75rem' }}>
-                      <span style={{ flex: 1, fontSize: '0.82rem', color: '#fff' }}>{a}</span>
-                      <button onClick={() => removeAward(i)} style={{ background: 'none', border: 'none', color: 'rgba(255,100,100,0.7)', cursor: 'pointer', fontSize: '0.85rem' }}>✕</button>
-                    </div>
-                  ))}
-                </div>
+                <label style={labelStyle}>Description / Criteria</label>
+                <textarea
+                  id="award-desc-input"
+                  value={modal.data.desc}
+                  onChange={e => upd('desc', e.target.value)}
+                  rows={4}
+                  placeholder="Describe the significance and selection criteria for this award..."
+                  style={{ ...inputStyle, resize: 'vertical' }}
+                />
               </div>
             </div>
+
             <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
-              <button onClick={save} style={primaryBtn}>Save</button>
-              <button onClick={() => { setModal(null); setNewAward('') }} style={ghostBtn}>Cancel</button>
+              <button id="save-award-btn" type="button" onClick={save} style={primaryBtn}>Save Award</button>
+              <button type="button" onClick={() => setModal(null)} style={ghostBtn}>Cancel</button>
             </div>
           </div>
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-        {cats.map(cat => (
-          <Card key={cat.id}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-              <div>
-                <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.9rem', marginBottom: '0.3rem' }}>{cat.category}</div>
-                <Badge color={cat.active ? '#2ecc71' : '#888'}>{cat.active ? 'Active' : 'Inactive'}</Badge>
-              </div>
+      {/* Grid of awards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1rem' }}>
+        {awards.map(a => (
+          <Card key={a.id} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <Badge color={a.color === 'blue' ? '#0f7ea3' : '#e05a24'}>{a.category}</Badge>
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: a.active !== false ? '#2ecc71' : '#ff6b6b' }}>
+                ● {a.active !== false ? 'Active' : 'Inactive'}
+              </span>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', marginBottom: '0.85rem' }}>
-              {cat.awards.map((a, i) => (
-                <div key={i} style={{ fontSize: '0.77rem', color: 'rgba(255,255,255,0.5)', paddingLeft: '0.65rem', borderLeft: '2px solid rgba(224,90,36,0.35)' }}>{a}</div>
-              ))}
-            </div>
-            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-              <Btn size="sm" onClick={() => openEdit(cat)}>Edit</Btn>
-              <Btn size="sm" variant="ghost" onClick={() => toggleActive(cat.id)}>{cat.active ? 'Deactivate' : 'Activate'}</Btn>
-              <Btn size="sm" variant="danger" onClick={() => remove(cat.id)}>Delete</Btn>
+
+            <div style={{ fontWeight: 700, color: '#fff', fontSize: '1rem' }}>{a.title}</div>
+            <p style={{ margin: 0, fontSize: '0.82rem', color: 'rgba(255,255,255,0.65)', lineHeight: 1.5 }}>
+              {a.desc}
+            </p>
+
+            <div style={{ display: 'flex', gap: '0.5rem', marginTop: 'auto', paddingTop: '0.75rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+              <Btn size="sm" variant="ghost" onClick={() => openEdit(a)}>✏️ Edit</Btn>
+              <Btn size="sm" variant="ghost" onClick={() => toggleActive(a.id)}>
+                {a.active !== false ? 'Deactivate' : 'Activate'}
+              </Btn>
+              <Btn size="sm" variant="ghost" onClick={() => remove(a.id)} style={{ color: '#ff6b6b' }}>🗑 Remove</Btn>
             </div>
           </Card>
         ))}
@@ -104,13 +151,39 @@ export default function AwardsManager() {
   )
 }
 
-const overlayStyle = { position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem' }
-const modalStyle   = { width: '100%', background: '#111c26', borderRadius: 14, padding: '1.75rem', boxShadow: '0 20px 60px rgba(0,0,0,0.6)' }
-const modalHeader  = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }
-const modalTitle   = { fontSize: '0.95rem', fontWeight: 700, color: '#fff' }
-const closeBtn     = { background: 'none', border: 'none', color: 'rgba(255,255,255,0.35)', cursor: 'pointer', fontSize: '1rem', lineHeight: 1 }
-const primaryBtn   = { flex: 1, padding: '0.65rem', borderRadius: 8, border: 'none', background: '#e05a24', color: '#fff', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer' }
-const ghostBtn     = { padding: '0.65rem 1.1rem', borderRadius: 8, border: '1px solid rgba(255,255,255,0.12)', background: 'transparent', color: 'rgba(255,255,255,0.5)', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer' }
-const inputStyle   = { width: '100%', padding: '0.6rem 0.85rem', background: '#1a2636', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#fff', fontSize: '0.85rem', boxSizing: 'border-box' }
-const labelStyle   = { display: 'block', fontSize: '0.7rem', fontWeight: 600, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.35rem' }
-function Toast({ msg }) { return <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', background: '#0d2218', border: '1px solid #2ecc71', color: '#2ecc71', borderRadius: 8, padding: '0.65rem 1.1rem', fontSize: '0.82rem', fontWeight: 600, zIndex: 9999 }}>{msg}</div> }
+function Toast({ msg }) {
+  return (
+    <div style={{
+      position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 9999,
+      background: '#2ecc71', color: '#fff', padding: '0.75rem 1.25rem',
+      borderRadius: 8, fontWeight: 600, fontSize: '0.85rem',
+      boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+    }}>
+      {msg}
+    </div>
+  )
+}
+
+const overlayStyle = {
+  position: 'fixed', inset: 0, zIndex: 1000,
+  background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)',
+  display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem',
+}
+const modalStyle = {
+  width: '100%', background: '#111c26',
+  borderRadius: 16, padding: '2rem',
+  boxShadow: '0 24px 64px rgba(0,0,0,0.7)',
+  border: '1px solid rgba(255,255,255,0.1)',
+}
+const modalHeader = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }
+const modalTitle  = { fontSize: '1rem', fontWeight: 700, color: '#fff' }
+const closeBtn    = { background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '1.2rem', lineHeight: 1 }
+const labelStyle  = { display: 'block', fontSize: '0.74rem', color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 600, marginBottom: '0.35rem' }
+const inputStyle  = {
+  width: '100%', background: 'rgba(255,255,255,0.05)',
+  border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8,
+  padding: '0.65rem 0.9rem', color: '#fff', fontSize: '0.85rem',
+  outline: 'none', boxSizing: 'border-box',
+}
+const primaryBtn  = { background: '#e05a24', color: '#fff', border: 'none', borderRadius: 8, padding: '0.65rem 1.25rem', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer' }
+const ghostBtn    = { background: 'none', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.55)', borderRadius: 8, padding: '0.65rem 1.25rem', fontSize: '0.85rem', cursor: 'pointer' }

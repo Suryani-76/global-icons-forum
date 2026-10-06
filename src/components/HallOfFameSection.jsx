@@ -4,6 +4,15 @@ import { motion, useInView } from 'framer-motion'
 import HallOfFameScene from './HallOfFameScene'
 import { useCountUp } from '../hooks/useCountUp'
 
+const hasWebGL = typeof window !== 'undefined' && (() => {
+  try {
+    const c = document.createElement('canvas')
+    return !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')))
+  } catch (e) {
+    return false
+  }
+})()
+
 const AWARD_CATEGORIES = [
   {
     icon: '🏆',
@@ -79,22 +88,24 @@ export default function HallOfFameSection() {
       }}
     >
       {/* 3D particle canvas — full bleed background */}
-      <div aria-hidden="true" style={{
-        position: 'absolute',
-        inset: 0,
-        zIndex: 0,
-      }}>
-        <Canvas
-          camera={{ position: [0, 0, 9], fov: 55 }}
-          gl={{ antialias: true, alpha: false }}
-          dpr={[1, 1.5]}
-          style={{ background: 'transparent', width: '100%', height: '100%' }}
-        >
-          <Suspense fallback={null}>
-            <HallOfFameScene />
-          </Suspense>
-        </Canvas>
-      </div>
+      {hasWebGL && (
+        <div aria-hidden="true" style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 0,
+        }}>
+          <Canvas
+            camera={{ position: [0, 0, 9], fov: 55 }}
+            gl={{ antialias: true, alpha: false }}
+            dpr={[1, 1.5]}
+            style={{ background: 'transparent', width: '100%', height: '100%' }}
+          >
+            <Suspense fallback={null}>
+              <HallOfFameScene />
+            </Suspense>
+          </Canvas>
+        </div>
+      )}
 
       {/* Dark vignette overlay */}
       <div aria-hidden="true" style={{

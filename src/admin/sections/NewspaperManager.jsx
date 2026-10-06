@@ -1,80 +1,107 @@
 import { useState, useRef } from 'react'
 import { Card, PageHeader, Btn, Badge } from '../AdminUI'
-
-const INIT = [
-  { id: 1,  photo: '/newspicture 1.jpeg', headline: 'Global Icons Forum Society Launches National Summit',         publication: 'Deccan Chronicle', date: '2025-03-10', category: 'Summit',    status: 'Published' },
-  { id: 2,  photo: '/newspicture 2.jpeg', headline: 'Vijayawada Icons Honoured at Global Forum Ceremony',          publication: 'Eenadu',           date: '2025-04-18', category: 'Awards',    status: 'Published' },
-  { id: 3,  photo: '/newspicture 3.jpeg', headline: 'Global Icons Forum Receives ISO 9001:2015 Certification',     publication: 'The Hindu',        date: '2026-07-20', category: 'Milestone', status: 'Published' },
-  { id: 4,  photo: '/newspicture 4.jpeg', headline: 'Super Star Krishna Awards 2025 — A Grand Celebration',        publication: 'Sakshi',           date: '2025-02-14', category: 'Awards',    status: 'Published' },
-  { id: 5,  photo: '/newspicture 5.jpeg', headline: 'GIF Society Expands Chapters Across South India',             publication: 'Andhra Jyothy',    date: '2025-06-05', category: 'Expansion', status: 'Published' },
-  { id: 6,  photo: '/news1.jpeg',         headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-01', category: 'Media',     status: 'Published' },
-  { id: 7,  photo: '/news2.jpeg',         headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-02', category: 'Media',     status: 'Published' },
-  { id: 8,  photo: '/news3.jpeg',         headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-03', category: 'Media',     status: 'Published' },
-  { id: 9,  photo: '/news4.jpeg',         headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-04', category: 'Media',     status: 'Published' },
-  { id: 10, photo: '/news5.jpeg',         headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-05', category: 'Media',     status: 'Published' },
-  { id: 11, photo: '/news6.jpeg',         headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-06', category: 'Media',     status: 'Published' },
-  { id: 12, photo: '/news7.jpeg',         headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-07', category: 'Media',     status: 'Published' },
-  { id: 13, photo: '/news8.jpeg',         headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-08', category: 'Media',     status: 'Published' },
-  { id: 14, photo: '/news9.jpeg',         headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-09', category: 'Media',     status: 'Published' },
-  { id: 15, photo: '/news10.jpeg',        headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-10', category: 'Media',     status: 'Published' },
-  { id: 16, photo: '/news11.jpeg',        headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-11', category: 'Media',     status: 'Published' },
-  { id: 17, photo: '/news12.jpeg',        headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-12', category: 'Media',     status: 'Published' },
-  { id: 18, photo: '/news13.jpeg',        headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-13', category: 'Media',     status: 'Published' },
-  { id: 19, photo: '/news14.jpeg',        headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-14', category: 'Media',     status: 'Published' },
-  { id: 20, photo: '/news15.jpeg',        headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-15', category: 'Media',     status: 'Published' },
-  { id: 21, photo: '/news16.jpeg',        headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-16', category: 'Media',     status: 'Published' },
-  { id: 22, photo: '/news17.jpeg',        headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-17', category: 'Media',     status: 'Published' },
-  { id: 23, photo: '/news18.jpeg',        headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-18', category: 'Media',     status: 'Published' },
-  { id: 24, photo: '/news19.jpeg',        headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-19', category: 'Media',     status: 'Published' },
-  { id: 25, photo: '/news20.jpeg',        headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-20', category: 'Media',     status: 'Published' },
-  { id: 26, photo: '/news21.jpeg',        headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-21', category: 'Media',     status: 'Published' },
-  { id: 27, photo: '/news22.jpeg',        headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-22', category: 'Media',     status: 'Published' },
-  { id: 28, photo: '/news23.jpeg',        headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-23', category: 'Media',     status: 'Published' },
-  { id: 29, photo: '/news24.jpeg',        headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-24', category: 'Media',     status: 'Published' },
-  { id: 30, photo: '/news25.jpeg',        headline: 'News Coverage — Global Icons Forum',                          publication: 'Media Coverage',   date: '2025-01-25', category: 'Media',     status: 'Published' },
-]
+import { useNewspaperItems } from '../../utils/newspaperStore'
+import { processImageFile } from '../../utils/imageProcessor'
 
 const CATEGORIES = ['Awards', 'Summit', 'Milestone', 'Expansion', 'Community', 'Media', 'Other']
 const STATUSES   = ['Published', 'Draft', 'Archived']
 const statusColor = { Published: '#2ecc71', Draft: '#f7c430', Archived: '#888' }
 
-const blank = { headline: '', publication: '', date: '', category: 'Awards', status: 'Published', photo: '' }
+const blank = {
+  headline: '',
+  publication: 'Media Coverage',
+  date: new Date().toISOString().slice(0, 10),
+  category: 'Awards',
+  status: 'Published',
+  photo: '',
+}
 
 export default function NewspaperManager() {
-  const [items, setItems]     = useState(INIT)
+  const [items, setItems]     = useNewspaperItems()
   const [modal, setModal]     = useState(null)
-  const [photoMode, setPhotoMode] = useState('url')
   const [filter, setFilter]   = useState('All')
-  const [toast, setToast]     = useState('')
   const [preview, setPreview] = useState(null)
+  const [photoMode, setPhotoMode] = useState('upload') // Default to upload mode
+  const [toast, setToast]     = useState('')
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [uploadError, setUploadError]   = useState('')
+  const [isDragging, setIsDragging]     = useState(false)
   const fileRef = useRef()
 
   const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(''), 2500) }
 
-  const openAdd  = () => { setPhotoMode('url'); setPreview(null); setModal({ mode: 'add',  data: { ...blank, id: Date.now() } }) }
-  const openEdit = (n) => { setPhotoMode('url'); setPreview(n.photo); setModal({ mode: 'edit', data: { ...n } }) }
+  const openAdd = () => {
+    setPhotoMode('upload')
+    setPreview(null)
+    setUploadError('')
+    setModal({ mode: 'add', data: { ...blank, id: Date.now() } })
+  }
+
+  const openEdit = (n) => {
+    setPhotoMode(n.photo?.startsWith('data:') ? 'upload' : 'url')
+    setPreview(n.photo)
+    setUploadError('')
+    setModal({ mode: 'edit', data: { ...n } })
+  }
+
   const upd = (k, v) => setModal(p => ({ ...p, data: { ...p.data, [k]: v } }))
 
-  const handleFile = (e) => {
-    const file = e.target.files[0]
+  const handleSelectedFile = async (file) => {
     if (!file) return
-    const reader = new FileReader()
-    reader.onload = (ev) => {
-      setPreview(ev.target.result)
-      upd('photo', ev.target.result)
+    setUploadError('')
+    setIsProcessing(true)
+
+    try {
+      const result = await processImageFile(file, 1100, 0.76)
+      setPreview(result.dataUrl)
+      upd('photo', result.dataUrl)
+    } catch (err) {
+      console.error('Newspaper upload error:', err)
+      setUploadError(err.message || 'Failed to process image. Please try another file.')
+    } finally {
+      setIsProcessing(false)
     }
-    reader.readAsDataURL(file)
+  }
+
+  const handleFile = (e) => {
+    const file = e.target.files?.[0]
+    handleSelectedFile(file)
+  }
+
+  const handleDrop = (e) => {
+    e.preventDefault()
+    setIsDragging(false)
+    const file = e.dataTransfer.files?.[0]
+    handleSelectedFile(file)
   }
 
   const save = () => {
-    if (!modal.data.headline.trim()) return
-    if (modal.mode === 'add') { setItems(prev => [modal.data, ...prev]); showToast('Article added.') }
-    else                      { setItems(prev => prev.map(i => i.id === modal.data.id ? modal.data : i)); showToast('Updated.') }
-    setModal(null); setPreview(null)
+    if (!modal.data.headline.trim()) {
+      setUploadError('Please enter an article headline.')
+      return
+    }
+    const finalData = {
+      ...modal.data,
+      photo: preview || modal.data.photo || '',
+    }
+    if (modal.mode === 'add') {
+      setItems(prev => [finalData, ...prev])
+      showToast('✓ Article added & saved.')
+    } else {
+      setItems(prev => prev.map(i => i.id === modal.data.id ? finalData : i))
+      showToast('✓ Article updated.')
+    }
+    setModal(null)
+    setPreview(null)
+    setIsProcessing(false)
   }
 
-  const remove  = (id) => { setItems(prev => prev.filter(i => i.id !== id)); showToast('Removed.') }
-  const toggle  = (id) => {
+  const remove = (id) => {
+    setItems(prev => prev.filter(i => i.id !== id))
+    showToast('Removed.')
+  }
+
+  const toggle = (id) => {
     setItems(prev => prev.map(i => i.id === id ? { ...i, status: i.status === 'Published' ? 'Archived' : 'Published' } : i))
     showToast('Status updated.')
   }
@@ -83,15 +110,15 @@ export default function NewspaperManager() {
 
   return (
     <div>
-      <PageHeader title="Newspaper Coverage" subtitle={`${items.length} articles`}>
-        <Btn onClick={openAdd}>+ Add Article</Btn>
+      <PageHeader title="Newspaper Coverage" subtitle={`${items.length} articles published`}>
+        <Btn id="add-newspaper-btn" onClick={openAdd}>+ Add Article</Btn>
       </PageHeader>
       {toast && <Toast msg={toast} />}
 
       {/* Filter tabs */}
       <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
         {['All', ...STATUSES, ...CATEGORIES].map(f => (
-          <button key={f} onClick={() => setFilter(f)} style={{
+          <button key={f} type="button" onClick={() => setFilter(f)} style={{
             padding: '0.3rem 0.85rem', borderRadius: 20,
             border: '1px solid rgba(255,255,255,0.1)',
             background: filter === f ? 'rgba(224,90,36,0.18)' : 'rgba(255,255,255,0.04)',
@@ -103,25 +130,31 @@ export default function NewspaperManager() {
 
       {/* Modal */}
       {modal && (
-        <div style={overlayStyle}>
-          <div style={{ ...modalStyle, maxHeight: '90vh', overflowY: 'auto' }}>
+        <div style={overlayStyle} onClick={() => { setModal(null); setPreview(null); setIsProcessing(false) }}>
+          <div style={{ ...modalStyle, maxHeight: '90vh', overflowY: 'auto' }} onClick={e => e.stopPropagation()}>
             <div style={modalHeader}>
               <span style={modalTitle}>{modal.mode === 'add' ? 'Add Newspaper Article' : 'Edit Article'}</span>
-              <button onClick={() => { setModal(null); setPreview(null) }} style={closeBtn}>✕</button>
+              <button type="button" onClick={() => { setModal(null); setPreview(null); setIsProcessing(false) }} style={closeBtn}>✕</button>
             </div>
+
+            {uploadError && (
+              <div style={{ padding: '0.65rem 0.85rem', borderRadius: 8, background: 'rgba(255,80,80,0.12)', border: '1px solid rgba(255,80,80,0.25)', color: '#ff7676', fontSize: '0.8rem', marginBottom: '1rem' }}>
+                ⚠️ {uploadError}
+              </div>
+            )}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {/* Headline */}
               <div>
                 <label style={labelStyle}>Headline</label>
-                <input value={modal.data.headline} onChange={e => upd('headline', e.target.value)} style={inputStyle} placeholder="e.g. Global Icons Forum Honours Excellence..." autoFocus />
+                <input id="newspaper-headline-input" value={modal.data.headline} onChange={e => upd('headline', e.target.value)} style={inputStyle} placeholder="e.g. Global Icons Forum Honours Excellence..." autoFocus />
               </div>
 
               {/* Publication + Date row */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                 <div>
                   <label style={labelStyle}>Publication / Newspaper</label>
-                  <input value={modal.data.publication} onChange={e => upd('publication', e.target.value)} style={inputStyle} placeholder="e.g. Deccan Chronicle" />
+                  <input id="newspaper-pub-input" value={modal.data.publication} onChange={e => upd('publication', e.target.value)} style={inputStyle} placeholder="e.g. Deccan Chronicle" />
                 </div>
                 <div>
                   <label style={labelStyle}>Date (YYYY-MM-DD)</label>
@@ -147,10 +180,10 @@ export default function NewspaperManager() {
 
               {/* Photo */}
               <div>
-                <label style={labelStyle}>Newspaper Photo</label>
+                <label style={labelStyle}>Newspaper Clipping Photo</label>
                 <div style={{ display: 'flex', background: '#1a2636', borderRadius: 8, padding: 3, marginBottom: '0.6rem' }}>
-                  {[['url', 'Paste URL'], ['upload', 'Upload File']].map(([id, label]) => (
-                    <button key={id} type="button" onClick={() => setPhotoMode(id)} style={{
+                  {[['upload', 'Upload File / Drag & Drop'], ['url', 'Paste URL']].map(([id, label]) => (
+                    <button key={id} type="button" onClick={() => { setPhotoMode(id); setUploadError('') }} style={{
                       flex: 1, padding: '0.4rem', borderRadius: 6, border: 'none',
                       background: photoMode === id ? '#e05a24' : 'transparent',
                       color: photoMode === id ? '#fff' : 'rgba(255,255,255,0.4)',
@@ -160,34 +193,75 @@ export default function NewspaperManager() {
                 </div>
 
                 {photoMode === 'url' && (
-                  <input value={modal.data.photo} onChange={e => { upd('photo', e.target.value); setPreview(e.target.value) }}
-                    style={inputStyle} placeholder="/newspicture 1.jpeg or https://..." />
+                  <input
+                    value={modal.data.photo}
+                    onChange={e => { upd('photo', e.target.value); setPreview(e.target.value) }}
+                    style={inputStyle}
+                    placeholder="/newspicture 1.jpeg or https://..."
+                  />
                 )}
 
                 {photoMode === 'upload' && (
                   <>
-                    <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} style={{ display: 'none' }} />
-                    <button type="button" onClick={() => fileRef.current.click()} style={{
-                      width: '100%', padding: '1.25rem', border: '1.5px dashed rgba(255,255,255,0.15)',
-                      borderRadius: 8, background: 'transparent', color: 'rgba(255,255,255,0.4)',
-                      cursor: 'pointer', fontSize: '0.82rem', boxSizing: 'border-box',
-                    }}>
-                      {preview && modal.data.photo?.startsWith('data:') ? '✓ File selected' : 'Click to choose image'}
-                    </button>
+                    <input
+                      id="newspaper-file-input"
+                      ref={fileRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFile}
+                      style={{ position: 'absolute', opacity: 0, width: '1px', height: '1px', pointerEvents: 'none' }}
+                    />
+                    <div
+                      onDragOver={e => { e.preventDefault(); setIsDragging(true) }}
+                      onDragLeave={() => setIsDragging(false)}
+                      onDrop={handleDrop}
+                      onClick={() => {
+                        if (fileRef.current) {
+                          fileRef.current.value = ''
+                          fileRef.current.click()
+                        }
+                      }}
+                      style={{
+                        width: '100%',
+                        padding: '1.25rem',
+                        border: `1.5px dashed ${isDragging ? '#e05a24' : 'rgba(255,255,255,0.2)'}`,
+                        borderRadius: 8,
+                        background: isDragging ? 'rgba(224,90,36,0.08)' : 'transparent',
+                        color: 'rgba(255,255,255,0.6)',
+                        cursor: 'pointer',
+                        fontSize: '0.82rem',
+                        boxSizing: 'border-box',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {isProcessing
+                        ? '⏳ Optimizing newspaper clipping...'
+                        : preview
+                          ? '✓ Photo selected (click or drop to change)'
+                          : 'Click to choose image or drag & drop'}
+                    </div>
                   </>
                 )}
 
                 {/* Preview */}
                 {preview && (
-                  <img src={preview} alt="preview" onError={() => setPreview(null)}
-                    style={{ width: '100%', height: 160, objectFit: 'cover', borderRadius: 8, marginTop: '0.6rem', display: 'block', border: '1px solid rgba(255,255,255,0.08)' }} />
+                  <div style={{ marginTop: '0.6rem', position: 'relative' }}>
+                    <img
+                      src={preview}
+                      alt="preview"
+                      onError={() => setUploadError('Image preview failed. Please check file format.')}
+                      style={{ width: '100%', height: 160, objectFit: 'cover', borderRadius: 8, display: 'block', border: '1px solid rgba(255,255,255,0.08)', background: '#0a1017' }}
+                    />
+                  </div>
                 )}
               </div>
             </div>
 
             <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
-              <button onClick={save} style={primaryBtn}>Save</button>
-              <button onClick={() => { setModal(null); setPreview(null) }} style={ghostBtn}>Cancel</button>
+              <button id="save-newspaper-btn" type="button" onClick={save} disabled={isProcessing} style={primaryBtn}>
+                {isProcessing ? 'Processing...' : 'Save Article'}
+              </button>
+              <button type="button" onClick={() => { setModal(null); setPreview(null); setIsProcessing(false) }} style={ghostBtn}>Cancel</button>
             </div>
           </div>
         </div>
@@ -200,8 +274,11 @@ export default function NewspaperManager() {
             {/* Photo */}
             <div style={{ position: 'relative', height: 180, overflow: 'hidden', background: '#0d1f2d' }}>
               {item.photo ? (
-                <img src={item.photo} alt={item.headline}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                <img
+                  src={item.photo}
+                  alt={item.headline}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
               ) : (
                 <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.15)', fontSize: '2.5rem' }}>📰</div>
               )}
@@ -219,14 +296,14 @@ export default function NewspaperManager() {
 
             {/* Content */}
             <div style={{ padding: '1rem' }}>
-              <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.88rem', lineHeight: 1.4, marginBottom: '0.5rem' }}>
+              <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.9rem', lineHeight: 1.35, marginBottom: '0.5rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                 {item.headline}
               </div>
-              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginBottom: '0.85rem' }}>
-                <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#e05a24' }}>{item.publication}</span>
-                <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.3)' }}>📅 {item.date}</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)', marginBottom: '1rem' }}>
+                <span style={{ color: '#e05a24', fontWeight: 600 }}>{item.publication}</span>
+                <span>{item.date}</span>
               </div>
-              <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: '0.4rem' }}>
                 <Btn size="sm" onClick={() => openEdit(item)}>Edit</Btn>
                 <Btn size="sm" variant="ghost" onClick={() => toggle(item.id)}>
                   {item.status === 'Published' ? 'Archive' : 'Publish'}
@@ -236,24 +313,21 @@ export default function NewspaperManager() {
             </div>
           </Card>
         ))}
-
-        {filtered.length === 0 && (
-          <div style={{ gridColumn: '1/-1', textAlign: 'center', color: 'rgba(255,255,255,0.25)', padding: '4rem', fontSize: '0.9rem' }}>
-            No articles match the selected filter.
-          </div>
-        )}
       </div>
     </div>
   )
 }
 
-const overlayStyle = { position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem' }
-const modalStyle   = { width: '100%', maxWidth: 520, background: '#111c26', borderRadius: 14, padding: '1.75rem', boxShadow: '0 20px 60px rgba(0,0,0,0.6)' }
+const overlayStyle = { position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem' }
+const modalStyle   = { width: '100%', maxWidth: 520, background: '#111c26', borderRadius: 14, padding: '2rem', boxShadow: '0 20px 60px rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.08)' }
 const modalHeader  = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }
-const modalTitle   = { fontSize: '0.95rem', fontWeight: 700, color: '#fff' }
-const closeBtn     = { background: 'none', border: 'none', color: 'rgba(255,255,255,0.35)', cursor: 'pointer', fontSize: '1rem', lineHeight: 1 }
-const primaryBtn   = { flex: 1, padding: '0.65rem', borderRadius: 8, border: 'none', background: '#e05a24', color: '#fff', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer' }
-const ghostBtn     = { padding: '0.65rem 1.1rem', borderRadius: 8, border: '1px solid rgba(255,255,255,0.12)', background: 'transparent', color: 'rgba(255,255,255,0.5)', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer' }
-const inputStyle   = { width: '100%', padding: '0.6rem 0.85rem', background: '#1a2636', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#fff', fontSize: '0.85rem', boxSizing: 'border-box' }
-const labelStyle   = { display: 'block', fontSize: '0.7rem', fontWeight: 600, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.35rem' }
-function Toast({ msg }) { return <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', background: '#0d2218', border: '1px solid #2ecc71', color: '#2ecc71', borderRadius: 8, padding: '0.65rem 1.1rem', fontSize: '0.82rem', fontWeight: 600, zIndex: 9999 }}>{msg}</div> }
+const modalTitle   = { fontSize: '1rem', fontWeight: 700, color: '#fff' }
+const closeBtn     = { background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '1.1rem', lineHeight: 1 }
+const inputStyle   = { width: '100%', padding: '0.65rem 0.85rem', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8, color: '#fff', fontSize: '0.85rem', boxSizing: 'border-box' }
+const labelStyle   = { display: 'block', fontSize: '0.7rem', fontWeight: 700, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.35rem' }
+const primaryBtn   = { flex: 1, padding: '0.65rem', borderRadius: 8, border: 'none', background: '#e05a24', color: '#fff', fontWeight: 700, fontSize: '0.88rem', cursor: 'pointer' }
+const ghostBtn     = { padding: '0.65rem 1rem', borderRadius: 8, border: '1px solid rgba(255,255,255,0.12)', background: 'transparent', color: 'rgba(255,255,255,0.5)', fontWeight: 600, fontSize: '0.88rem', cursor: 'pointer' }
+
+function Toast({ msg }) {
+  return <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', background: '#0d2818', border: '1px solid #2ecc71', color: '#2ecc71', borderRadius: 10, padding: '0.75rem 1.25rem', fontSize: '0.85rem', fontWeight: 600, zIndex: 9999, boxShadow: '0 4px 20px rgba(0,0,0,0.4)' }}>{msg}</div>
+}

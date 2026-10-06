@@ -25,9 +25,19 @@ const LegalSection        = lazy(() => import('./components/LegalSection'))
 const CollaborationSection = lazy(() => import('./components/CollaborationSection'))
 const AmbientParticles    = lazy(() => import('./components/AmbientParticles'))
 
+const hasWebGL = typeof window !== 'undefined' && (() => {
+  try {
+    const canvas = document.createElement('canvas')
+    return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')))
+  } catch (e) {
+    return false
+  }
+})()
+
 const isLowPower =
-  typeof navigator !== 'undefined' &&
-  (navigator.hardwareConcurrency <= 2 || /Android|iPhone|iPad/i.test(navigator.userAgent))
+  !hasWebGL ||
+  (typeof navigator !== 'undefined' &&
+    (navigator.hardwareConcurrency <= 2 || /Android|iPhone|iPad/i.test(navigator.userAgent)))
 
 const pageVariants = {
   initial: { opacity: 0, y: 16 },

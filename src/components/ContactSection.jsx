@@ -1,80 +1,87 @@
 import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-
-const CONTACT_INFO = [
-  {
-    type: 'orange',
-    label: 'Head Office (Hyderabad)',
-    value: 'Second Floor, Samridhi Vasyam, D No 1/98/9/3/23, Capital Pk Rd, beside Narayana High School, Cyber Hills Colony, VIP Hills, Jaihind Enclave, Madhapur, Hyderabad, Telangana 500081',
-    svg: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="#e05a24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
-        <circle cx="12" cy="10" r="3" />
-      </svg>
-    ),
-  },
-  {
-    type: 'orange',
-    label: 'Global Icons Forum Society — Registered Office',
-    value: '24-29-211, Durga Puram, Gulabi Thota Road, Vijayawada 520003',
-    svg: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="#e05a24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
-        <circle cx="12" cy="10" r="3" />
-      </svg>
-    ),
-  },
-  {
-    type: 'blue',
-    label: 'Email',
-    value: 'info@oklut.com',
-    svg: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="#0f7ea3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-        <polyline points="22,6 12,13 2,6" />
-      </svg>
-    ),
-  },
-  {
-    type: 'blue',
-    label: 'Phone',
-    value: '+91-9014217124',
-    svg: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="#0f7ea3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6 6l.9-.9a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.5 16z" />
-      </svg>
-    ),
-  },
-  {
-    type: 'orange',
-    label: 'International Enquiries',
-    value: 'info@oklut.com',
-    svg: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="#e05a24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <circle cx="12" cy="12" r="10" />
-        <line x1="2" y1="12" x2="22" y2="12" />
-        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z" />
-      </svg>
-    ),
-  },
-]
+import { useSiteSettings } from '../utils/settingsStore'
+import { addNomination } from '../utils/nominationsStore'
 
 export default function ContactSection() {
   const sectionRef = useRef()
-  const inView = useInView(sectionRef, { once: true, margin: '-80px' })
+  const inView = useInView(sectionRef, { once: true, margin: '-40px' })
+  const [settings] = useSiteSettings()
   const [formState, setFormState] = useState({ name: '', email: '', subject: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
+
+  const contactList = [
+    {
+      type: 'orange',
+      label: 'Head Office (Hyderabad)',
+      value: settings.contact?.headOffice || 'Second Floor, Samridhi Vasyam, Madhapur, Hyderabad 500081',
+      svg: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="#e05a24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
+          <circle cx="12" cy="10" r="3" />
+        </svg>
+      ),
+    },
+    {
+      type: 'orange',
+      label: 'Global Icons Forum Society — Registered Office',
+      value: settings.contact?.registeredOffice || '24-29-211, Durga Puram, Gulabi Thota Road, Vijayawada 520003',
+      svg: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="#e05a24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
+          <circle cx="12" cy="10" r="3" />
+        </svg>
+      ),
+    },
+    {
+      type: 'blue',
+      label: 'Email',
+      value: settings.contact?.email || 'info@oklut.com',
+      svg: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0f7ea3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+          <polyline points="22,6 12,13 2,6" />
+        </svg>
+      ),
+    },
+    {
+      type: 'blue',
+      label: 'Phone',
+      value: settings.contact?.phone || '+91-9014217124',
+      svg: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0f7ea3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6 6l.9-.9a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.5 16z" />
+        </svg>
+      ),
+    },
+    {
+      type: 'orange',
+      label: 'International Enquiries',
+      value: settings.contact?.email || 'info@oklut.com',
+      svg: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="#e05a24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="2" y1="12" x2="22" y2="12" />
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z" />
+        </svg>
+      ),
+    },
+  ]
 
   const handleSubmit = (e) => {
     e.preventDefault()
     const { name, email, subject, message } = formState
-    // Build mailto link — opens default email client with pre-filled fields
-    const mailTo = `mailto:info@oklut.com`
-    const mailSubject = encodeURIComponent(subject || 'Enquiry from Global Icons Forum Website')
-    const mailBody = encodeURIComponent(
-      `Name: ${name}\nEmail: ${email}\n\n${message}`
-    )
-    window.location.href = `${mailTo}?subject=${mailSubject}&body=${mailBody}`
+    if (!name || !email) return
+
+    // Record submission to nominations store so admin sees it live!
+    addNomination({
+      name,
+      email,
+      category: subject || 'General Enquiry',
+      message: message || 'Message submitted from website contact form.',
+      phone: '',
+    })
+
     setSubmitted(true)
   }
 
@@ -106,7 +113,7 @@ export default function ContactSection() {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.1 }}
           >
-            {CONTACT_INFO.map((item, i) => (
+            {contactList.map((item, i) => (
               <div key={i} className="contact-info-item">
                 <div className={`contact-icon-wrap ${item.type}`}>
                   {item.svg}

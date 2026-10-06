@@ -1,31 +1,7 @@
 import { useState, useRef, useCallback } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 
-const IMAGES = [
-  { src: '/gallery14.jpeg', caption: 'Global Icons Forum — Award Ceremony' },
-  { src: '/gallery15.jpeg', caption: 'Global Icons Forum — Award Ceremony' },
-  { src: '/gallery20.jpeg', caption: 'Global Icons Forum — Award Ceremony' },
-  { src: '/gallery18.jpeg', caption: 'Global Icons Forum — Award Ceremony' },
-  { src: '/gallery19.jpeg', caption: 'Global Icons Forum — Award Ceremony' },
-  { src: '/photo 1.jpeg',  caption: 'Global Icons Forum — Excellence Event' },
-  { src: '/photo 2.jpeg',  caption: 'Global Icons Forum — Excellence Event' },
-  { src: '/photo 3.jpeg',  caption: 'Global Icons Forum — Excellence Event' },
-  { src: '/photo 4.jpeg',  caption: 'Global Icons Forum — Excellence Event' },
-  { src: '/photo 5.jpeg',  caption: 'Global Icons Forum — Excellence Event' },
-  { src: '/photo 6.jpeg',  caption: 'Global Icons Forum — Excellence Event' },
-  { src: '/photo 7.jpeg',  caption: 'Global Icons Forum — Excellence Event' },
-  { src: '/photo 8.jpeg',  caption: 'Global Icons Forum — Excellence Event' },
-  { src: '/photo 9.jpeg',  caption: 'Global Icons Forum — Excellence Event' },
-  { src: '/photo 10.jpeg', caption: 'Global Icons Forum — Excellence Event' },
-  { src: '/photo 11.jpeg', caption: 'Global Icons Forum — Excellence Event' },
-  { src: '/photo 12.jpeg', caption: 'Global Icons Forum — Excellence Event' },
-  { src: '/photo 13.jpeg', caption: 'Global Icons Forum — Excellence Event' },
-  { src: '/photo 14.jpeg', caption: 'Global Icons Forum — Excellence Event' },
-  { src: '/photo 15.jpeg', caption: 'Global Icons Forum — Excellence Event' },
-  { src: '/photo 16.jpeg', caption: 'Global Icons Forum — Excellence Event' },
-  { src: '/photo 17.jpeg', caption: 'Global Icons Forum — Excellence Event' },
-  { src: '/photo 18.jpeg', caption: 'Global Icons Forum — Excellence Event' },
-]
+import { useGalleryImages } from '../utils/galleryStore'
 
 // ---- Lightbox ----
 function Lightbox({ image, onClose, onPrev, onNext }) {
@@ -142,14 +118,15 @@ function Lightbox({ image, onClose, onPrev, onNext }) {
 }
 
 export default function GallerySection() {
+  const [images] = useGalleryImages()
   const sectionRef = useRef()
   const inView = useInView(sectionRef, { once: true, margin: '-80px' })
   const [lightbox, setLightbox] = useState(null) // index
 
   const openLightbox = (i) => setLightbox(i)
   const closeLightbox = () => setLightbox(null)
-  const prevImage = useCallback(() => setLightbox(i => (i - 1 + IMAGES.length) % IMAGES.length), [])
-  const nextImage = useCallback(() => setLightbox(i => (i + 1) % IMAGES.length), [])
+  const prevImage = useCallback(() => setLightbox(i => (i - 1 + images.length) % images.length), [images.length])
+  const nextImage = useCallback(() => setLightbox(i => (i + 1) % images.length), [images.length])
 
   return (
     <>
@@ -191,7 +168,7 @@ export default function GallerySection() {
             gridTemplateColumns: 'repeat(4, 1fr)',
             gap: '12px',
           }}>
-            {IMAGES.map((img, i) => {
+            {images.map((img, i) => {
               return (
                 <motion.div
                   key={i}
@@ -310,7 +287,7 @@ export default function GallerySection() {
 
       {/* Lightbox */}
       <Lightbox
-        image={lightbox !== null ? IMAGES[lightbox] : null}
+        image={lightbox !== null ? images[lightbox] : null}
         onClose={closeLightbox}
         onPrev={prevImage}
         onNext={nextImage}

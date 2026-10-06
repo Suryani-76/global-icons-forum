@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useCountUp } from '../hooks/useCountUp'
+import { useAnnouncements } from '../utils/announcementsStore'
 
 // Hero stat with count-up, starts after `delay` seconds
 function HeroStat({ end, suffix, label, delay }) {
@@ -57,6 +58,10 @@ const STATS = [
 ]
 
 export default function HeroSection({ onTabChange }) {
+  const [announcements] = useAnnouncements()
+  const tagline = announcements?.hero?.tagline || 'Celebrating Global Excellence'
+  const subtext = announcements?.hero?.subtext || 'A prestigious international platform that recognises extraordinary individuals and organisations driving positive change across the globe. Where leadership meets legacy.'
+
   const navigate = (tab) => {
     if (onTabChange) onTabChange(tab)
   }
@@ -75,7 +80,7 @@ export default function HeroSection({ onTabChange }) {
             custom={0}
           >
             <span className="hero-eyebrow-dot" aria-hidden="true" />
-            Celebrating Global Excellence
+            {tagline}
           </motion.div>
 
           {/* ---- Character-by-character title ---- */}
@@ -99,9 +104,7 @@ export default function HeroSection({ onTabChange }) {
             animate="visible"
             custom={2}
           >
-            A prestigious international platform that recognises extraordinary
-            individuals and organisations driving positive change across the globe.
-            Where leadership meets legacy.
+            {subtext}
           </motion.p>
 
           <motion.div

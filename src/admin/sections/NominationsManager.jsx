@@ -1,22 +1,12 @@
 import { useState } from 'react'
 import { Card, PageHeader, Btn, Badge } from '../AdminUI'
+import { useNominations } from '../../utils/nominationsStore'
 
 const STATUSES = ['Pending', 'Shortlisted', 'Approved', 'Rejected']
 const statusColor = { Pending: '#f7c430', Shortlisted: '#5ec8e8', Approved: '#2ecc71', Rejected: '#ff6b6b' }
 
-const SAMPLE = [
-  { id: 1,  name: 'Dr. Arjun Reddy',      email: 'arjun@example.com',   category: 'Business & Entrepreneurship', date: '2026-07-10', status: 'Pending',     message: 'Founder of 3 successful startups across India and UAE.' },
-  { id: 2,  name: 'Ms. Preethi Nair',     email: 'preethi@example.com', category: 'Arts & Culture',               date: '2026-07-12', status: 'Shortlisted', message: 'Award-winning classical dancer and choreographer.' },
-  { id: 3,  name: 'Mr. Vinod Sharma',     email: 'vinod@example.com',   category: 'Social Impact',                date: '2026-07-14', status: 'Approved',    message: 'Runs 12 rural schools across Rajasthan.' },
-  { id: 4,  name: 'Dr. Meena Iyer',       email: 'meena@example.com',   category: 'Health & Medicine',            date: '2026-07-15', status: 'Pending',     message: 'Pioneer in telemedicine for remote villages.' },
-  { id: 5,  name: 'Mr. Farhan Qureshi',   email: 'farhan@example.com',  category: 'Science & Technology',         date: '2026-07-16', status: 'Rejected',    message: 'AI researcher at IIT Bombay.' },
-  { id: 6,  name: 'Ms. Sudha Krishnan',   email: 'sudha@example.com',   category: 'Education',                    date: '2026-07-17', status: 'Pending',     message: 'Established literacy programs for 10,000+ women.' },
-  { id: 7,  name: 'Mr. Ravi Teja Bolli',  email: 'ravi@example.com',    category: 'Sports',                       date: '2026-07-18', status: 'Shortlisted', message: 'National-level kabaddi champion.' },
-  { id: 8,  name: 'Dr. Leela Anand',      email: 'leela@example.com',   category: 'Diplomacy & Peace',            date: '2026-07-19', status: 'Pending',     message: 'Peace ambassador for South Asian dialogue forums.' },
-]
-
 export default function NominationsManager() {
-  const [items, setItems]       = useState(SAMPLE)
+  const [items, setItems]       = useNominations()
   const [statusFilter, setStatusFilter] = useState('All')
   const [catFilter, setCatFilter]       = useState('All')
   const [selected, setSelected] = useState(null)
@@ -32,12 +22,20 @@ export default function NominationsManager() {
     showToast(`Status updated to ${status}`)
   }
 
+  const deleteNomination = (id) => {
+    if (confirm('Delete this nomination?')) {
+      setItems(prev => prev.filter(i => i.id !== id))
+      if (selected?.id === id) setSelected(null)
+      showToast('Nomination deleted.')
+    }
+  }
+
   const sendEmail = () => {
     showToast(`Email sent to ${emailModal.email}`)
     setEmailModal(null); setEmailText('')
   }
 
-  const categories = ['All', ...new Set(SAMPLE.map(i => i.category))]
+  const categories = ['All', ...new Set(items.map(i => i.category).filter(Boolean))]
   const filtered = items
     .filter(i => statusFilter === 'All' || i.status === statusFilter)
     .filter(i => catFilter    === 'All' || i.category === catFilter)
@@ -116,6 +114,7 @@ export default function NominationsManager() {
                 </div>
                 <div style={{ display: 'flex', gap: '0.4rem' }}>
                   <Btn size="sm" variant="ghost" onClick={e => { e.stopPropagation(); setEmailModal(item) }}>📧</Btn>
+                  <Btn size="sm" variant="ghost" onClick={e => { e.stopPropagation(); deleteNomination(item.id) }} style={{ color: '#ff6b6b' }}>🗑</Btn>
                 </div>
               </div>
             </Card>
