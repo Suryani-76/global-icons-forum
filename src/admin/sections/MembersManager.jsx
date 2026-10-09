@@ -40,7 +40,7 @@ export default function MembersManager() {
   }
 
   const saveChapter = () => {
-    const city = chapterModal.data.city.trim() || document.querySelector('#chapter-city-input')?.value?.trim() || ''
+    const city = chapterModal?.data?.city?.trim() || document.querySelector('#chapter-city-input')?.value?.trim() || ''
     if (!city) return
     const contact = chapterModal.data.contact || document.querySelector('#chapter-contact-input')?.value?.trim() || ''
     const finalData = { ...chapterModal.data, city, contact }

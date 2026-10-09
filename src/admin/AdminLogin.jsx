@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 const ADMIN_USER = 'admin'
-const ADMIN_PASS = 'gif@2025'
+const VALID_PASSWORDS = ['gif@2025', 'admin123']
 
 export default function AdminLogin({ onLogin }) {
   const [user, setUser] = useState('')
@@ -11,7 +11,7 @@ export default function AdminLogin({ onLogin }) {
 
   const handle = (e) => {
     e.preventDefault()
-    if (user === ADMIN_USER && pass === ADMIN_PASS) {
+    if (user.trim() === ADMIN_USER && VALID_PASSWORDS.includes(pass.trim())) {
       onLogin()
     } else {
       setErr('Invalid username or password.')

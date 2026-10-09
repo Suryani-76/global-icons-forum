@@ -57,7 +57,7 @@ export default function ExecutiveManager() {
   }
 
   const save = () => {
-    const name = modal.data.name.trim() || document.querySelector('#exec-name-input')?.value?.trim() || ''
+    const name = modal?.data?.name?.trim() || document.querySelector('#exec-name-input')?.value?.trim() || ''
     if (!name) {
       setUploadError('Please enter member name.')
       return

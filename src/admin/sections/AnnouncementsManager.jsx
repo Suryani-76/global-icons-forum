@@ -55,7 +55,7 @@ export default function AnnouncementsManager() {
   }
 
   const savePartner = () => {
-    if (!partnerModal.data.name.trim()) return
+    if (!partnerModal?.data?.name?.trim()) return
     if (partnerModal.mode === 'add') {
       setData(prev => ({
         ...prev,

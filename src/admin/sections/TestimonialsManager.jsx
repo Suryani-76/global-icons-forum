@@ -74,7 +74,7 @@ export default function TestimonialsManager() {
   }
 
   const save = () => {
-    const name = modal.data.name.trim() || document.querySelector('#testimonial-name-input')?.value?.trim() || ''
+    const name = modal?.data?.name?.trim() || document.querySelector('#testimonial-name-input')?.value?.trim() || ''
     if (!name) {
       setUploadError('Please enter honouree name.')
       return

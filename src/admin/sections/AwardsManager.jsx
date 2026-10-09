@@ -33,9 +33,9 @@ export default function AwardsManager() {
   const upd = (k, v) => setModal(p => ({ ...p, data: { ...p.data, [k]: v } }))
 
   const save = () => {
-    const title = modal.data.title.trim() || document.querySelector('#award-title-input')?.value?.trim() || ''
+    const title = modal?.data?.title?.trim() || document.querySelector('#award-title-input')?.value?.trim() || ''
     if (!title) return
-    const desc = modal.data.desc.trim() || document.querySelector('#award-desc-input')?.value?.trim() || ''
+    const desc = modal?.data?.desc?.trim() || document.querySelector('#award-desc-input')?.value?.trim() || ''
     const finalData = { ...modal.data, title, desc }
     if (modal.mode === 'add') {
       setAwards(prev => [finalData, ...prev])

@@ -91,7 +91,10 @@ const TAB_TO_PATH = {
   partners:     '/partners',
   contact:      '/contact',
 }
-const PATH_TO_TAB = Object.fromEntries(Object.entries(TAB_TO_PATH).map(([k, v]) => [v, k]))
+const PATH_TO_TAB = {
+  ...Object.fromEntries(Object.entries(TAB_TO_PATH).map(([k, v]) => [v, k])),
+  '/news': 'newsletter',
+}
 
 function getInitialTab() {
   const path = window.location.pathname

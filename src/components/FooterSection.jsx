@@ -236,7 +236,7 @@ export default function FooterSection({ onTabChange }) {
       <div className="container">
         <div className="footer-bottom">
           <p>© {new Date().getFullYear()} Global Icons Forum Society. All rights reserved.</p>
-          <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
             {['Privacy Policy', 'Terms of Use', 'Cookie Policy'].map((item, i) => (
               <a key={i} href="#" style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.35)', transition: 'color 0.3s' }}
                 onMouseEnter={e => e.target.style.color = '#fff'}
@@ -244,6 +244,11 @@ export default function FooterSection({ onTabChange }) {
                 {item}
               </a>
             ))}
+            <a href="/admin" style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.45)', transition: 'color 0.3s' }}
+              onMouseEnter={e => e.target.style.color = '#e05a24'}
+              onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.45)'}>
+              Admin Portal
+            </a>
           </div>
         </div>
       </div>

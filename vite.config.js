@@ -3,6 +3,28 @@ import react from '@vitejs/plugin-react'
 import fs from 'fs'
 import path from 'path'
 
+function mergeArraySafely(existingArr, incomingArr, idKey = 'id') {
+  if (!Array.isArray(existingArr) || existingArr.length === 0) return incomingArr || []
+  if (!Array.isArray(incomingArr) || incomingArr.length === 0) return existingArr
+
+  const incomingMap = new Map()
+  incomingArr.forEach(item => {
+    if (item && item[idKey]) incomingMap.set(item[idKey], item)
+  })
+
+  const updatedExisting = existingArr.map(item => {
+    if (item && item[idKey] && incomingMap.has(item[idKey])) {
+      const incomingItem = incomingMap.get(item[idKey])
+      incomingMap.delete(item[idKey])
+      return incomingItem
+    }
+    return item
+  })
+
+  const newItems = Array.from(incomingMap.values())
+  return [...updatedExisting, ...newItems]
+}
+
 function adminSyncPlugin() {
   return {
     name: 'admin-sync-plugin',
@@ -27,9 +49,19 @@ function adminSyncPlugin() {
                 } catch (_) {}
               }
 
-              const merged = { ...existing, ...data }
+              const merged = { ...existing }
+              for (const [key, val] of Object.entries(data)) {
+                if (Array.isArray(existing[key]) && Array.isArray(val)) {
+                  merged[key] = mergeArraySafely(existing[key], val)
+                } else if (typeof existing[key] === 'object' && existing[key] !== null && typeof val === 'object' && val !== null) {
+                  merged[key] = { ...existing[key], ...val }
+                } else {
+                  merged[key] = val
+                }
+              }
+
               fs.writeFileSync(filePath, JSON.stringify(merged, null, 2), 'utf8')
-              console.log('[AdminSync] ✓ Updated src/data/adminData.json with latest admin data')
+              console.log('[AdminSync] ✓ Safely merged src/data/adminData.json without losing baseline items')
 
               res.writeHead(200, { 'Content-Type': 'application/json' })
               res.end(JSON.stringify({ success: true, message: 'Admin data saved to codebase' }))
