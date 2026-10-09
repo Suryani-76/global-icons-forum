@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
+import initialAdminData from '../data/adminData.json'
+import { syncAdminToCodebase } from './adminSync'
 
-export const DEFAULT_ANNOUNCEMENTS = {
+export const DEFAULT_ANNOUNCEMENTS = (initialAdminData && initialAdminData.announcements) || {
   hero: {
     tagline: 'Celebrating Excellence Across the Globe',
     subtext: 'The Global Icons Forum Society honours outstanding individuals and organisations for excellence at national and international levels.',
@@ -43,6 +45,9 @@ export function saveAnnouncements(data) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
     setTimeout(() => {
       window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: data }))
+      if (import.meta.env.DEV) {
+        syncAdminToCodebase()
+      }
     }, 0)
   } catch (err) {
     console.error('Failed to save announcements data:', err)

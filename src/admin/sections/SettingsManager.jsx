@@ -38,6 +38,7 @@ const INIT = {
 }
 
 import { useSiteSettings } from '../../utils/settingsStore'
+import { syncAdminToCodebase, exportAdminBackup, importAdminBackup } from '../../utils/adminSync'
 
 const INIT_ADMINS = [
   { id: 1, username: 'admin',       role: 'Super Admin', email: 'admin@gif.org',   active: true },
@@ -219,6 +220,71 @@ export default function SettingsManager() {
                 <Btn size="sm" variant="danger" onClick={() => { setAdmins(prev => prev.filter(x => x.id !== a.id)); showToast('Admin removed.') }}>🗑</Btn>
               </div>
             ))}
+          </div>
+        </Card>
+
+        {/* ── DATA BACKUP & CODEBASE SYNCHRONIZATION ── */}
+        <Card>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <div>
+              <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.92rem' }}>Codebase Sync & Data Backup</div>
+              <div style={{ fontSize: '0.74rem', color: 'rgba(255,255,255,0.4)', marginTop: '0.2rem' }}>
+                Save all browser portal data into project files so changes are tracked and pushed to Git.
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', alignItems: 'center' }}>
+            <Btn
+              id="sync-now-btn"
+              onClick={async () => {
+                showToast('Syncing all admin data to codebase...')
+                const res = await syncAdminToCodebase()
+                if (res.success) {
+                  showToast('✓ Saved to codebase! Ready for Git push.')
+                } else {
+                  showToast(`Notice: ${res.message}`)
+                }
+              }}
+            >
+              💾 Save All to Codebase
+            </Btn>
+
+            <Btn
+              variant="ghost"
+              onClick={async () => {
+                await exportAdminBackup()
+                showToast('✓ Backup downloaded.')
+              }}
+            >
+              📥 Export Backup (JSON)
+            </Btn>
+
+            <label style={{ display: 'inline-flex' }}>
+              <input
+                type="file"
+                accept=".json"
+                style={{ display: 'none' }}
+                onChange={async (e) => {
+                  const file = e.target.files?.[0]
+                  if (!file) return
+                  try {
+                    await importAdminBackup(file)
+                    showToast('✓ Backup restored and synced.')
+                  } catch (err) {
+                    showToast('Failed to import backup.')
+                  }
+                }}
+              />
+              <span style={{
+                padding: '0.5rem 1rem', borderRadius: 8,
+                background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)',
+                color: '#fff', fontSize: '0.82rem', fontWeight: 600, cursor: 'pointer',
+                display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+              }}>
+                📤 Import Backup (JSON)
+              </span>
+            </label>
           </div>
         </Card>
       </div>

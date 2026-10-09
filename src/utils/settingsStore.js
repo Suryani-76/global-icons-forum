@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
+import initialAdminData from '../data/adminData.json'
+import { syncAdminToCodebase } from './adminSync'
 
-export const DEFAULT_SETTINGS = {
+export const DEFAULT_SETTINGS = (initialAdminData && initialAdminData.settings) || {
   contact: {
     phone: '+91-9014217124',
     email: 'info@oklut.com',
@@ -51,6 +53,9 @@ export function saveSiteSettings(data) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
     setTimeout(() => {
       window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: data }))
+      if (import.meta.env.DEV) {
+        syncAdminToCodebase()
+      }
     }, 0)
   } catch (err) {
     console.error('Failed to save site settings:', err)

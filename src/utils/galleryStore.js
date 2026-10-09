@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
+import initialAdminData from '../data/adminData.json'
 
-export const DEFAULT_GALLERY_IMAGES = [
+export const DEFAULT_GALLERY_IMAGES = (initialAdminData && initialAdminData.gallery) || [
   { id: 1, src: '/gallery14.jpeg', caption: 'Global Icons Forum — Award Ceremony' },
   { id: 2, src: '/gallery15.jpeg', caption: 'Global Icons Forum — Award Ceremony' },
   { id: 3, src: '/gallery20.jpeg', caption: 'Global Icons Forum — Award Ceremony' },

@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
+import initialAdminData from '../data/adminData.json'
+import { syncAdminToCodebase } from './adminSync'
 
-export const DEFAULT_AWARDS = [
+export const DEFAULT_AWARDS = (initialAdminData && initialAdminData.awards) || [
   {
     id: 1,
     color: 'blue',
@@ -73,6 +75,9 @@ export function saveAwards(items) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
     setTimeout(() => {
       window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: items }))
+      if (import.meta.env.DEV) {
+        syncAdminToCodebase()
+      }
     }, 0)
   } catch (err) {
     console.error('Failed to save awards:', err)

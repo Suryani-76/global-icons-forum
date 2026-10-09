@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
+import initialAdminData from '../data/adminData.json'
 
-export const DEFAULT_TESTIMONIALS = [
+export const DEFAULT_TESTIMONIALS = (initialAdminData && initialAdminData.testimonials) || [
   {
     id: 1,
     photo: '/news1.jpeg',

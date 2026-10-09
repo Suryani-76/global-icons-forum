@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
+import initialAdminData from '../data/adminData.json'
+import { syncAdminToCodebase } from './adminSync'
 
-export const DEFAULT_NOMINATIONS = [
+export const DEFAULT_NOMINATIONS = (initialAdminData && initialAdminData.nominations) || [
   { id: 1, name: 'Dr. Arjun Reddy',     email: 'arjun@example.com',   phone: '+91 98765 00001', category: 'Business & Entrepreneurship', date: '2026-07-10', status: 'Pending',     message: 'Founder of 3 successful startups across India and UAE.' },
   { id: 2, name: 'Ms. Preethi Nair',    email: 'preethi@example.com', phone: '+91 98765 00002', category: 'Arts & Culture',               date: '2026-07-12', status: 'Shortlisted', message: 'Award-winning classical dancer and choreographer.' },
   { id: 3, name: 'Mr. Vinod Sharma',    email: 'vinod@example.com',   phone: '+91 98765 00003', category: 'Social Impact',                date: '2026-07-14', status: 'Approved',    message: 'Runs 12 rural schools across Rajasthan.' },
@@ -31,6 +33,9 @@ export function saveNominations(items) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
     setTimeout(() => {
       window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: items }))
+      if (import.meta.env.DEV) {
+        syncAdminToCodebase()
+      }
     }, 0)
   } catch (err) {
     console.error('Failed to save nominations:', err)

@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
+import initialAdminData from '../data/adminData.json'
+import { syncAdminToCodebase } from './adminSync'
 
-export const DEFAULT_CHAPTERS = [
+export const DEFAULT_CHAPTERS = (initialAdminData && initialAdminData.chapters) || [
   { id: 1,  state: 'Andhra Pradesh', city: 'Vijayawada', type: 'Registered Office', status: 'Active', icon: '⭐', contact: 'Mr. Chaitanya Janga', email: 'vijayawada@gif.org', members: 45 },
   { id: 2,  state: 'Telangana',      city: 'Hyderabad',  type: 'Operating Office',  status: 'Active', icon: '⭐', contact: 'Mr. Ravi Kumar',      email: 'hyderabad@gif.org',  members: 38 },
   { id: 3,  state: 'Maharashtra',    city: 'Mumbai',     type: 'Chapter Office',    status: 'Active', icon: '🟢', contact: 'Ms. Anita Sharma',    email: 'mumbai@gif.org',     members: 27 },
@@ -35,6 +37,9 @@ export function saveChapters(items) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
     setTimeout(() => {
       window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: items }))
+      if (import.meta.env.DEV) {
+        syncAdminToCodebase()
+      }
     }, 0)
   } catch (err) {
     console.error('Failed to save chapters:', err)

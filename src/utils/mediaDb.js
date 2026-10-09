@@ -109,5 +109,8 @@ export function safeSyncSave(storageKey, data, eventName) {
   // 3. Dispatch event to all listeners in same tab
   setTimeout(() => {
     window.dispatchEvent(new CustomEvent(eventName, { detail: data }))
+    if (import.meta.env.DEV) {
+      import('./adminSync').then(m => m.syncAdminToCodebase()).catch(() => {})
+    }
   }, 0)
 }

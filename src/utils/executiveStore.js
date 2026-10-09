@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
+import initialAdminData from '../data/adminData.json'
 
-export const DEFAULT_EXECUTIVE_MEMBERS = [
+export const DEFAULT_EXECUTIVE_MEMBERS = (initialAdminData && initialAdminData.executive) || [
   { id: 1, name: 'Mr. Chaitanya Janga',          designation: 'President',       photo: '/president.jpg' },
   { id: 2, name: 'Mrs. Jaya Pateriya',            designation: 'Secretary',       photo: '/exec-jaya-pateriya.jpeg' },
   { id: 3, name: 'Mr. Mithana Eswara Rao',        designation: 'Vice-President',  photo: '/gallery21.jpeg' },

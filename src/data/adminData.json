@@ -1,0 +1,517 @@
+{
+  "awards": [
+    {
+      "id": 1,
+      "color": "blue",
+      "title": "Global Icon of the Year",
+      "category": "Leadership & Vision",
+      "desc": "The highest honour bestowed upon an individual who has demonstrated extraordinary global impact, leadership, and humanitarian vision.",
+      "active": true
+    },
+    {
+      "id": 2,
+      "color": "orange",
+      "title": "Excellence in Innovation",
+      "category": "Science & Technology",
+      "desc": "Recognising pioneers whose technological and scientific breakthroughs are transforming industries and improving lives worldwide.",
+      "active": true
+    },
+    {
+      "id": 3,
+      "color": "blue",
+      "title": "Peace & Diplomacy Award",
+      "category": "Diplomacy & Peace",
+      "desc": "Celebrating leaders who have made exceptional contributions to international peace, cross-cultural dialogue, and conflict resolution.",
+      "active": true
+    },
+    {
+      "id": 4,
+      "color": "orange",
+      "title": "Humanitarian Leadership",
+      "category": "Social Impact",
+      "desc": "Honouring those who selflessly dedicate their resources and influence toward alleviating suffering and uplifting communities.",
+      "active": true
+    },
+    {
+      "id": 5,
+      "color": "blue",
+      "title": "Business Icon of the Decade",
+      "category": "Business & Entrepreneurship",
+      "desc": "Presented to visionary entrepreneurs and executives who have reshaped global commerce with integrity and transformative impact.",
+      "active": true
+    },
+    {
+      "id": 6,
+      "color": "orange",
+      "title": "Cultural Excellence Award",
+      "category": "Arts & Culture",
+      "desc": "Celebrating icons in arts, culture, and heritage who preserve and propagate the richness of human civilisation across borders.",
+      "active": true
+    }
+  ],
+  "announcements": {
+    "hero": {
+      "tagline": "Celebrating Excellence Across the Globe",
+      "subtext": "The Global Icons Forum Society honours outstanding individuals and organisations for excellence at national and international levels."
+    },
+    "banners": [
+      {
+        "id": 1,
+        "text": "🏆 Nominations Open for Global Icons Awards 2026 — Apply Now",
+        "accent": "orange",
+        "active": true
+      },
+      {
+        "id": 2,
+        "text": "📅 National Summit 2026 — Coming September, Vijayawada",
+        "accent": "blue",
+        "active": true
+      },
+      {
+        "id": 3,
+        "text": "🌐 ISO 9001:2015 Certified — MQA Certification Services, UK",
+        "accent": "orange",
+        "active": true
+      },
+      {
+        "id": 4,
+        "text": "120+ Countries Represented Globally",
+        "accent": "blue",
+        "active": true
+      },
+      {
+        "id": 5,
+        "text": "5,000+ Global Icons Recognised & Honoured",
+        "accent": "orange",
+        "active": true
+      },
+      {
+        "id": 6,
+        "text": "18 Years of Excellence in Public Leadership & Honours",
+        "accent": "blue",
+        "active": true
+      }
+    ],
+    "partners": [
+      {
+        "id": 1,
+        "name": "Ministry of Culture, India",
+        "active": true
+      },
+      {
+        "id": 2,
+        "name": "UKAF Certification Limited, London",
+        "active": true
+      },
+      {
+        "id": 3,
+        "name": "MQA Certification Services, UK",
+        "active": true
+      },
+      {
+        "id": 4,
+        "name": "Andhra Pradesh Tourism & Heritage",
+        "active": true
+      }
+    ]
+  },
+  "news": [
+    {
+      "id": 1,
+      "title": "State Icons Awards Night — 2026",
+      "category": "Awards",
+      "date": "2026-08-08",
+      "status": "Published",
+      "photo": "/events.jpeg",
+      "excerpt": "Global Icons Forum Society organises the prestigious State Icons Awards Night 2026 at Hotel Hyatt Place, Gunadala, Vijayawada with distinguished ministers, delegates and cultural luminaries."
+    }
+  ],
+  "newspaper": [
+    {
+      "id": 1,
+      "photo": "/newspicture 1.jpeg",
+      "headline": "Global Icons Forum Society Launches National Summit",
+      "publication": "Deccan Chronicle",
+      "date": "2025-03-10",
+      "category": "Summit",
+      "status": "Published"
+    },
+    {
+      "id": 2,
+      "photo": "/newspicture 2.jpeg",
+      "headline": "Vijayawada Icons Honoured at Global Forum Ceremony",
+      "publication": "Eenadu",
+      "date": "2025-04-18",
+      "category": "Awards",
+      "status": "Published"
+    },
+    {
+      "id": 3,
+      "photo": "/newspicture 3.jpeg",
+      "headline": "Global Icons Forum Receives ISO 9001:2015 Certification",
+      "publication": "The Hindu",
+      "date": "2026-07-20",
+      "category": "Milestone",
+      "status": "Published"
+    },
+    {
+      "id": 4,
+      "photo": "/newspicture 4.jpeg",
+      "headline": "Super Star Krishna Awards 2025 — A Grand Celebration",
+      "publication": "Sakshi",
+      "date": "2025-02-14",
+      "category": "Awards",
+      "status": "Published"
+    },
+    {
+      "id": 5,
+      "photo": "/newspicture 5.jpeg",
+      "headline": "GIF Society Expands Chapters Across South India",
+      "publication": "Andhra Jyothy",
+      "date": "2025-06-05",
+      "category": "Expansion",
+      "status": "Published"
+    }
+  ],
+  "gallery": [
+    {
+      "id": 1,
+      "src": "/gallery14.jpeg",
+      "caption": "Global Icons Forum — Award Ceremony"
+    },
+    {
+      "id": 2,
+      "src": "/gallery15.jpeg",
+      "caption": "Global Icons Forum — Award Ceremony"
+    },
+    {
+      "id": 3,
+      "src": "/gallery20.jpeg",
+      "caption": "Global Icons Forum — Award Ceremony"
+    },
+    {
+      "id": 4,
+      "src": "/gallery18.jpeg",
+      "caption": "Global Icons Forum — Award Ceremony"
+    },
+    {
+      "id": 5,
+      "src": "/gallery19.jpeg",
+      "caption": "Global Icons Forum — Award Ceremony"
+    }
+  ],
+  "executive": [
+    {
+      "id": 1,
+      "name": "Mr. Chaitanya Janga",
+      "designation": "President",
+      "photo": "/president.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Mrs. Jaya Pateriya",
+      "designation": "Secretary",
+      "photo": "/exec-jaya-pateriya.jpeg"
+    },
+    {
+      "id": 3,
+      "name": "Mr. Mithana Eswara Rao",
+      "designation": "Vice-President",
+      "photo": "/gallery21.jpeg"
+    },
+    {
+      "id": 4,
+      "name": "Mr. Kode Sri Chaitanya",
+      "designation": "Joint Secretary",
+      "photo": "/gallery22.jpeg"
+    },
+    {
+      "id": 5,
+      "name": "Mr. Ramisetty Venkata Apparao",
+      "designation": "Treasurer",
+      "photo": "/exec-ramisetty.jpeg"
+    },
+    {
+      "id": 6,
+      "name": "Dr. Animelli Naveen",
+      "designation": "Member",
+      "photo": "/exec-animelli-naveen.jpeg"
+    },
+    {
+      "id": 7,
+      "name": "Mr. Battula Dhanista",
+      "designation": "Member",
+      "photo": "/exec-battula.jpeg"
+    },
+    {
+      "id": 8,
+      "name": "Mr. Emmanuel",
+      "designation": "Member",
+      "photo": "/exec-emmanuel.jpeg"
+    },
+    {
+      "id": 9,
+      "name": "Mr. Syed Ghouseuddin",
+      "designation": "Member",
+      "photo": "/exec-syed.jpeg"
+    }
+  ],
+  "testimonials": [
+    {
+      "id": 1,
+      "photo": "/news1.jpeg",
+      "name": "Dr. Priya Sharma",
+      "title": "Global Innovator of the Year 2023",
+      "nation": "India",
+      "color": "#ffffff",
+      "quote": "Being recognised by the Global Icons Forum was a watershed moment in my career. The platform amplifies voices that are truly making a difference, and the energy in that room was unlike anything I have ever experienced."
+    },
+    {
+      "id": 2,
+      "photo": "/news2.jpeg",
+      "name": "Ambassador Jean-Paul Moreau",
+      "title": "Peace & Diplomacy Awardee 2022",
+      "nation": "France",
+      "color": "#e05a24",
+      "quote": "The Global Icons Forum stands as a rare institution that genuinely bridges cultures and continents. This honour reaffirmed my belief that diplomacy and human connection are the most powerful tools we have for lasting peace."
+    },
+    {
+      "id": 3,
+      "photo": "/news3.jpeg",
+      "name": "Ms. Amara Osei",
+      "title": "Humanitarian Leadership Award 2023",
+      "nation": "Ghana",
+      "color": "#f7c430",
+      "quote": "Receiving this award on behalf of thousands of women I work with across West Africa was deeply moving. The Forum shines a global spotlight on grassroots change-makers who rarely get the recognition they deserve."
+    },
+    {
+      "id": 4,
+      "photo": "/news4.jpeg",
+      "name": "Mr. Rajan Mehta",
+      "title": "Business Icon of the Decade 2021",
+      "nation": "Singapore",
+      "color": "#ffffff",
+      "quote": "What sets the Global Icons Forum apart is the quality of the community it has built. Being part of this network has opened doors to collaborations across five continents and reshaped how I think about global business leadership."
+    },
+    {
+      "id": 5,
+      "photo": "/news5.jpeg",
+      "name": "Ms. Lakshmi Prasad",
+      "title": "Cultural Excellence Awardee 2023",
+      "nation": "India",
+      "color": "#e05a24",
+      "quote": "Art transcends borders, and the Global Icons Forum truly embodies that spirit. This recognition gives impetus to our mission of taking Indian classical heritage to global stages."
+    },
+    {
+      "id": 6,
+      "photo": "/news6.jpeg",
+      "name": "Prof. David Kimani",
+      "title": "Education Visionary Award 2023",
+      "nation": "Kenya",
+      "color": "#f7c430",
+      "quote": "The Global Icons Forum does not just hand out trophies — it creates a movement. The scholarship initiatives born out of this forum are already changing lives across East Africa."
+    }
+  ],
+  "chapters": [
+    {
+      "id": 1,
+      "state": "Andhra Pradesh",
+      "city": "Vijayawada",
+      "type": "Registered Office",
+      "status": "Active",
+      "icon": "⭐",
+      "contact": "Mr. Chaitanya Janga",
+      "email": "vijayawada@gif.org",
+      "members": 45
+    },
+    {
+      "id": 2,
+      "state": "Telangana",
+      "city": "Hyderabad",
+      "type": "Operating Office",
+      "status": "Active",
+      "icon": "⭐",
+      "contact": "Mr. Ravi Kumar",
+      "email": "hyderabad@gif.org",
+      "members": 38
+    },
+    {
+      "id": 3,
+      "state": "Maharashtra",
+      "city": "Mumbai",
+      "type": "Chapter Office",
+      "status": "Active",
+      "icon": "🟢",
+      "contact": "Ms. Anita Sharma",
+      "email": "mumbai@gif.org",
+      "members": 27
+    },
+    {
+      "id": 4,
+      "state": "Karnataka",
+      "city": "Bengaluru",
+      "type": "Chapter Office",
+      "status": "Active",
+      "icon": "🟢",
+      "contact": "Mr. Harish Patel",
+      "email": "bengaluru@gif.org",
+      "members": 22
+    },
+    {
+      "id": 5,
+      "state": "Tamil Nadu",
+      "city": "Chennai",
+      "type": "Chapter Office",
+      "status": "Active",
+      "icon": "🟢",
+      "contact": "Dr. Meena Iyer",
+      "email": "chennai@gif.org",
+      "members": 19
+    },
+    {
+      "id": 6,
+      "state": "Delhi NCR",
+      "city": "New Delhi",
+      "type": "Chapter Office",
+      "status": "Active",
+      "icon": "🟢",
+      "contact": "Mr. Vinod Sharma",
+      "email": "delhi@gif.org",
+      "members": 31
+    },
+    {
+      "id": 7,
+      "state": "West Bengal",
+      "city": "Kolkata",
+      "type": "Chapter Office",
+      "status": "Upcoming",
+      "icon": "🔵",
+      "contact": "Ms. Preethi Nair",
+      "email": "kolkata@gif.org",
+      "members": 12
+    },
+    {
+      "id": 8,
+      "state": "Gujarat",
+      "city": "Ahmedabad",
+      "type": "Chapter Office",
+      "status": "Upcoming",
+      "icon": "🔵",
+      "contact": "Mr. Rajan Mehta",
+      "email": "gujarat@gif.org",
+      "members": 15
+    },
+    {
+      "id": 9,
+      "state": "United Kingdom",
+      "city": "London",
+      "type": "International Chapter",
+      "status": "Upcoming",
+      "icon": "🌍",
+      "contact": "Mr. Emmanuel",
+      "email": "london@gif.org",
+      "members": 9
+    },
+    {
+      "id": 10,
+      "state": "United States",
+      "city": "New York",
+      "type": "International Chapter",
+      "status": "Upcoming",
+      "icon": "🌎",
+      "contact": "Dr. Sofia Ramirez",
+      "email": "ny@gif.org",
+      "members": 7
+    }
+  ],
+  "nominations": [
+    {
+      "id": 1,
+      "name": "Dr. Arjun Reddy",
+      "email": "arjun@example.com",
+      "phone": "+91 98765 00001",
+      "category": "Business & Entrepreneurship",
+      "date": "2026-07-10",
+      "status": "Pending",
+      "message": "Founder of 3 successful startups across India and UAE."
+    },
+    {
+      "id": 2,
+      "name": "Ms. Preethi Nair",
+      "email": "preethi@example.com",
+      "phone": "+91 98765 00002",
+      "category": "Arts & Culture",
+      "date": "2026-07-12",
+      "status": "Shortlisted",
+      "message": "Award-winning classical dancer and choreographer."
+    },
+    {
+      "id": 3,
+      "name": "Mr. Vinod Sharma",
+      "email": "vinod@example.com",
+      "phone": "+91 98765 00003",
+      "category": "Social Impact",
+      "date": "2026-07-14",
+      "status": "Approved",
+      "message": "Runs 12 rural schools across Rajasthan."
+    },
+    {
+      "id": 4,
+      "name": "Dr. Meena Iyer",
+      "email": "meena@example.com",
+      "phone": "+91 98765 00004",
+      "category": "Health & Medicine",
+      "date": "2026-07-15",
+      "status": "Pending",
+      "message": "Pioneer in telemedicine for remote villages."
+    },
+    {
+      "id": 5,
+      "name": "Mr. Farhan Qureshi",
+      "email": "farhan@example.com",
+      "phone": "+91 98765 00005",
+      "category": "Science & Technology",
+      "date": "2026-07-16",
+      "status": "Rejected",
+      "message": "AI researcher at IIT Bombay."
+    },
+    {
+      "id": 6,
+      "name": "Ms. Sudha Krishnan",
+      "email": "sudha@example.com",
+      "phone": "+91 98765 00006",
+      "category": "Education",
+      "date": "2026-07-17",
+      "status": "Pending",
+      "message": "Established literacy programs for 10,000+ women."
+    }
+  ],
+  "settings": {
+    "contact": {
+      "phone": "+91-9014217124",
+      "email": "info@oklut.com",
+      "headOffice": "Second Floor, Samridhi Vasyam, D No 1/98/9/3/23, Capital Pk Rd, beside Narayana High School, Cyber Hills Colony, VIP Hills, Jaihind Enclave, Madhapur, Hyderabad, Telangana 500081",
+      "registeredOffice": "24-29-211, Durga Puram, Gulabi Thota Road, J Apparao Street, Vijayawada 520003, Andhra Pradesh"
+    },
+    "social": {
+      "facebook": "https://facebook.com/globaliconsforumsociety",
+      "instagram": "https://instagram.com/globaliconsforumsociety",
+      "twitter": "https://twitter.com/globaliconsGIF",
+      "youtube": "https://youtube.com/@globaliconsforumsociety",
+      "linkedin": "https://linkedin.com/company/globaliconsforumsociety"
+    },
+    "iso": {
+      "certNo": "QMS/26M05315",
+      "certBy": "MQA Certification Services, London",
+      "location": "130 Thessaly Rd, Nine Elms, London SW8 5EJ, UK",
+      "issued": "18 July 2026",
+      "expiry": "17 July 2029",
+      "accred": "UKAF-CB-011 · UKAF CERT LIMITED"
+    },
+    "registration": {
+      "actName": "Societies Registration Act 35/2001",
+      "nature": "Non-Profit · No Commercial Activity",
+      "finYear": "April 1st — March 31st"
+    }
+  }
+}

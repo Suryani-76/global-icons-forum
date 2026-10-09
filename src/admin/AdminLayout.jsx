@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { syncAdminToCodebase } from '../utils/adminSync'
 import GalleryManager       from './sections/GalleryManager'
 import ExecutiveManager     from './sections/ExecutiveManager'
 import TestimonialsManager  from './sections/TestimonialsManager'
@@ -56,6 +57,13 @@ const SECTION_MAP = {
 export default function AdminLayout({ onLogout }) {
   const [active, setActive] = useState('gallery')
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [syncState, setSyncState] = useState('idle')
+
+  useEffect(() => {
+    if (import.meta.env.DEV) {
+      syncAdminToCodebase().catch(() => {})
+    }
+  }, [])
 
   const ActiveSection = SECTION_MAP[active]
   const groups = [...new Set(NAV.map(n => n.group))]
@@ -218,16 +226,47 @@ export default function AdminLayout({ onLogout }) {
               {NAV.find(n => n.id === active)?.label}
             </span>
           </div>
+          <button
+            id="sync-codebase-btn"
+            onClick={async () => {
+              setSyncState('syncing')
+              const res = await syncAdminToCodebase()
+              if (res.success) {
+                setSyncState('synced')
+                setTimeout(() => setSyncState('idle'), 3000)
+              } else {
+                setSyncState('error')
+                setTimeout(() => setSyncState('idle'), 3500)
+              }
+            }}
+            style={{
+              fontSize: '0.75rem', fontWeight: 600,
+              color: syncState === 'synced' ? '#2ecc71' : syncState === 'error' ? '#ff6b6b' : '#fff',
+              background: syncState === 'synced' ? 'rgba(46,204,113,0.12)' : 'rgba(224,90,36,0.18)',
+              border: `1px solid ${syncState === 'synced' ? 'rgba(46,204,113,0.35)' : 'rgba(224,90,36,0.45)'}`,
+              display: 'flex', alignItems: 'center', gap: '0.45rem',
+              padding: '0.4rem 0.85rem', borderRadius: 8, cursor: 'pointer',
+              transition: 'all 0.18s ease',
+            }}
+            title="Saves all current browser admin data into project files so Git tracks and pushes them"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+              <polyline points="17 21 17 13 7 13 7 21"/>
+              <polyline points="7 3 7 8 15 8"/>
+            </svg>
+            {syncState === 'syncing' ? 'Syncing to Files...' : syncState === 'synced' ? '✓ Synced to Codebase' : syncState === 'error' ? 'Sync Notice' : 'Sync to Git / Codebase'}
+          </button>
           <a href="/" target="_blank" rel="noopener noreferrer"
             style={{
-              fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)', textDecoration: 'none',
+              fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', textDecoration: 'none',
               display: 'flex', alignItems: 'center', gap: '0.4rem',
               padding: '0.4rem 0.85rem', borderRadius: 8,
               border: '1px solid rgba(255,255,255,0.08)',
               transition: 'all 0.15s',
             }}
             onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)' }}
-            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.3)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)' }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.4)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)' }}
           >
             {Icons.globe} View Site
           </a>

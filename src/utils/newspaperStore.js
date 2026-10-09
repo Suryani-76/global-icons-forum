@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
+import initialAdminData from '../data/adminData.json'
 
-export const DEFAULT_NEWSPAPER_ITEMS = [
+export const DEFAULT_NEWSPAPER_ITEMS = (initialAdminData && initialAdminData.newspaper) || [
   { id: 1,  photo: '/newspicture 1.jpeg', headline: 'Global Icons Forum Society Launches National Summit',         publication: 'Deccan Chronicle', date: '2025-03-10', category: 'Summit',    status: 'Published' },
   { id: 2,  photo: '/newspicture 2.jpeg', headline: 'Vijayawada Icons Honoured at Global Forum Ceremony',          publication: 'Eenadu',           date: '2025-04-18', category: 'Awards',    status: 'Published' },
   { id: 3,  photo: '/newspicture 3.jpeg', headline: 'Global Icons Forum Receives ISO 9001:2015 Certification',     publication: 'The Hindu',        date: '2026-07-20', category: 'Milestone', status: 'Published' },

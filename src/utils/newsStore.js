@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
+import initialAdminData from '../data/adminData.json'
 
-export const DEFAULT_NEWS_ITEMS = [
+export const DEFAULT_NEWS_ITEMS = (initialAdminData && initialAdminData.news) || [
   {
     id: 1,
     title: 'State Icons Awards Night — 2026',
