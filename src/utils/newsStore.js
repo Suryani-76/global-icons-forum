@@ -13,20 +13,9 @@ export const DEFAULT_NEWS_ITEMS = (initialAdminData && initialAdminData.news) ||
   },
 ]
 
-const REMOVED_TITLES = [
-  'ISO 9001:2015 Certification Achieved from London UK',
-  'Global Icons Forum National Summit 2026 Announced',
-  'Vijayawada Cultural & Humanitarian Honors Ceremony',
-]
-
 export function sanitizeNews(items) {
   if (!Array.isArray(items)) return DEFAULT_NEWS_ITEMS
-  const filtered = items.filter(item => {
-    if (!item || !item.title) return false
-    return !REMOVED_TITLES.some(removed =>
-      item.title.toLowerCase().trim().includes(removed.toLowerCase().trim())
-    )
-  })
+  const filtered = items.filter(item => Boolean(item && item.title))
   return filtered.length > 0 ? filtered : DEFAULT_NEWS_ITEMS
 }
 
@@ -41,12 +30,15 @@ export function getNewsItems() {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return DEFAULT_NEWS_ITEMS
     const parsed = JSON.parse(raw)
+    if (Array.isArray(parsed) && parsed.length >= DEFAULT_NEWS_ITEMS.length) {
+      return sanitizeNews(parsed)
+    }
     if (Array.isArray(parsed) && parsed.length > 0) {
-      const sanitized = sanitizeNews(parsed)
-      if (sanitized.length !== parsed.length) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitized))
-      }
-      return sanitized
+      const existingIds = new Set(parsed.map(p => p.id))
+      const missing = DEFAULT_NEWS_ITEMS.filter(d => !existingIds.has(d.id))
+      const combined = sanitizeNews([...parsed, ...missing])
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(combined))
+      return combined
     }
   } catch (err) {
     console.error('Failed to parse news items:', err)

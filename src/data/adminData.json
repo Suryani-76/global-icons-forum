@@ -1,4 +1,547 @@
 {
+  "gallery": [
+    {
+      "id": 1,
+      "src": "/gallery14.jpeg",
+      "caption": "Global Icons Forum — Award Ceremony"
+    },
+    {
+      "id": 2,
+      "src": "/gallery15.jpeg",
+      "caption": "Global Icons Forum — Award Ceremony"
+    },
+    {
+      "id": 3,
+      "src": "/gallery20.jpeg",
+      "caption": "Global Icons Forum — Award Ceremony"
+    },
+    {
+      "id": 4,
+      "src": "/gallery18.jpeg",
+      "caption": "Global Icons Forum — Award Ceremony"
+    },
+    {
+      "id": 5,
+      "src": "/gallery19.jpeg",
+      "caption": "Global Icons Forum — Award Ceremony"
+    },
+    {
+      "id": 6,
+      "src": "/photo 1.jpeg",
+      "caption": "Global Icons Forum — Excellence Event Ceremony 1"
+    },
+    {
+      "id": 7,
+      "src": "/photo 2.jpeg",
+      "caption": "Global Icons Forum — Excellence Event Ceremony 2"
+    },
+    {
+      "id": 8,
+      "src": "/photo 3.jpeg",
+      "caption": "Global Icons Forum — Excellence Event Ceremony 3"
+    },
+    {
+      "id": 9,
+      "src": "/photo 4.jpeg",
+      "caption": "Global Icons Forum — Excellence Event Ceremony 4"
+    },
+    {
+      "id": 10,
+      "src": "/photo 5.jpeg",
+      "caption": "Global Icons Forum — Excellence Event Ceremony 5"
+    },
+    {
+      "id": 11,
+      "src": "/photo 6.jpeg",
+      "caption": "Global Icons Forum — Excellence Event Ceremony 6"
+    },
+    {
+      "id": 12,
+      "src": "/photo 7.jpeg",
+      "caption": "Global Icons Forum — Excellence Event Ceremony 7"
+    },
+    {
+      "id": 13,
+      "src": "/photo 8.jpeg",
+      "caption": "Global Icons Forum — Excellence Event Ceremony 8"
+    },
+    {
+      "id": 14,
+      "src": "/photo 9.jpeg",
+      "caption": "Global Icons Forum — Excellence Event Ceremony 9"
+    },
+    {
+      "id": 15,
+      "src": "/photo 10.jpeg",
+      "caption": "Global Icons Forum — Excellence Event Ceremony 10"
+    },
+    {
+      "id": 16,
+      "src": "/photo 11.jpeg",
+      "caption": "Global Icons Forum — Excellence Event Ceremony 11"
+    },
+    {
+      "id": 17,
+      "src": "/photo 12.jpeg",
+      "caption": "Global Icons Forum — Excellence Event Ceremony 12"
+    },
+    {
+      "id": 18,
+      "src": "/photo 13.jpeg",
+      "caption": "Global Icons Forum — Excellence Event Ceremony 13"
+    },
+    {
+      "id": 19,
+      "src": "/photo 14.jpeg",
+      "caption": "Global Icons Forum — Excellence Event Ceremony 14"
+    },
+    {
+      "id": 20,
+      "src": "/photo 15.jpeg",
+      "caption": "Global Icons Forum — Excellence Event Ceremony 15"
+    },
+    {
+      "id": 21,
+      "src": "/photo 16.jpeg",
+      "caption": "Global Icons Forum — Excellence Event Ceremony 16"
+    },
+    {
+      "id": 22,
+      "src": "/photo 17.jpeg",
+      "caption": "Global Icons Forum — Excellence Event Ceremony 17"
+    },
+    {
+      "id": 23,
+      "src": "/photo 18.jpeg",
+      "caption": "Global Icons Forum — Excellence Event Ceremony 18"
+    },
+    {
+      "id": 24,
+      "src": "/gallery1.jpeg",
+      "caption": "Award Ceremony — FTPC India"
+    },
+    {
+      "id": 25,
+      "src": "/gallery-2.jpeg",
+      "caption": "Press Conference — Visakhapatnam"
+    },
+    {
+      "id": 26,
+      "src": "/gallery-3.jpeg",
+      "caption": "Certificate of Recognition Presentation"
+    },
+    {
+      "id": 27,
+      "src": "/gallery-4.jpeg",
+      "caption": "Super Star Krishna Awards 2025"
+    },
+    {
+      "id": 28,
+      "src": "/gallery-5.jpeg",
+      "caption": "Super Star Krishna Awards — Awardees"
+    },
+    {
+      "id": 29,
+      "src": "/gallery-6.jpeg",
+      "caption": "White Awards Ceremony"
+    },
+    {
+      "id": 30,
+      "src": "/gallery-7.jpeg",
+      "caption": "Super Star Krishna Awards — FTPC India"
+    },
+    {
+      "id": 31,
+      "src": "/gallery-9.jpeg",
+      "caption": "FTPC India — Telugu Cinema Vedika"
+    },
+    {
+      "id": 32,
+      "src": "/gallery10.jpeg",
+      "caption": "Global Icons Forum — Recognition Event"
+    },
+    {
+      "id": 33,
+      "src": "/gallery11.jpeg",
+      "caption": "Global Icons Forum — Award Ceremony"
+    },
+    {
+      "id": 34,
+      "src": "/gallery12.jpeg",
+      "caption": "Global Icons Forum — Honours Stage"
+    },
+    {
+      "id": 35,
+      "src": "/gallery13.jpeg",
+      "caption": "Global Icons Forum — Dignitaries"
+    },
+    {
+      "id": 36,
+      "src": "/gallery16.jpeg",
+      "caption": "National Delegates Gathering"
+    },
+    {
+      "id": 37,
+      "src": "/gallery17.jpeg",
+      "caption": "VIP Felicitations Ceremony"
+    },
+    {
+      "id": 38,
+      "src": "/gallery21.jpeg",
+      "caption": "Executive Council Inauguration"
+    },
+    {
+      "id": 39,
+      "src": "/gallery22.jpeg",
+      "caption": "National Executive Body Meeting"
+    }
+  ],
+  "newspaper": [
+    {
+      "id": 1,
+      "photo": "/newspicture 1.jpeg",
+      "headline": "Global Icons Forum Society Launches National Summit",
+      "publication": "Deccan Chronicle",
+      "date": "2025-03-10",
+      "category": "Summit",
+      "status": "Published"
+    },
+    {
+      "id": 2,
+      "photo": "/newspicture 2.jpeg",
+      "headline": "Vijayawada Icons Honoured at Global Forum Ceremony",
+      "publication": "Eenadu",
+      "date": "2025-04-18",
+      "category": "Awards",
+      "status": "Published"
+    },
+    {
+      "id": 3,
+      "photo": "/newspicture 3.jpeg",
+      "headline": "Global Icons Forum Receives ISO 9001:2015 Certification",
+      "publication": "The Hindu",
+      "date": "2026-07-20",
+      "category": "Milestone",
+      "status": "Published"
+    },
+    {
+      "id": 4,
+      "photo": "/newspicture 4.jpeg",
+      "headline": "Super Star Krishna Awards 2025 — A Grand Celebration",
+      "publication": "Sakshi",
+      "date": "2025-02-14",
+      "category": "Awards",
+      "status": "Published"
+    },
+    {
+      "id": 5,
+      "photo": "/newspicture 5.jpeg",
+      "headline": "GIF Society Expands Chapters Across South India",
+      "publication": "Andhra Jyothy",
+      "date": "2025-06-05",
+      "category": "Expansion",
+      "status": "Published"
+    },
+    {
+      "id": 6,
+      "photo": "/news1.jpeg",
+      "headline": "Press Report 1: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Eenadu",
+      "date": "2025-01-01",
+      "category": "Media",
+      "status": "Published"
+    },
+    {
+      "id": 7,
+      "photo": "/news2.jpeg",
+      "headline": "Press Report 2: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Deccan Chronicle",
+      "date": "2025-02-02",
+      "category": "Awards",
+      "status": "Published"
+    },
+    {
+      "id": 8,
+      "photo": "/news3.jpeg",
+      "headline": "Press Report 3: Global Icons Forum Honours & Social Initiatives",
+      "publication": "The Hindu",
+      "date": "2025-03-03",
+      "category": "Summit",
+      "status": "Published"
+    },
+    {
+      "id": 9,
+      "photo": "/news4.jpeg",
+      "headline": "Press Report 4: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Sakshi",
+      "date": "2025-04-04",
+      "category": "Community",
+      "status": "Published"
+    },
+    {
+      "id": 10,
+      "photo": "/news5.jpeg",
+      "headline": "Press Report 5: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Andhra Jyothy",
+      "date": "2025-05-05",
+      "category": "Milestone",
+      "status": "Published"
+    },
+    {
+      "id": 11,
+      "photo": "/news6.jpeg",
+      "headline": "Press Report 6: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Prajasakti",
+      "date": "2025-06-06",
+      "category": "Expansion",
+      "status": "Published"
+    },
+    {
+      "id": 12,
+      "photo": "/news7.jpeg",
+      "headline": "Press Report 7: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Vaartha",
+      "date": "2025-07-07",
+      "category": "Media",
+      "status": "Published"
+    },
+    {
+      "id": 13,
+      "photo": "/news8.jpeg",
+      "headline": "Press Report 8: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Namasthe Telangana",
+      "date": "2025-08-08",
+      "category": "Awards",
+      "status": "Published"
+    },
+    {
+      "id": 14,
+      "photo": "/news9.jpeg",
+      "headline": "Press Report 9: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Indian Express",
+      "date": "2025-09-09",
+      "category": "Summit",
+      "status": "Published"
+    },
+    {
+      "id": 15,
+      "photo": "/news10.jpeg",
+      "headline": "Press Report 10: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Times of India",
+      "date": "2025-01-10",
+      "category": "Community",
+      "status": "Published"
+    },
+    {
+      "id": 16,
+      "photo": "/news11.jpeg",
+      "headline": "Press Report 11: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Eenadu",
+      "date": "2025-02-11",
+      "category": "Milestone",
+      "status": "Published"
+    },
+    {
+      "id": 17,
+      "photo": "/news12.jpeg",
+      "headline": "Press Report 12: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Deccan Chronicle",
+      "date": "2025-03-12",
+      "category": "Expansion",
+      "status": "Published"
+    },
+    {
+      "id": 18,
+      "photo": "/news13.jpeg",
+      "headline": "Press Report 13: Global Icons Forum Honours & Social Initiatives",
+      "publication": "The Hindu",
+      "date": "2025-04-13",
+      "category": "Media",
+      "status": "Published"
+    },
+    {
+      "id": 19,
+      "photo": "/news14.jpeg",
+      "headline": "Press Report 14: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Sakshi",
+      "date": "2025-05-14",
+      "category": "Awards",
+      "status": "Published"
+    },
+    {
+      "id": 20,
+      "photo": "/news15.jpeg",
+      "headline": "Press Report 15: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Andhra Jyothy",
+      "date": "2025-06-15",
+      "category": "Summit",
+      "status": "Published"
+    },
+    {
+      "id": 21,
+      "photo": "/news16.jpeg",
+      "headline": "Press Report 16: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Prajasakti",
+      "date": "2025-07-16",
+      "category": "Community",
+      "status": "Published"
+    },
+    {
+      "id": 22,
+      "photo": "/news17.jpeg",
+      "headline": "Press Report 17: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Vaartha",
+      "date": "2025-08-17",
+      "category": "Milestone",
+      "status": "Published"
+    },
+    {
+      "id": 23,
+      "photo": "/news18.jpeg",
+      "headline": "Press Report 18: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Namasthe Telangana",
+      "date": "2025-09-18",
+      "category": "Expansion",
+      "status": "Published"
+    },
+    {
+      "id": 24,
+      "photo": "/news19.jpeg",
+      "headline": "Press Report 19: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Indian Express",
+      "date": "2025-01-19",
+      "category": "Media",
+      "status": "Published"
+    },
+    {
+      "id": 25,
+      "photo": "/news20.jpeg",
+      "headline": "Press Report 20: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Times of India",
+      "date": "2025-02-20",
+      "category": "Awards",
+      "status": "Published"
+    },
+    {
+      "id": 26,
+      "photo": "/news21.jpeg",
+      "headline": "Press Report 21: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Eenadu",
+      "date": "2025-03-21",
+      "category": "Summit",
+      "status": "Published"
+    },
+    {
+      "id": 27,
+      "photo": "/news22.jpeg",
+      "headline": "Press Report 22: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Deccan Chronicle",
+      "date": "2025-04-22",
+      "category": "Community",
+      "status": "Published"
+    },
+    {
+      "id": 28,
+      "photo": "/news23.jpeg",
+      "headline": "Press Report 23: Global Icons Forum Honours & Social Initiatives",
+      "publication": "The Hindu",
+      "date": "2025-05-23",
+      "category": "Milestone",
+      "status": "Published"
+    },
+    {
+      "id": 29,
+      "photo": "/news24.jpeg",
+      "headline": "Press Report 24: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Sakshi",
+      "date": "2025-06-24",
+      "category": "Expansion",
+      "status": "Published"
+    },
+    {
+      "id": 30,
+      "photo": "/news25.jpeg",
+      "headline": "Press Report 25: Global Icons Forum Honours & Social Initiatives",
+      "publication": "Andhra Jyothy",
+      "date": "2025-07-25",
+      "category": "Media",
+      "status": "Published"
+    }
+  ],
+  "news": [
+    {
+      "id": 1,
+      "title": "State Icons Awards Night — 2026",
+      "category": "Awards",
+      "date": "2026-08-08",
+      "status": "Published",
+      "photo": "/events.jpeg",
+      "excerpt": "Global Icons Forum Society organises the prestigious State Icons Awards Night 2026 at Hotel Hyatt Place, Gunadala, Vijayawada with distinguished ministers, delegates and cultural luminaries."
+    },
+    {
+      "id": 2,
+      "title": "Global Icons Forum National Summit 2026 Announced",
+      "category": "Summit",
+      "date": "2026-09-15",
+      "status": "Published",
+      "photo": "/newspicture 1.jpeg",
+      "excerpt": "Bringing together visionaries from across 120+ countries to discuss leadership, cultural exchange, and socio-economic empowerment."
+    },
+    {
+      "id": 3,
+      "title": "ISO 9001:2015 Certification Achieved from London UK",
+      "category": "Milestone",
+      "date": "2026-07-18",
+      "status": "Published",
+      "photo": "/newspicture 3.jpeg",
+      "excerpt": "Accredited by UKAF Cert Limited & MQA Certification Services, establishing international benchmarks in organizational excellence."
+    },
+    {
+      "id": 4,
+      "title": "Super Star Krishna Awards Ceremony 2025",
+      "category": "Awards",
+      "date": "2025-02-14",
+      "status": "Published",
+      "photo": "/newspicture 4.jpeg",
+      "excerpt": "Grand celebration recognizing cinematic luminaries, cultural stewards, and veteran artists across the Indian creative landscape."
+    },
+    {
+      "id": 5,
+      "title": "Vijayawada Cultural & Humanitarian Honors Ceremony",
+      "category": "Awards",
+      "date": "2025-04-18",
+      "status": "Published",
+      "photo": "/newspicture 2.jpeg",
+      "excerpt": "Honouring grassroots changemakers and lifetime achievers dedicated to cultural preservation and community welfare."
+    },
+    {
+      "id": 6,
+      "title": "South India Chapter Expansion & Membership Convocation",
+      "category": "Expansion",
+      "date": "2025-06-05",
+      "status": "Published",
+      "photo": "/newspicture 5.jpeg",
+      "excerpt": "Inauguration of active chapter liaison offices in Hyderabad, Mumbai, Bengaluru, Chennai, and Vijayawada."
+    },
+    {
+      "id": 7,
+      "title": "Youth Empowerment & Innovation Round-Table",
+      "category": "Workshop",
+      "date": "2025-10-05",
+      "status": "Published",
+      "photo": "/photo 1.jpeg",
+      "excerpt": "Skill building, ethical entrepreneurship, and digital transformation workshops conducted for emerging innovators."
+    },
+    {
+      "id": 8,
+      "title": "Indian Heritage Cultural Festival & Felicitation",
+      "category": "Cultural",
+      "date": "2025-11-18",
+      "status": "Published",
+      "photo": "/photo 2.jpeg",
+      "excerpt": "Celebrating traditional arts, classical literature, and folk traditions with international cultural delegates."
+    }
+  ],
   "awards": [
     {
       "id": 1,
@@ -115,91 +658,6 @@
       }
     ]
   },
-  "news": [
-    {
-      "id": 1,
-      "title": "State Icons Awards Night — 2026",
-      "category": "Awards",
-      "date": "2026-08-08",
-      "status": "Published",
-      "photo": "/events.jpeg",
-      "excerpt": "Global Icons Forum Society organises the prestigious State Icons Awards Night 2026 at Hotel Hyatt Place, Gunadala, Vijayawada with distinguished ministers, delegates and cultural luminaries."
-    }
-  ],
-  "newspaper": [
-    {
-      "id": 1,
-      "photo": "/newspicture 1.jpeg",
-      "headline": "Global Icons Forum Society Launches National Summit",
-      "publication": "Deccan Chronicle",
-      "date": "2025-03-10",
-      "category": "Summit",
-      "status": "Published"
-    },
-    {
-      "id": 2,
-      "photo": "/newspicture 2.jpeg",
-      "headline": "Vijayawada Icons Honoured at Global Forum Ceremony",
-      "publication": "Eenadu",
-      "date": "2025-04-18",
-      "category": "Awards",
-      "status": "Published"
-    },
-    {
-      "id": 3,
-      "photo": "/newspicture 3.jpeg",
-      "headline": "Global Icons Forum Receives ISO 9001:2015 Certification",
-      "publication": "The Hindu",
-      "date": "2026-07-20",
-      "category": "Milestone",
-      "status": "Published"
-    },
-    {
-      "id": 4,
-      "photo": "/newspicture 4.jpeg",
-      "headline": "Super Star Krishna Awards 2025 — A Grand Celebration",
-      "publication": "Sakshi",
-      "date": "2025-02-14",
-      "category": "Awards",
-      "status": "Published"
-    },
-    {
-      "id": 5,
-      "photo": "/newspicture 5.jpeg",
-      "headline": "GIF Society Expands Chapters Across South India",
-      "publication": "Andhra Jyothy",
-      "date": "2025-06-05",
-      "category": "Expansion",
-      "status": "Published"
-    }
-  ],
-  "gallery": [
-    {
-      "id": 1,
-      "src": "/gallery14.jpeg",
-      "caption": "Global Icons Forum — Award Ceremony"
-    },
-    {
-      "id": 2,
-      "src": "/gallery15.jpeg",
-      "caption": "Global Icons Forum — Award Ceremony"
-    },
-    {
-      "id": 3,
-      "src": "/gallery20.jpeg",
-      "caption": "Global Icons Forum — Award Ceremony"
-    },
-    {
-      "id": 4,
-      "src": "/gallery18.jpeg",
-      "caption": "Global Icons Forum — Award Ceremony"
-    },
-    {
-      "id": 5,
-      "src": "/gallery19.jpeg",
-      "caption": "Global Icons Forum — Award Ceremony"
-    }
-  ],
   "executive": [
     {
       "id": 1,
@@ -310,6 +768,24 @@
       "nation": "Kenya",
       "color": "#f7c430",
       "quote": "The Global Icons Forum does not just hand out trophies — it creates a movement. The scholarship initiatives born out of this forum are already changing lives across East Africa."
+    },
+    {
+      "id": 7,
+      "photo": "/testimonial-1.jpeg",
+      "name": "Hon. Justice K. Ramanathan",
+      "title": "Public Service & Governance Icon 2022",
+      "nation": "India",
+      "color": "#0f7ea3",
+      "quote": "An organization that preserves institutional integrity and celebrates exemplary devotion to society and constitutional values."
+    },
+    {
+      "id": 8,
+      "photo": "/testimonial-2.jpeg",
+      "name": "Dr. Evelyn Vance",
+      "title": "Global Health Pioneer 2024",
+      "nation": "United Kingdom",
+      "color": "#e05a24",
+      "quote": "The Global Icons Forum provides a magnificent international platform to connect innovators dedicated to humanitarian healthcare solutions."
     }
   ],
   "chapters": [

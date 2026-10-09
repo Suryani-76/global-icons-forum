@@ -29,8 +29,15 @@ export function getNewspaperItems() {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return DEFAULT_NEWSPAPER_ITEMS
     const parsed = JSON.parse(raw)
-    if (Array.isArray(parsed) && parsed.length > 0) {
+    if (Array.isArray(parsed) && parsed.length >= DEFAULT_NEWSPAPER_ITEMS.length) {
       return parsed
+    }
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      const existingIds = new Set(parsed.map(p => p.id))
+      const missing = DEFAULT_NEWSPAPER_ITEMS.filter(d => !existingIds.has(d.id))
+      const combined = [...parsed, ...missing]
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(combined))
+      return combined
     }
   } catch (err) {
     console.error('Failed to parse newspaper items:', err)
