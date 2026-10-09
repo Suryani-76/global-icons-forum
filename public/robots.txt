@@ -1,0 +1,7 @@
+# robots.txt for Global Icons Forum Society
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+Sitemap: https://globaliconsforumsociety.org/sitemap.xml

@@ -101,6 +101,61 @@ function getInitialTab() {
   return PATH_TO_TAB[path] || 'home'
 }
 
+const SEO_META = {
+  home: {
+    title: 'Global Icons Forum Society — Celebrating Excellence, Inspiring Leadership',
+    description: 'A prestigious international non-profit society recognising extraordinary individuals and organisations driving positive global change across 120+ countries. ISO 9001:2015 Certified.',
+  },
+  about: {
+    title: 'About Us & Executive Body | Global Icons Forum Society',
+    description: 'Discover the history, objectives, registration under Societies Registration Act 35/2001, and governing committee of Global Icons Forum Society.',
+  },
+  awards: {
+    title: 'Prestigious Awards & Honours | Global Icons Forum Society',
+    description: 'Explore the Global Icon of the Year, Excellence in Innovation, Peace & Diplomacy, and other prestigious international honours.',
+  },
+  events: {
+    title: 'News & Events Archive | Global Icons Forum Society',
+    description: 'Latest events, summits, State Icons Awards Night, Super Star Krishna Awards, and official society announcements.',
+  },
+  gallery: {
+    title: 'Photo Gallery — Moments of Excellence | Global Icons Forum Society',
+    description: 'Browse the complete high-resolution photo gallery of Global Icons Forum award ceremonies, summits, and felicitation events.',
+  },
+  testimonials: {
+    title: 'Honouree Testimonials & Global Feedback | Global Icons Forum Society',
+    description: 'Read inspiring testimonials and feedback from distinguished dignitaries, award recipients, and international delegates.',
+  },
+  membership: {
+    title: 'Join the Society — Membership Categories | Global Icons Forum Society',
+    description: 'Become a General, Life, or Patron member of the Global Icons Forum Society. Unlock international networking and fellowship opportunities.',
+  },
+  programmes: {
+    title: 'Programmes & Social Initiatives | Global Icons Forum Society',
+    description: 'Learn about our fellowships, youth empowerment, healthcare camps, education drives, and community upliftment programmes.',
+  },
+  chapters: {
+    title: 'National & International Chapters | Global Icons Forum Society',
+    description: 'Our presence across Vijayawada, Hyderabad, Mumbai, Bengaluru, Delhi, London, New York, and 120+ countries worldwide.',
+  },
+  newsletter: {
+    title: 'Newspaper & Media Coverage | Global Icons Forum Society',
+    description: 'Extensive press coverage, media clippings, and featured newspaper articles covering Global Icons Forum initiatives.',
+  },
+  partners: {
+    title: 'Collaboration & Global Partners | Global Icons Forum Society',
+    description: 'Partner with the Global Icons Forum Society across government bodies, universities, corporate CSR, and social organisations.',
+  },
+  legal: {
+    title: 'Legal Governance & Bylaws | Global Icons Forum Society',
+    description: 'Official registration under Societies Registration Act 35/2001, non-profit status, constitutional bylaws, and audited governance.',
+  },
+  contact: {
+    title: 'Contact Us | Global Icons Forum Society',
+    description: 'Get in touch with our registered office in Vijayawada or operating office in Hyderabad. Submit nominations and general enquiries.',
+  },
+}
+
 export default function App() {
   const [activeTab, setActiveTab] = useState(getInitialTab)
 
@@ -121,6 +176,32 @@ export default function App() {
     window.addEventListener('popstate', onPop)
     return () => window.removeEventListener('popstate', onPop)
   }, [])
+
+  // Dynamic SEO meta updates on route / tab change
+  useEffect(() => {
+    const meta = SEO_META[activeTab] || SEO_META.home
+    document.title = meta.title
+
+    let descTag = document.querySelector('meta[name="description"]')
+    if (!descTag) {
+      descTag = document.createElement('meta')
+      descTag.name = 'description'
+      document.head.appendChild(descTag)
+    }
+    descTag.content = meta.description
+
+    const ogTitle = document.querySelector('meta[property="og:title"]')
+    if (ogTitle) ogTitle.content = meta.title
+    const ogDesc = document.querySelector('meta[property="og:description"]')
+    if (ogDesc) ogDesc.content = meta.description
+
+    const path = TAB_TO_PATH[activeTab] || '/'
+    const fullUrl = `https://globaliconsforumsociety.org${path}`
+    const canonical = document.querySelector('link[rel="canonical"]')
+    if (canonical) canonical.href = fullUrl
+    const ogUrl = document.querySelector('meta[property="og:url"]')
+    if (ogUrl) ogUrl.content = fullUrl
+  }, [activeTab])
 
   return (
     <div style={{ minHeight: '100vh', background: '#ffffff' }}>
