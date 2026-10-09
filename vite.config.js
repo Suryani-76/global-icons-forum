@@ -59,6 +59,12 @@ function adminSyncPlugin() {
 
 export default defineConfig({
   plugins: [react(), adminSyncPlugin()],
+  server: {
+    port: 5173,
+    watch: {
+      ignored: ['**/src/data/**'],
+    },
+  },
   optimizeDeps: {
     include: ['three', '@react-three/fiber', '@react-three/drei'],
   },

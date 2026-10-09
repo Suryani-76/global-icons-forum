@@ -119,16 +119,6 @@ export default function App() {
     return () => window.removeEventListener('popstate', onPop)
   }, [])
 
-  // In dev mode, auto-sync browser admin changes to project files so Git tracks them
-  useEffect(() => {
-    if (import.meta.env.DEV) {
-      const timer = setTimeout(() => {
-        import('./utils/adminSync').then(m => m.syncAdminToCodebase()).catch(() => {})
-      }, 1000)
-      return () => clearTimeout(timer)
-    }
-  }, [])
-
   return (
     <div style={{ minHeight: '100vh', background: '#ffffff' }}>
       {/* Custom cursor disabled — using normal cursor */}

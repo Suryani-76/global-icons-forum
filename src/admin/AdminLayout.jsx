@@ -59,12 +59,6 @@ export default function AdminLayout({ onLogout }) {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [syncState, setSyncState] = useState('idle')
 
-  useEffect(() => {
-    if (import.meta.env.DEV) {
-      syncAdminToCodebase().catch(() => {})
-    }
-  }, [])
-
   const ActiveSection = SECTION_MAP[active]
   const groups = [...new Set(NAV.map(n => n.group))]
 
