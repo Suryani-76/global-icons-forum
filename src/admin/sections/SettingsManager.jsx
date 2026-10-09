@@ -38,7 +38,7 @@ const INIT = {
 }
 
 import { useSiteSettings } from '../../utils/settingsStore'
-import { syncAdminToCodebase, exportAdminBackup, importAdminBackup } from '../../utils/adminSync'
+import { syncAdminToCodebase, exportAdminBackup, importAdminBackup, restoreAllDefaultArchives } from '../../utils/adminSync'
 
 const INIT_ADMINS = [
   { id: 1, username: 'admin',       role: 'Super Admin', email: 'admin@gif.org',   active: true },
@@ -285,6 +285,24 @@ export default function SettingsManager() {
                 📤 Import Backup (JSON)
               </span>
             </label>
+
+            <Btn
+              variant="danger"
+              size="sm"
+              onClick={async () => {
+                if (window.confirm('Restore all 39 gallery pictures, 30 newspaper articles, and 8 events from the master archive?')) {
+                  showToast('Restoring master archive...')
+                  const ok = await restoreAllDefaultArchives()
+                  if (ok) {
+                    showToast('✓ All archives restored to master defaults!')
+                  } else {
+                    showToast('Failed to restore master archives.')
+                  }
+                }
+              }}
+            >
+              ↺ Reset All to Master Archives
+            </Btn>
           </div>
         </Card>
       </div>

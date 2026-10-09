@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { syncAdminToCodebase } from '../utils/adminSync'
+import { syncAdminToCodebase, restoreAllDefaultArchives } from '../utils/adminSync'
 import GalleryManager       from './sections/GalleryManager'
 import ExecutiveManager     from './sections/ExecutiveManager'
 import TestimonialsManager  from './sections/TestimonialsManager'
@@ -58,6 +58,7 @@ export default function AdminLayout({ onLogout }) {
   const [active, setActive] = useState('gallery')
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [syncState, setSyncState] = useState('idle')
+  const [restoreState, setRestoreState] = useState('idle')
 
   const ActiveSection = SECTION_MAP[active]
   const groups = [...new Set(NAV.map(n => n.group))]
@@ -220,6 +221,39 @@ export default function AdminLayout({ onLogout }) {
               {NAV.find(n => n.id === active)?.label}
             </span>
           </div>
+          <button
+            id="restore-archives-btn"
+            onClick={async () => {
+              if (window.confirm('Restore all 39 gallery pictures, 30 newspaper articles, and 8 events from the master archive? This will refresh all managers.')) {
+                setRestoreState('restoring')
+                const ok = await restoreAllDefaultArchives()
+                if (ok) {
+                  setRestoreState('done')
+                  setTimeout(() => setRestoreState('idle'), 3500)
+                } else {
+                  setRestoreState('idle')
+                }
+              }
+            }}
+            style={{
+              fontSize: '0.75rem', fontWeight: 600,
+              color: restoreState === 'done' ? '#2ecc71' : '#fff',
+              background: restoreState === 'done' ? 'rgba(46,204,113,0.12)' : 'rgba(255,255,255,0.06)',
+              border: `1px solid ${restoreState === 'done' ? 'rgba(46,204,113,0.35)' : 'rgba(255,255,255,0.15)'}`,
+              display: 'flex', alignItems: 'center', gap: '0.45rem',
+              padding: '0.4rem 0.85rem', borderRadius: 8, cursor: 'pointer',
+              transition: 'all 0.18s ease',
+            }}
+            title="Restores the complete archive of 39 photos, 30 press articles, and 8 events across all stores"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 12a9 9 0 0 1 15-6.7L21 8"/>
+              <path d="M21 3v5h-5"/>
+              <path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
+              <path d="M3 21v-5h5"/>
+            </svg>
+            {restoreState === 'restoring' ? 'Restoring Archives...' : restoreState === 'done' ? '✓ Archives Restored' : '↺ Restore All Archives'}
+          </button>
           <button
             id="sync-codebase-btn"
             onClick={async () => {

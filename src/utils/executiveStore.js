@@ -18,14 +18,27 @@ import { idbGet, safeSyncSave } from './mediaDb'
 const STORAGE_KEY = 'gif_executive_members'
 const EVENT_NAME = 'gif_executive_updated'
 
+export function mergeExecutiveWithDefaults(current) {
+  if (!Array.isArray(current) || current.length === 0) return DEFAULT_EXECUTIVE_MEMBERS
+  if (current.length >= DEFAULT_EXECUTIVE_MEMBERS.length) return current
+  const existingIds = new Set(current.map(p => p.id).filter(Boolean))
+  const missing = DEFAULT_EXECUTIVE_MEMBERS.filter(d => !existingIds.has(d.id))
+  return [...current, ...missing]
+}
+
 export function getExecutiveMembers() {
   if (typeof window === 'undefined') return DEFAULT_EXECUTIVE_MEMBERS
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return DEFAULT_EXECUTIVE_MEMBERS
     const parsed = JSON.parse(raw)
-    if (Array.isArray(parsed) && parsed.length > 0) {
+    if (Array.isArray(parsed) && parsed.length >= DEFAULT_EXECUTIVE_MEMBERS.length) {
       return parsed
+    }
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      const combined = mergeExecutiveWithDefaults(parsed)
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(combined))
+      return combined
     }
   } catch (err) {
     console.error('Failed to parse executive members:', err)
@@ -43,7 +56,15 @@ export function useExecutiveMembers() {
   useEffect(() => {
     idbGet(STORAGE_KEY).then((stored) => {
       if (Array.isArray(stored) && stored.length > 0) {
-        setMembersState(stored)
+        if (stored.length < DEFAULT_EXECUTIVE_MEMBERS.length) {
+          const merged = mergeExecutiveWithDefaults(stored)
+          setMembersState(merged)
+          safeSyncSave(STORAGE_KEY, merged, EVENT_NAME)
+        } else {
+          setMembersState(stored)
+        }
+      } else {
+        safeSyncSave(STORAGE_KEY, getExecutiveMembers(), EVENT_NAME)
       }
     }).catch(() => {})
 

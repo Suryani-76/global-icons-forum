@@ -24,6 +24,16 @@ import { idbGet, idbRemove, safeSyncSave } from './mediaDb'
 const STORAGE_KEY = 'gif_news_items'
 const EVENT_NAME = 'gif_news_updated'
 
+export function mergeNewsWithDefaults(current) {
+  if (!Array.isArray(current) || current.length === 0) return DEFAULT_NEWS_ITEMS
+  const sanitized = sanitizeNews(current)
+  if (sanitized.length >= DEFAULT_NEWS_ITEMS.length) return sanitized
+  const existingIds = new Set(sanitized.map(p => p.id).filter(Boolean))
+  const existingTitles = new Set(sanitized.map(p => p.title?.toLowerCase().trim()).filter(Boolean))
+  const missing = DEFAULT_NEWS_ITEMS.filter(d => !existingIds.has(d.id) && !existingTitles.has(d.title?.toLowerCase().trim()))
+  return sanitizeNews([...sanitized, ...missing])
+}
+
 export function getNewsItems() {
   if (typeof window === 'undefined') return DEFAULT_NEWS_ITEMS
   try {
@@ -34,9 +44,7 @@ export function getNewsItems() {
       return sanitizeNews(parsed)
     }
     if (Array.isArray(parsed) && parsed.length > 0) {
-      const existingIds = new Set(parsed.map(p => p.id))
-      const missing = DEFAULT_NEWS_ITEMS.filter(d => !existingIds.has(d.id))
-      const combined = sanitizeNews([...parsed, ...missing])
+      const combined = mergeNewsWithDefaults(parsed)
       localStorage.setItem(STORAGE_KEY, JSON.stringify(combined))
       return combined
     }
@@ -71,11 +79,14 @@ export function useNewsItems() {
     // Hydrate from IndexedDB in case localStorage was trimmed or full
     idbGet(STORAGE_KEY).then((stored) => {
       if (Array.isArray(stored) && stored.length > 0) {
-        const sanitized = sanitizeNews(stored)
-        setItemsState(sanitized)
-        if (sanitized.length !== stored.length) {
+        let sanitized = sanitizeNews(stored)
+        if (sanitized.length < DEFAULT_NEWS_ITEMS.length) {
+          sanitized = mergeNewsWithDefaults(sanitized)
           saveNewsItems(sanitized)
         }
+        setItemsState(sanitized)
+      } else {
+        saveNewsItems(getNewsItems())
       }
     }).catch(() => {})
 

@@ -63,13 +63,26 @@ import { idbGet, safeSyncSave } from './mediaDb'
 const STORAGE_KEY = 'gif_testimonials'
 const EVENT_NAME = 'gif_testimonials_updated'
 
+export function mergeTestimonialsWithDefaults(current) {
+  if (!Array.isArray(current) || current.length === 0) return DEFAULT_TESTIMONIALS
+  if (current.length >= DEFAULT_TESTIMONIALS.length) return current
+  const existingIds = new Set(current.map(p => p.id).filter(Boolean))
+  const missing = DEFAULT_TESTIMONIALS.filter(d => !existingIds.has(d.id))
+  return [...current, ...missing]
+}
+
 export function getTestimonials() {
   if (typeof window === 'undefined') return DEFAULT_TESTIMONIALS
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return DEFAULT_TESTIMONIALS
     const parsed = JSON.parse(raw)
-    if (Array.isArray(parsed) && parsed.length > 0) return parsed
+    if (Array.isArray(parsed) && parsed.length >= DEFAULT_TESTIMONIALS.length) return parsed
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      const combined = mergeTestimonialsWithDefaults(parsed)
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(combined))
+      return combined
+    }
   } catch (err) {
     console.error('Failed to parse testimonials:', err)
   }
@@ -86,7 +99,15 @@ export function useTestimonials() {
   useEffect(() => {
     idbGet(STORAGE_KEY).then((stored) => {
       if (Array.isArray(stored) && stored.length > 0) {
-        setItemsState(stored)
+        if (stored.length < DEFAULT_TESTIMONIALS.length) {
+          const merged = mergeTestimonialsWithDefaults(stored)
+          setItemsState(merged)
+          safeSyncSave(STORAGE_KEY, merged, EVENT_NAME)
+        } else {
+          setItemsState(stored)
+        }
+      } else {
+        safeSyncSave(STORAGE_KEY, getTestimonials(), EVENT_NAME)
       }
     }).catch(() => {})
 

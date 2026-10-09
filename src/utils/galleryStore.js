@@ -19,6 +19,15 @@ import { idbGet, idbRemove, safeSyncSave } from './mediaDb'
 const STORAGE_KEY = 'gif_gallery_images'
 const EVENT_NAME = 'gif_gallery_updated'
 
+export function mergeGalleryWithDefaults(current) {
+  if (!Array.isArray(current) || current.length === 0) return DEFAULT_GALLERY_IMAGES
+  if (current.length >= DEFAULT_GALLERY_IMAGES.length) return current
+  const existingIds = new Set(current.map(p => p.id).filter(Boolean))
+  const existingSrcs = new Set(current.map(p => p.src).filter(Boolean))
+  const missing = DEFAULT_GALLERY_IMAGES.filter(d => !existingIds.has(d.id) && !existingSrcs.has(d.src))
+  return [...current, ...missing]
+}
+
 export function getGalleryImages() {
   if (typeof window === 'undefined') return DEFAULT_GALLERY_IMAGES
   try {
@@ -29,9 +38,7 @@ export function getGalleryImages() {
       return parsed
     }
     if (Array.isArray(parsed) && parsed.length > 0) {
-      const existingIds = new Set(parsed.map(p => p.id))
-      const missing = DEFAULT_GALLERY_IMAGES.filter(d => !existingIds.has(d.id))
-      const combined = [...parsed, ...missing]
+      const combined = mergeGalleryWithDefaults(parsed)
       localStorage.setItem(STORAGE_KEY, JSON.stringify(combined))
       return combined
     }
@@ -65,7 +72,15 @@ export function useGalleryImages() {
   useEffect(() => {
     idbGet(STORAGE_KEY).then((stored) => {
       if (Array.isArray(stored) && stored.length > 0) {
-        setImagesState(stored)
+        if (stored.length < DEFAULT_GALLERY_IMAGES.length) {
+          const merged = mergeGalleryWithDefaults(stored)
+          setImagesState(merged)
+          safeSyncSave(STORAGE_KEY, merged, EVENT_NAME)
+        } else {
+          setImagesState(stored)
+        }
+      } else {
+        safeSyncSave(STORAGE_KEY, getGalleryImages(), EVENT_NAME)
       }
     }).catch(() => {})
 

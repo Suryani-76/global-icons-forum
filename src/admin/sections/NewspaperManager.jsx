@@ -17,7 +17,7 @@ const blank = {
 }
 
 export default function NewspaperManager() {
-  const [items, setItems]     = useNewspaperItems()
+  const [items, setItems, resetToDefaults] = useNewspaperItems()
   const [modal, setModal]     = useState(null)
   const [filter, setFilter]   = useState('All')
   const [preview, setPreview] = useState(null)
@@ -111,7 +111,17 @@ export default function NewspaperManager() {
   return (
     <div>
       <PageHeader title="Newspaper Coverage" subtitle={`${items.length} articles published`}>
-        <Btn id="add-newspaper-btn" onClick={openAdd}>+ Add Article</Btn>
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <Btn variant="ghost" size="sm" onClick={() => {
+            if (confirm('Reset newspaper coverage to default original articles?')) {
+              resetToDefaults()
+              showToast('Newspaper articles restored to defaults.')
+            }
+          }}>
+            ↺ Reset Defaults
+          </Btn>
+          <Btn id="add-newspaper-btn" onClick={openAdd}>+ Add Article</Btn>
+        </div>
       </PageHeader>
       {toast && <Toast msg={toast} />}
 

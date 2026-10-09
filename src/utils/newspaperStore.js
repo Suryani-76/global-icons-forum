@@ -18,10 +18,19 @@ export const DEFAULT_NEWSPAPER_ITEMS = (initialAdminData && initialAdminData.new
   })),
 ]
 
-import { idbGet, safeSyncSave } from './mediaDb'
+import { idbGet, idbRemove, safeSyncSave } from './mediaDb'
 
 const STORAGE_KEY = 'gif_newspaper_items'
 const EVENT_NAME = 'gif_newspaper_updated'
+
+export function mergeNewspaperWithDefaults(current) {
+  if (!Array.isArray(current) || current.length === 0) return DEFAULT_NEWSPAPER_ITEMS
+  if (current.length >= DEFAULT_NEWSPAPER_ITEMS.length) return current
+  const existingIds = new Set(current.map(p => p.id).filter(Boolean))
+  const existingPhotos = new Set(current.map(p => p.photo).filter(Boolean))
+  const missing = DEFAULT_NEWSPAPER_ITEMS.filter(d => !existingIds.has(d.id) && !existingPhotos.has(d.photo))
+  return [...current, ...missing]
+}
 
 export function getNewspaperItems() {
   if (typeof window === 'undefined') return DEFAULT_NEWSPAPER_ITEMS
@@ -33,9 +42,7 @@ export function getNewspaperItems() {
       return parsed
     }
     if (Array.isArray(parsed) && parsed.length > 0) {
-      const existingIds = new Set(parsed.map(p => p.id))
-      const missing = DEFAULT_NEWSPAPER_ITEMS.filter(d => !existingIds.has(d.id))
-      const combined = [...parsed, ...missing]
+      const combined = mergeNewspaperWithDefaults(parsed)
       localStorage.setItem(STORAGE_KEY, JSON.stringify(combined))
       return combined
     }
@@ -49,13 +56,35 @@ export function saveNewspaperItems(items) {
   safeSyncSave(STORAGE_KEY, items, EVENT_NAME)
 }
 
+export function resetNewspaperItems() {
+  if (typeof window === 'undefined') return DEFAULT_NEWSPAPER_ITEMS
+  try {
+    localStorage.removeItem(STORAGE_KEY)
+    idbRemove(STORAGE_KEY).catch(() => {})
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: DEFAULT_NEWSPAPER_ITEMS }))
+    }, 0)
+  } catch (err) {
+    console.error('Failed to reset newspaper items:', err)
+  }
+  return DEFAULT_NEWSPAPER_ITEMS
+}
+
 export function useNewspaperItems() {
   const [items, setItemsState] = useState(getNewspaperItems)
 
   useEffect(() => {
     idbGet(STORAGE_KEY).then((stored) => {
       if (Array.isArray(stored) && stored.length > 0) {
-        setItemsState(stored)
+        if (stored.length < DEFAULT_NEWSPAPER_ITEMS.length) {
+          const merged = mergeNewspaperWithDefaults(stored)
+          setItemsState(merged)
+          safeSyncSave(STORAGE_KEY, merged, EVENT_NAME)
+        } else {
+          setItemsState(stored)
+        }
+      } else {
+        safeSyncSave(STORAGE_KEY, getNewspaperItems(), EVENT_NAME)
       }
     }).catch(() => {})
 
@@ -89,5 +118,10 @@ export function useNewspaperItems() {
     })
   }, [])
 
-  return [items, setItems]
+  const resetToDefaults = useCallback(() => {
+    const def = resetNewspaperItems()
+    setItemsState(def)
+  }, [])
+
+  return [items, setItems, resetToDefaults]
 }
